@@ -14,26 +14,26 @@ ECCUBE3のトップページに新着商品を追加します。　対応ver.3.0
     独自プラグイン`プラグインのアップロードはこちら`から、`LineUpBlock.tar.gz`　を
     アップロードする。
 
-    <img src="img/plugin_inst.png">
+    <img src="https://github.com/reinslab/ec-cube/blob/develop/plugin/LineUp_Block/img/plugin_inst.png">
 
 <br /><br />
 2. プラグインを有効化する<br />
     `管理画面`　→　`オーナーズストア`　→　`プラグイン`　→　`プラグイン一覧`
     独自プラグイン　`ラインナップ`を`有効`にする。
 
-    <img src="img/plugin_enabled.png">
+    <img src="https://github.com/reinslab/ec-cube/blob/develop/plugin/LineUp_Block/img/plugin_enabled.png">
 
 <br /><br />
 3. 「ラインナップブロック」ブロックをページへ配置する<br />
     `管理画面`　→　`コンテンツ管理`　→　`ページ管理`　→　`TOPページ`
     右端の`・・・`をクリックして`レイアウト編集`をクリック
 
-    <img src="img/plugin_setposi.png">
+    <img src="https://github.com/reinslab/ec-cube/blob/develop/plugin/LineUp_Block/img/plugin_setposi.png">
 
     未使用ブロックに表示されている「ラインナップブロック」ブロックを配置したい場所にドラッグ<br />＆ドロップする。
     `登録`ボタンを押して保存する。
 
-    <img src="img/plugin_dragdrop.png">
+    <img src="https://github.com/reinslab/ec-cube/blob/develop/plugin/LineUp_Block/img/plugin_dragdrop.png">
 
 <br /><br />
 4. ページにアクセスして、配置した場所に新商品が表示を確認し、問題がなければインストール終了。
