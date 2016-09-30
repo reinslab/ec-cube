@@ -26,6 +26,13 @@ use Eccube\Tests\Web\Admin\AbstractAdminWebTestCase;
 
 class IndexControllerTest extends AbstractAdminWebTestCase
 {
+    protected $Member;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->Member = $this->createMember();
+    }
 
     public function testRoutingAdminIndex()
     {
@@ -39,6 +46,12 @@ class IndexControllerTest extends AbstractAdminWebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
     }
 
+    public function testRoutingAdminChangePassword()
+    {
+        $this->client->request('GET', $this->app['url_generator']->generate('admin_change_password'));
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+    }
+
     /**
      * @link https://github.com/EC-CUBE/ec-cube/issues/1143
      */
@@ -47,6 +60,7 @@ class IndexControllerTest extends AbstractAdminWebTestCase
         $Customer = $this->createCustomer();
         $Today = new \DateTime();
         $Yesterday = new \DateTime('-1 days');
+
         $OrderNew = $this->app['eccube.repository.order_status']->find($this->app['config']['order_new']);
         $OrderPending = $this->app['eccube.repository.order_status']->find($this->app['config']['order_pending']);
         $OrderCancel = $this->app['eccube.repository.order_status']->find($this->app['config']['order_cancel']);
@@ -104,13 +118,98 @@ class IndexControllerTest extends AbstractAdminWebTestCase
         $this->actual = str_replace(',', '', $match[2]);
         $this->verify('昨日の売上件数');
 
+        // 当月の受注を取得する
+        $firstDate = clone $Today;
+        $firstDate->setDate($Today->format('Y'), $Today->format('m'), 1);
+        $firstDate->setTime(0, 0 ,0);
+        $endDate = clone $firstDate;
+        $endDate->setDate($Today->format('Y'), $Today->format('m'), $Today->format('t'));
+        $endDate->setTime(23, 59, 59);
+
+        $qb = $this->app['eccube.repository.order']->createQueryBuilder('o');
+        $qb->andWhere($qb->expr()->notIn('o.OrderStatus',
+                                         array(
+                                             $OrderPending->getId(),
+                                             $OrderProcessing->getId(),
+                                             $OrderCancel->getId()
+                                         )))
+            ->andWhere('o.order_date BETWEEN :firstDate AND :endDate')
+            ->setParameters(
+                array(
+                    'firstDate' => $firstDate,
+                    'endDate' => $endDate
+                )
+            );
+        $MonthlyOrders = $qb->getQuery()->getResult();
+
         preg_match('/^¥ ([0-9,]+) \/ ([0-9]+)/u', trim($crawler->filter('.monthly_sale')->text()), $match);
-        $this->expected = $todaysSales + $yesterdaysSales;
+        $this->expected = array_reduce( // MonthlyOrders の payment_total をすべて足す
+            array_map(
+                function ($Order) {
+                    return $Order->getPaymentTotal();
+                }, $MonthlyOrders
+            ),
+            function ($carry, $item) {
+                return $carry += $item;
+            }
+        );
         $this->actual = str_replace(',', '', $match[1]);
         $this->verify('今月の売上');
 
-        $this->expected = 6;
+        $this->expected = count($MonthlyOrders);
         $this->actual = str_replace(',', '', $match[2]);
         $this->verify('今月の売上件数');
+    }
+
+    public function testChangePasswordWithPost()
+    {
+        $this->logIn($this->Member);
+        $client = $this->client;
+
+        $form = $this->createChangePasswordFormData();
+        $crawler = $client->request(
+            'POST',
+            $this->app->path('admin_change_password'),
+            array('admin_change_password' => $form)
+        );
+
+        $this->assertTrue($client->getResponse()->isRedirect($this->app->url('admin_change_password')));
+
+        $Member = clone $this->Member;
+        $Member->setPassword($form['change_password']['first']);
+
+        $this->expected = $this->app['eccube.repository.member']->encryptPassword($Member);;
+        $this->actual = $this->Member->getPassword();
+        $this->verify();
+    }
+
+    public function testChangePasswordWithPostInvalid()
+    {
+        $this->logIn($this->Member);
+        $client = $this->client;
+
+        $client->request(
+            'POST',
+            $this->app->path('admin_change_password'),
+            array()
+        );
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    protected function createChangePasswordFormData()
+    {
+        $faker = $this->getFaker();
+
+        $password = $faker->lexify('????????');
+
+        $form = array(
+            'current_password' => 'password',
+            'change_password' => array(
+                'first' => $password,
+                'second' => $password,
+            ),
+            '_token' => 'dummy'
+        );
+        return $form;
     }
 }
