@@ -23,7 +23,7 @@ class PluginManager extends AbstractPluginManager
 {
     const BLOCKNAME = "ラインナップブロック";
 
-    const BLOCKFILENAME = "lineup_block";
+    const BLOCKFILENAME = "well_lineup_block";
 
     private $Block;
 

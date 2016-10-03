@@ -26,7 +26,7 @@ class LineUpBlockController
      */
     public function index(Application $app, Request $request)
     {
-        return $app['view']->render('Block/lineup_block.twig', array(
+        return $app['view']->render('Block/well_lineup_block.twig', array(
             // add parameter...
         ));
     }

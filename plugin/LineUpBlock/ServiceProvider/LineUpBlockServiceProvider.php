@@ -27,8 +27,8 @@ class LineUpBlockServiceProvider implements ServiceProviderInterface
     public function register(BaseApplication $app)
     {
         // ブロック
-        $app->match('/block/lineup_block', '\Plugin\LineUpBlock\Controller\Block\LineUpBlockController::index')
-            ->bind('block_lineup_block');
+        $app->match('/block/well_lineup_block', '\Plugin\LineUpBlock\Controller\Block\LineUpBlockController::index')
+            ->bind('block_well_lineup_block');
 
     }
 
