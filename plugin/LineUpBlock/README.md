@@ -64,12 +64,11 @@ ECCUBE3のトップページに新着商品を追加します。　対応ver.3.0
 │       ├── LineUpBlock.tar.gz    //プラグイン インストール用圧縮ファイル
 │       ├── LineUpEvent.php
 │       ├── PluginManager.php
-│       ├── README.md
 │       ├── Resource
 │       │   └── template
 │       │       └── default
 │       │           ├── Block
-│       │           │   └── lineup_block.twig
+│       │           │   └── well_lineup_block.twig
 │       │           └── lineup.twig
 │       ├── ServiceProvider
 │       │   └── LineUpBlockServiceProvider.php
@@ -91,7 +90,7 @@ app/Plugin/LineUpBlock/config.yml
 ```
 name: ラインナップ                  #プラグイン名
 code: LineUpBlock                 #プラグインコード名（プラグイン識別名）
-version: 0.0.1                    #プラグインバージョン
+version: 0.0.2                    #プラグインバージョン
 event: LineUpEvent                #フックポイントを利用する際に必要。Eventのクラス名を指定。
 service:
     - LineUpBlockServiceProvider  #サービスプロバイダー
@@ -116,7 +115,7 @@ class PluginManager extends AbstractPluginManager
 {
     const BLOCKNAME = "ラインナップブロック";
 
-    const BLOCKFILENAME = "lineup_block";
+    const BLOCKFILENAME = "well_lineup_block";
 
     private $Block;
 
@@ -400,7 +399,7 @@ class LineUpBlockController
      */
     public function index(Application $app, Request $request)
     {
-        return $app['view']->render('Block/lineup_block.twig', array(
+        return $app['view']->render('Block/well_lineup_block.twig', array(
             // add parameter...
         ));
     }
@@ -433,8 +432,8 @@ class LineUpBlockServiceProvider implements ServiceProviderInterface
     public function register(BaseApplication $app)
     {
         // ブロック
-        $app->match('/block/lineup_block', '\Plugin\LineUpBlock\Controller\Block\LineUpBlockController::index')
-            ->bind('block_lineup_block');
+        $app->match('/block/well_lineup_block', '\Plugin\LineUpBlock\Controller\Block\LineUpBlockController::index')
+            ->bind('block_well_lineup_block');
 
     }
 
@@ -465,9 +464,9 @@ app/Plugin/LineUpBlock/Resource/template/default/lineup.twig
   </div>
 ```
 
-### lineup_block.twig
+### well_lineup_block.twig
 
-app/Plugin/LineUpBlock/Resource/template/default/Block/lineup_block.twig
+app/Plugin/LineUpBlock/Resource/template/default/Block/well_lineup_block.twig
 
 ```
 <div class="item_lineUp">
@@ -488,12 +487,11 @@ app/Plugin/LineUpBlock/Resource/template/default/Block/lineup_block.twig
    │       ├── LICENSE
    │       ├── LineUpEvent.php      //フックポイントや入力フォームの拡張時の業務処理
    │       ├── PluginManager.php    //プラグイン管理ファイル
-   │       ├── README.md
    │       ├── Resource
    │       │   └── template
    │       │       └── default
    │       │           ├── Block
-   │       │           │   └── lineup_block.twig    //template/default/Blockが優先
+   │       │           │   └── well_lineup_block.twig
    │       │           └── lineup.twig              //一覧表示用twig
    │       ├── ServiceProvider
    │       │   └── LineUpBlockServiceProvider.php   //DIコンテナ定義
@@ -503,7 +501,7 @@ app/Plugin/LineUpBlock/Resource/template/default/Block/lineup_block.twig
        ├── admin
        └── default
            └── Block
-               └── lineup_block.twig    //ブロック差込み用twig
+               └── well_lineup_block.twig    //ブロック差込み用twig
 
 ```
 ▲ プラグイン インストール後のファイル構成

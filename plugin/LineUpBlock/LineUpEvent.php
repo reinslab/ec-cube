@@ -40,10 +40,12 @@ class LineUpEvent
         $crawler = new Crawler($html);
         $oldElement = $crawler
                 ->filter('.item_lineUp');
-        $oldHtml = $oldElement->html();
-        $newHtml = $oldHtml.$twig;
-        $html = $crawler->html();
-        $html = str_replace($oldHtml, $newHtml, $html);
+        if ($oldElement->count()) {
+            $oldHtml = $oldElement->html();
+            $newHtml = $oldHtml.$twig;
+            $html = $crawler->html();
+            $html = str_replace($oldHtml, $newHtml, $html);
+        }
         //書き換え処理終了
 
         $response->setContent($html);
