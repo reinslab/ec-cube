@@ -1,0 +1,6 @@
+eccube.event.render.index.before:
+    - [LineUp, NORMAL]
+eccube.event.render.homepage.before:
+    - [LineUp, NORMAL]
+eccube.event.render.top.before:
+    - [LineUp, NORMAL]

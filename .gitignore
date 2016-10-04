@@ -33,3 +33,5 @@ composer.phar
 /reports/*
 .idea
 *.php~
+/nbproject/private/
+/app/template/default/Block/well_lineup_block.twig

@@ -1,0 +1,81 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{% macro tree(Category) %}
+    <li>
+        <a href="{{ url('product_list') }}?category_id={{ Category.id }}">
+            {{ Category.name }}
+        </a>
+        {% if Category.children|length > 0 %}
+            <ul>
+            {% for ChildCategory in Category.children %}
+                    {{ _self.tree(ChildCategory) }}
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+<nav id="category" class="drawer_block pc">
+    <ul class="category-nav">
+   <!--  {% for Category in Categories %}
+        {{ _self.tree(Category) }}
+    {% endfor %} -->
+
+<li class="mainmenu">
+  <a href="{{ url('homepage') }}">トップページ</a>
+  </li>
+  <li class="mainmenu">
+  <a href="#">商品一覧</a>
+
+  <ul>
+{% for Category in Categories %}
+        {{ _self.tree(Category) }}
+    {% endfor %}
+  </ul>
+  </li>
+  <li class="mainmenu">
+  <a href="#">ご利用ガイド</a>
+  <ul>
+    <li><a href="#">データの入稿方法</a></li>
+    <li><a href="#">注文・支払いについて</a></li>
+    <li><a href="#">発送・配送について</a></li>
+    <li><a href="#">変更・キャンセルについて</a></li>
+    <li><a href="#">製品の活用事例</a></li>
+  </ul>
+  </li>
+  <li class="mainmenu">
+  <a href="#">データの作り方</a>
+  <ul>
+    <li><a href="#">データ作成ガイド</a></li>
+    <li><a href="#">製品別テンプレート</a></li>
+  </ul>
+  </li>
+  <li class="mainmenu">
+  <a href="#">お問い合わせ</a>
+  <ul class="footermenu">
+    <li><a href="#">よくある質問</a></li>
+    <li><a href="#">問い合わせフォーム</a></li>
+  </ul>
+  </li>
+
+    </ul> <!-- category-nav -->
+</nav>
