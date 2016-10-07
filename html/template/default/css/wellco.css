@@ -18,7 +18,6 @@ h1.header_logo{
 	height: 2em;
 	width:8em;
 }
-
 .category-nav{
 	text-align: left !important;
 	background-color:crimson;
@@ -48,7 +47,6 @@ h1.header_logo{
 	height: 15em;
 }
 }
-
 @media only screen and (min-width: 768px) {
 .header_logo_area{
 	margin-right:0px !important;
