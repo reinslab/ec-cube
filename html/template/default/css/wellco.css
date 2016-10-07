@@ -16,7 +16,13 @@ h1.header_logo{
 	background-size: contain;
 	background-repeat: no-repeat;
 	height: 2em;
+	width:8em;
 }
+
+.header_bottom_area{
+	opacity: 0;
+}
+
 .category-nav{
 	text-align: left !important;
 	background-color:crimson;
@@ -39,5 +45,40 @@ h1.header_logo{
 @media only screen and (max-width: 767px) {
 .item_gallery li{
     display: none;
+}
+}
+
+@media only screen and (min-width: 768px) {
+.header_logo_area{
+	margin-right:0px !important;
+}
+#cart_area{
+	position: relative;
+}
+#category{
+	float:left;
+	padding: 0px !important;
+	margin-top:-70px !important;
+	width: 100% !important;
+}
+}
+@media only screen and (max-width: 852px) {
+#member{
+	display:none !important;
+}
+}
+@media only screen and (min-width: 852px) {
+#member{
+	margin-top: -70px;
+}
+}
+@media only screen and (min-width: 1050px) {
+#member{
+	margin-top: -150px;
+	margin-right:300px;
+}
+#cart_area{
+	position: relative;
+	padding-top: 10px;
 }
 }
