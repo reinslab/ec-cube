@@ -67,6 +67,7 @@ h1.header_logo{
 #main_middle{
 	width: 100%;
 	height: 15em;
+
 }
 }
 @media only screen and (min-width: 768px) {
@@ -79,12 +80,10 @@ h1.header_logo{
 #category{
 	float:left;
 	padding: 0px !important;
-
 	width: 100% !important;
 }
 #main_middle{
 	width: 100%;
-	height: 350px;
 }
 .slick-dots{
 	position: relative;
@@ -127,7 +126,7 @@ h1.header_logo{
 }
 #main_middle{
 	width: 100%;
-	height: 390px;
+    padding-bottom: 20px !important;
 }
 .slick-dots{
 	position: relative;
