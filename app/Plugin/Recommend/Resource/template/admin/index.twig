@@ -1,0 +1,109 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{#
+[コンテンツ]-[おすすめ商品]-[一覧・検索]画面
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['content', 'admin_recommend'] %}
+
+{% block title %}おすすめ商品管理{% endblock %}
+{% block sub_title %}おすすめ商品内容設定{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ app.config.admin_urlpath }}/assets/css/bootstrap-datetimepicker.min.css">
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment.min.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/moment-ja.js"></script>
+<script src="{{ app.config.admin_urlpath }}/assets/js/vendor/bootstrap-datetimepicker.min.js"></script>
+
+{% endblock javascript %}
+
+{% block main %}
+<form name="search_form" id="search_form" method="post" action="">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-arrow">
+                    <h3 class="box-title"><span class="normal"><strong>{{ totalItemCount }} 件</strong> が該当しました</span></h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table_list">
+                        <div class="table-responsive with-border">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>おすすめ商品</th>
+                                    <th>コメント</th>
+                                    <th>編集</th>
+                                    <th>削除</th>
+                                    <th>並び替え</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for RecommendProduct in pagination %}
+                                <tr>
+                                    <td class="recommend_product_id">{{ RecommendProduct.id }}</td>
+                                    <td class="product_id">
+                                        {{ RecommendProduct.Product.name }}
+                                    </td>
+                                    <td class="comment">{{ RecommendProduct.comment|nl2br }}</td>
+                                    <td><a href="{{ url('admin_recommend_edit', { id : RecommendProduct.id }) }}" >編集</a></td>
+                                    <td><a href="{{ url('admin_recommend_delete', {'id' : RecommendProduct.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete" data-message="おすすめ情報を削除してもよろしいですか？">削除</a></td>
+                                    <td class="icon_edit">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown"><svg class="cb cb-ellipsis-h"> <use xlink:href="#cb-ellipsis-h" /></svg></a>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                            {% if loop.first == false %}
+                                                <li>
+                                                    <a href="{{ url('admin_recommend_rank_up', {id: RecommendProduct.id}) }}"  {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">上へ</a>
+                                                </li>
+                                            {% endif %}
+                                            {% if loop.last == false %}
+                                                <li>
+                                                    <a href="{{ url('admin_recommend_rank_down', {id: RecommendProduct.id}) }}"  {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">下へ</a>
+                                                </li>
+                                            {% endif %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                               </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+    </div>
+<div class="row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+        <a href="{{ url('admin_recommend_new') }}" class="btn btn-primary btn-block btn-lg">おすすめ商品を新規登録</a>
+    </div>
+</div>
+</form>
+{% endblock %}
