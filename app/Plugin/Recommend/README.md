@@ -34,20 +34,20 @@ php app/console plugin:develop update     //アップデート
 ```
 インストール例
 ```
-php app/console plugin:develop enable --code=Reccomend
+php app/console plugin:develop install --code=Recommend
 ```
 有効化例
 ```
-php app/console plugin:develop enable --code=Reccomend
+php app/console plugin:develop enable --code=Recommend
 ```
 無効化例
 ```
-php app/console plugin:develop disable --code=Reccomend
+php app/console plugin:develop disable --code=Recommend
 ```
 アンインストール例
 ```
-php app/console plugin:develop uninstall --code=Reccomend
+php app/console plugin:develop uninstall --code=Recommend
 ```
-※Reccomendの部分は、プラグインのcode名を記載する。
+※Recommendの部分は、プラグインのcode名を記載する。
 
 以上
