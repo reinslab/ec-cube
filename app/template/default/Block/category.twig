@@ -41,7 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     {% endfor %} -->
 
   <li class="mainmenu">
-  <a href="http://well-direct.com/products/list">商品一覧</a>
+  <a href="{{ url('product_list') }}">商品一覧</a>
 
   <ul>
 {% for Category in Categories %}
@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   </ul>
   </li>
   <li class="mainmenu">
-  <a href="http://well-direct.com/help/guide ">ご利用ガイド</a>
+  <a href="{{ url('help_guide') }} ">ご利用ガイド</a>
   <ul>
 <li><a href="#">注文方法について</a></li>
     <li><a href="#">データの入稿について</a></li>
