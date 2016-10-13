@@ -1,4 +1,4 @@
-## EC-CUBE3 プラグインのインストールについて
+﻿## EC-CUBE3 プラグインのインストールについて
 
 ### 概要
 本家EC-CUBEのリポジトリでは、app/Plugin/はgit管理対象外であるが、当社においては、
@@ -34,7 +34,7 @@ php app/console plugin:develop update     //アップデート
 ```
 インストール例
 ```
-php app/console plugin:develop enable --code=Reccomend
+php app/console plugin:develop install --code=Recommend
 ```
 有効化例
 ```
