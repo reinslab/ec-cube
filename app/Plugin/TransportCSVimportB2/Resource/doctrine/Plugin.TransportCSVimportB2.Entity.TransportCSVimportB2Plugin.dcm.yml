@@ -1,0 +1,47 @@
+Plugin\TransportCSVimportB2\Entity\TransportCSVimportB2Plugin:
+    type: entity
+    table: plg_transport_csv_import_b2_plugin
+    repositoryClass: Plugin\TransportCSVimportB2\Repository\TransportCSVimportB2PluginRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: plugin_id
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            type: text
+            nullable: false
+            column: plugin_code
+        name:
+            type: text
+            nullable: false
+            column: plugin_name
+        sub_data:
+            type: text
+            nullable: true
+        mail_template_id:
+            type: smallint
+            nullable: true
+        auto_update_flg:
+            type: smallint
+            nullable: false
+            unsigned: false
+            default: '0'
+        del_flg:
+            type: smallint
+            nullable: false
+            unsigned: false
+            default: '0'
+        create_date:
+            type: datetime
+            nullable: false
+            
+        update_date:
+            type: datetime
+            nullable: false
+    lifecycleCallbacks: {  }
+

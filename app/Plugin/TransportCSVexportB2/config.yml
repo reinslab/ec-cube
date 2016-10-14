@@ -1,0 +1,8 @@
+name: ヤマトB2・CSV出力
+event: TransportCSVexportB2
+code: TransportCSVexportB2
+version: 1.0.1
+service: 
+    - TransportCSVexportB2ServiceProvider
+orm.path:
+    - /Resource/doctrine

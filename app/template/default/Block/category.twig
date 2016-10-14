@@ -51,19 +51,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   </li>
   <li class="mainmenu">
   <a href="{{ url('help_guide') }} ">ご利用ガイド</a>
-  <ul>
-<li><a href="#">注文方法について</a></li>
-    <li><a href="#">データの入稿について</a></li>
-    <li><a href="#">支払いについて</a></li>
-    <li><a href="#">商品の発送について</a></li>
-    <li><a href="#">キャンセルについて</a></li>
-  </ul>
   </li>
   <li class="mainmenu">
-  <a href="#">データ作成ガイド</a>
+  <a href="{{ url(app.config.user_data_route, {"route": "creation"} )}} ">データ作成ガイド</a>
  </li>
   <li class="mainmenu">
-  <a href="#">製品別テンプレート</a>
+  <a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">製品別テンプレート</a>
  </li>
 
 
