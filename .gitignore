@@ -34,3 +34,4 @@ composer.phar
 .idea
 *.php~
 /nbproject/private/
+.DS_Store
