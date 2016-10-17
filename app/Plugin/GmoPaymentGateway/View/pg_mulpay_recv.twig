@@ -1,0 +1,397 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% block main %}
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">処理区分 <span class='warningError'>*</span></label>
+
+        <div class="col-sm-10 {% if form.ShopID.vars.errors is not empty %}has-error{% endif %}">
+            {# {% if errJobCd is not empty  %} <span class='caution'>{{errJobCd}}</span> {% endif %} #}
+            {{ form_widget(form.ShopID) }}
+            {{ form_errors(form.ShopID) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">支払い種別 <span class='warningError'>*</span></label>
+
+        <div class="col-sm-10 {% if form.ShopPass.vars.errors is not empty %}has-error{% endif %}">
+            {# {% if errCredit_pay_methods is not empty  %} <span class='caution'>{{errCredit_pay_methods}}</span> {% endif %} #}
+            {{ form_widget(form.ShopPass) }}
+            {{ form_errors(form.ShopPass) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">本人認証サービス(3Dセキュア)</label>
+
+        <div class="col-sm-10{% if form.AccessID.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AccessID) }}
+            {{ form_errors(form.AccessID) }}
+            <p class='small'>※本人認証サービスを使用するにはSSL環境が必要です。</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">3Dセキュア表示店舗名</label>
+
+        <div class="col-sm-10{% if form.AccessPass.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AccessPass) }}
+            {{ form_errors(form.AccessPass) }}
+            <p class='small'>※本人認証サービスを利用しない場合、入力は不要です。</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">決済完了案内タイトル</label>
+
+        <div class="col-sm-10{% if form.OrderID.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.OrderID) }}
+            {{ form_errors(form.OrderID) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">決済完了案内本文</label>
+
+        <div class="col-sm-10{% if form.Status.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Status) }}
+            {{ form_errors(form.Status) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目1</label>
+
+        <div class="col-sm-10{% if form.JobCd.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.JobCd) }}
+            {{ form_errors(form.JobCd) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Amount.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Amount) }}
+            {{ form_errors(form.Amount) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Tax.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Tax) }}
+            {{ form_errors(form.Tax) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Currency.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Currency) }}
+            {{ form_errors(form.Currency) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Forward.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Forward) }}
+            {{ form_errors(form.Forward) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Method.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Method) }}
+            {{ form_errors(form.Method) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.PayTimes.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.PayTimes) }}
+            {{ form_errors(form.PayTimes) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.TranID.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.TranID) }}
+            {{ form_errors(form.TranID) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Approve.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Approve) }}
+            {{ form_errors(form.Approve) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.TranDate.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.TranDate) }}
+            {{ form_errors(form.TranDate) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.ErrCode.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.ErrCode) }}
+            {{ form_errors(form.ErrCode) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.ErrInfo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.ErrInfo) }}
+            {{ form_errors(form.ErrInfo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.PayType.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.PayType) }}
+            {{ form_errors(form.PayType) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.CvsCode.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.CvsCode) }}
+            {{ form_errors(form.CvsCode) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.CvsConfNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.CvsConfNo) }}
+            {{ form_errors(form.CvsConfNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.CvsReceiptNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.CvsReceiptNo) }}
+            {{ form_errors(form.CvsReceiptNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.EdyReceiptNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.EdyReceiptNo) }}
+            {{ form_errors(form.EdyReceiptNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.EdyOrderNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.EdyOrderNo) }}
+            {{ form_errors(form.EdyOrderNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.SuicaReceiptNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.SuicaReceiptNo) }}
+            {{ form_errors(form.SuicaReceiptNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.SuicaOrderNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.SuicaOrderNo) }}
+            {{ form_errors(form.SuicaOrderNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.CustID.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.CustID) }}
+            {{ form_errors(form.CustID) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.BkCode.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.BkCode) }}
+            {{ form_errors(form.BkCode) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.ConfNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.ConfNo) }}
+            {{ form_errors(form.ConfNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.PaymentTerm.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.PaymentTerm) }}
+            {{ form_errors(form.PaymentTerm) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.EncryptReceiptNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.EncryptReceiptNo) }}
+            {{ form_errors(form.EncryptReceiptNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.Amount.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.Amount) }}
+            {{ form_errors(form.Amount) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.FinishDate.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.FinishDate) }}
+            {{ form_errors(form.FinishDate) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.ReceiptDate.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.ReceiptDate) }}
+            {{ form_errors(form.ReceiptDate) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.WebMoneyManagementNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.WebMoneyManagementNo) }}
+            {{ form_errors(form.WebMoneyManagementNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.WebMoneySettleCode.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.WebMoneySettleCode) }}
+            {{ form_errors(form.WebMoneySettleCode) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.AuPayInfoNo.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AuPayInfoNo) }}
+            {{ form_errors(form.AuPayInfoNo) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.AuPayMethod.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AuPayMethod) }}
+            {{ form_errors(form.AuPayMethod) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.AuCancelAmount.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AuCancelAmount) }}
+            {{ form_errors(form.AuCancelAmount) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.AuCancelTax.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.AuCancelTax) }}
+            {{ form_errors(form.AuCancelTax) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.DocomoSettlementCode.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.DocomoSettlementCode) }}
+            {{ form_errors(form.DocomoSettlementCode) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.DocomoCancelAmount.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.DocomoCancelAmount) }}
+            {{ form_errors(form.DocomoCancelAmount) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label required">自由項目2</label>
+
+        <div class="col-sm-10{% if form.DocomoCancelTax.vars.errors is not empty %}has-error{% endif %}">
+            {{ form_widget(form.DocomoCancelTax) }}
+            {{ form_errors(form.DocomoCancelTax) }}
+        </div>
+    </div>
+{% endblock %}

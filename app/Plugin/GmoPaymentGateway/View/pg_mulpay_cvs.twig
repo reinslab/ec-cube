@@ -1,0 +1,58 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block main %}
+
+    <h2 class="title">{{ title }}</h2>
+    <form name="form1" id="form1" method="post" action="{{ url('gmo_shopping_payment') }}">
+        <div id="payment_form_loading" style="{% if tpl_is_loding == false %}display:none;{% endif %}">
+            <div class="information">
+                <p>決済処理中です。そのまま、お待ち下さい。</p>
+            </div>
+            <div class="dl_table" style="margin-top: 20px;">
+                <dl>
+                    <dd style="text-align: center;">
+                        <img src="{{ app.config.root_urlpath }}{{ app.config.plugin_html_urlpath }}gmo_pg/loading.gif"/>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        {% if error.payment is not empty or error.conveni is not empty %}
+            <div class="message">
+                <p class="errormsg bg-danger">
+                    <svg class="cb cb-warning">
+                        <use xlink:href="#cb-warning"></use>
+                    </svg>{{ error.payment|raw }}
+                </p>
+            </div>
+        {% endif %}
+
+        <div class="dl_table" id="payment_form_body"
+             style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+            <dl>
+                <dt style="width:20%">コンビニ選択<span class="required">必須</span></dt>
+                <dd style="width:80%">
+                    <div class="form-group form-inline {% if error.conveni is not empty %}has-error{% endif %}">
+                        {% for data in paymentInfo.conveni %}
+                            <input type="radio" id="cvs_id_{{ data }}" name="Convenience" value="{{ data }}" style=""/>
+                            <label for="cvs_id_{{ data }}">{{ conveniStores[data] }}</label><br/>
+                        {% endfor %}
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        <div class="row no-padding" style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+            <div class="btn_group col-sm-offset-4 col-sm-4">
+                <p>
+                    <button type="submit" class="btn btn-primary btn-block">ご注文完了ページへ</button>
+                </p>
+                <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

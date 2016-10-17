@@ -1,0 +1,278 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'card' %}
+
+{% set body_class = 'mypage' %}
+
+{% block javascript %}
+  <script type="text/javascript">
+    // add checkbox before each credit card for user check and delete it
+    $(function () {
+      var a = $("#form_cardSeq___name__");
+      var data = a[0].outerHTML;
+      $(".cardSeq").each(function () {
+        check = data.replace(/__name__/g, $(this).attr("cardSeq"));
+        $(check).appendTo($(this));
+      });
+
+      if($("#my_page_regist_credit_CardSeq").attr('value') != undefined){
+        $("#cardSeq")[0].style.display = "table-row";
+      }
+    });
+
+    // check if not have any checkbox was checked and press delete, error message will be show
+    function validate(){
+      var someChecked = false;
+      $("[id^='form_cardSeq_']").each(function () {
+          if ($(this).prop('checked')) {
+              someChecked = true;
+              return false;
+          }
+          ;
+      });
+
+      if (!someChecked) {
+          alert('チェックボックスが選択されていません。');
+          return false;
+      }
+      document.form2.submit();
+      return false;
+    }
+
+    // bind data to from add credit card when user click to card number, display cardSeq and button cancel update
+    function bindData(CardSeq, CardNo, Expire, HolderName){
+      var Expire = Expire.match(/.{1,2}/g);
+      
+      $("#my_page_regist_credit_card_name1").val(HolderName);
+      $("#my_page_regist_credit_expire_month").val(Expire[1]);
+      $("#my_page_regist_credit_expire_year").val(Expire[0]);
+      $("#my_page_regist_credit_CardSeq").val(CardSeq);
+      $("#my_page_regist_credit_CardNo").val('');
+      
+      $("#cardSeq")[0].style.display = "table-row";
+      $("#my_page_regist_credit_CardSeq")[0].type = "text";
+
+      return false;
+
+    }
+  </script>
+{% endblock %}
+
+{% block main %}
+  <style type="text/css">
+    #my_page_regist_credit_CardNo, #my_page_regist_credit_card_name1{
+      width:50%;
+    }
+    td{
+      text-align: center;
+    }
+
+    .td_str{
+      text-align: left;
+    }
+    .caution{
+      color: red;
+      margin-bottom:0px;
+      margin-top:0px;
+    }
+    .cardNoCaution{
+      color: red;
+    }
+    .dl_table dt {
+      width: 25%;
+    }
+    .dl_table dt, .dl_table dd{
+      border: none;
+      padding: 5px;
+    }
+    .dl_table{
+      border: none;
+    }
+    .bg-success{
+      color: #fff;
+      background-color: #18a689;
+    }
+
+  </style>
+  <h1 class="page-heading">マイページ{% if heading != ''%}{{heading}}{% endif %}</h1>
+  {% include 'Mypage/navi.twig' %}
+  <h2 class="heading01">登録カード一覧</h2>
+  <div class="container-fluid">
+    <div class="row" style="padding-bottom: 0px;">
+      <div class="col-md-1"></div>
+      <div class = "col-md-10" style="border-bottom: 1px dotted #ccc; padding-bottom:60px">
+        {% if errors is not empty %}
+          <div class="message">
+            <p class="errormsg bg-danger">
+              <svg class="cb cb-warning">
+                <use xlink:href="#cb-warning"></use>
+              </svg>
+              {% for error in errors %}
+                {{error}}
+              {% endfor %}
+            </p>
+          </div>
+        {% endif %}
+        
+        {% if errorsAdd is not empty %}
+          <div class="message">
+            <p class="errormsg bg-danger">
+              <svg class="cb cb-warning">
+                <use xlink:href="#cb-warning"></use>
+              </svg>
+              {% for error in errorsAdd %}
+                {{error}}
+              {% endfor %}
+            </p>
+          </div>
+        {% endif %}
+
+        {% if app.session.flashBag.has('eccube.mypage.info') %}
+            {% for message in app.session.flashBag.get('eccube.mypage.info') %}
+                <div class="message">
+                  <p class="errormsg bg-success">
+                    {{ message|trans }}
+                  </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if app.session.flashBag.has('eccube.mypage.error') %}
+            {% for message in app.session.flashBag.get('eccube.mypage.error') %}
+                <div class="message">
+                  <p class="errormsg bg-danger">
+                    {{ message|trans }}
+                  </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if cardList is empty %}
+          <p>登録されているカード情報はありません。</p>
+        {% else %}
+          <form class="form-horizontal" name="form2" id="form2" method="post" action="{{ url('gmo_mypage_change_card') }}">
+            {{ form_widget(form2._token) }}
+            <table class="table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>削除</th>
+                  <th>番号</th>
+                  <th class="td_str">カード番号</th>
+                  <th class="td_str">有効期限</th>
+                  <th class="td_str">名義人</th>
+                </tr>
+              </thead>
+              <tbody>
+                <div style="display:none">
+                  {{ form_widget(form2.cardSeq.vars.prototype) }}
+                </div>
+                {% for card in cardList %}
+                  <tr>
+                    <td class="cardSeq" cardSeq="{{ card.CardSeq }}">
+                    </td>
+                    <td>
+                      {{ card.CardSeq }}
+                    </td>
+                    <td class="td_str">
+                      <a href="#" onclick="bindData('{{ card.CardSeq }}', '{{ card.CardNo }}', '{{ card.Expire }}', '{{ card.HolderName }}'); return false;">
+                        {{ card.CardNo }}
+                      </a>
+                    </td>
+                    <td class="td_str">
+                      {{card.expire_year}}年{{card.expire_month}}月
+                    </td>
+                    <td class="td_str">
+                      {{ card.HolderName }}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <a class="btn btn-default" href="#" onclick="validate(); return false;" style="margin-top: 20px;">選択したカードを削除</a>
+          </form>
+        {% endif %}
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+    <div class="row" style="padding-top: 40px;">
+      <div class = "col-md-1"></div>
+      <div class = "col-md-10">
+        
+        <form name="form1" id="form1" method="post" action="{{ url('gmo_mypage_change_card') }}">
+          {{ form_widget(form._token) }}
+          <div class="dl_table">
+            <dl>
+              <dt>
+                カード番号
+                <span class="caution">※</span>
+              </dt>
+              <dd>
+                <div class="form-group form-inline {% if form.CardNo.vars.errors is not empty %}has-error{% endif %}">
+                  {{ form_widget(form.CardNo) }}
+                  <span class="cardNoCaution">※変更時、カード番号は再入力が必要です。</span>
+                  {{ form_errors(form.CardNo) }}
+                </div>
+              </dd>
+            </dl>
+            
+            <dl>
+              <dt>
+                有効期限
+                <span class="caution">※</span>
+              </dt>
+              <dd>
+                <div class="form-group form-inline {% if form.expire_month.vars.errors is not empty %}has-error{% endif %} {% if form.expire_year.vars.errors is not empty %}has-error{% endif %}">
+                  {{ form_widget(form.expire_month) }}月 / 20
+                  {{ form_widget(form.expire_year) }}年
+                  {{ form_errors(form.expire_month) }}
+                  {{ form_errors(form.expire_year) }}
+                </div>
+              </dd>
+            </dl>
+            
+            <dl>
+              <dt>
+                名義人
+                <span class="caution">※</span>
+              </dt>
+              <dd>
+                <div class="form-group form-inline {% if form.card_name1.vars.errors is not empty %}has-error{% endif %}">
+                  {{ form_widget(form.card_name1) }}
+                  <span>※「Mr.」等の敬称は入力不要です。</span>
+                  {{ form_errors(form.card_name1) }}
+                </div>
+              </dd>
+            </dl>
+            
+            <dl id="cardSeq" style="display:none">
+              <dt>番号
+                <span class="caution">※</span>
+              </dt>
+              <dd>
+                <div class="form-group form-inline {% if form.CardSeq.vars.errors is not empty %}has-error{% endif %}">
+                  {{ form_widget(form.CardSeq) }}{{ form_errors(form.CardSeq) }}
+                </div>
+              </dd>
+            </dl>
+
+            <dl>
+              <dt><a id= "addCard" href="#" onclick="document.form1.submit(); return false;" class="btn btn-default" style="margin-top: 20px;">入力内容を保存</a></dt>
+            </dl>
+          </div>
+        </form>
+
+      </div>
+      <div class = "col-md-1"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function fnDelete(action) {
+      document.del_form.action = action;
+      document.del_form.submit();
+    }
+  </script>
+{% endblock %}

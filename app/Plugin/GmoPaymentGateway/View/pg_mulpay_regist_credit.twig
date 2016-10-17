@@ -1,0 +1,131 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+    <script>
+        {% if dataReturn.tpl_payment_onload %}
+        document.form1.submit();
+        {% endif%}
+    </script>
+{% endblock %}
+
+{% block main %}
+    <style type="text/css">
+    td{
+      text-align: center;
+    }
+  </style>
+    <h2 class="title">{{ title }}</h2>
+    <form name="form1" id="form1" method="post" action="{% if dataReturn.next_action is not empty %}{{ dataReturn.next_action }}{% else %}{{ url('gmo_shopping_payment') }}{% endif %}" {{ form_enctype(form) }} >
+        {{ form_widget(form._token) }}
+        <input type="hidden" name="mode" value="next"/>
+        {% if dataReturn.tpl_is_td_tran %}
+            <div id="payment_form_td_tran"
+                 style="{% if dataReturn.tpl_is_td_tran == false %}display:none; {% endif %} ">
+                <div class="information">
+                    <p>本人認証サービス(3-Dセキュア認証)の画面に移動します。</p>
+                </div>
+                <table summary="">
+                    <tr>
+                        <td class="alignC">
+                            本人認証サービス（3-Dセキュア認証）を続けます。<br/>
+                            「次へ」ボタンをクリックして下さい。<br/>
+                            <span class="text-danger">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="PaReq" value="{{ dataReturn.arrTdData.PaReq }}"/>
+            <input type="hidden" name="PaRes" value="{{ dataReturn.arrTdData.PaRes }}"/>
+            <input type="hidden" name="TermUrl" value="{{ dataReturn.arrTdData.TermUrl }}"/>
+            <input type="hidden" name="MD" value="{{ dataReturn.arrTdData.MD }}"/>
+
+        {% endif %}
+
+        <div id="payment_form_loading"
+             style="{% if tpl_is_loding == false and do_request == false %}display:none;{% endif %}">
+            <div class="information">
+                <p>決済処理中です。しばらくお待ち下さい。</p>
+            </div>
+            
+        </div>
+        {% if error.payment is not empty %}
+            <div class="message">
+                <p class="errormsg bg-danger">
+                    <svg class="cb cb-warning">
+                        <use xlink:href="#cb-warning"></use>
+                    </svg>{{ error.payment|raw }}
+                </p>
+            </div>
+            <div class="row no-padding">
+                <div class="btn_group col-sm-offset-4 col-sm-4">
+                    <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                </div>
+            </div>
+        {% else %}
+            <p>決済に利用するカードをご選択ください。「<span class="text-danger">※</span>」印は入力必須項目です。<br/>
+                        入力後、一番下の「次へ」ボタンをクリックしてください。</p>
+
+            <p class="text-danger">{{ error.payment }}</p>
+            <p class="text-danger">{{ error.CardSeq }}</p>
+            <div id="payment_form_body" style="{%if tpl_is_loding%}display:none;{% endif %}" >
+                <table class="table" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th >選択<span class="required">必須</span></th>
+                        <th >カード番号</th>
+                        <th >有効期限</th>
+                        <th >名義人</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for data in listData %}
+                        <tr>
+                            <td>
+                                <input type="radio" name="CardSeq" value="{{ data.CardSeq }}"
+                                {% if tpl_plg_target_seq == data.CardSeq %}checked="checked"{% endif %}/> 
+                            </td>
+                          
+                            <td >
+                                {{ data.CardNo }}
+                            </td>
+                            <td >
+                                {{ data.expire_year }}年{{ data.expire_month }}月
+                            </td>
+                            <td >
+                                {{ data.HolderName }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>支払い方法<span class="required">必須</span></td>
+                        <td >
+                           <div class="form-group form-inline {% if form.method.vars.errors is not empty %}has-error{% endif %}">
+                                {{ form_widget(form.method) }}
+                                {{ form_errors(form.method) }}
+                            </div> 
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                    
+                    </tbody>
+                </table>
+               
+            </div>
+            <span>以上の内容で間違いなければ、下記「次へ」ボタンをクリックしてください。<br/></span>
+            <span class="text-danger">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+            <div class="row no-padding" style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+               <div class="btn_group col-sm-offset-4 col-sm-4">
+                   <p>
+                       <button type="submit" class="btn btn-primary btn-block">ご注文完了ページへ</button>
+                   </p>
+                   <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+               </div>
+           </div>
+        {% endif %}
+    </form>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% block main %}
+    <form name="form1" id="form1" method="post" action="{{ url('gmo_shopping_payment_recv') }}">
+        {{ form_widget(form) }}
+        <input type="image" alt="ご注文完了ページへ" name="next-bottom" id="next-bottom"/>
+    </form>
+{% endblock %}

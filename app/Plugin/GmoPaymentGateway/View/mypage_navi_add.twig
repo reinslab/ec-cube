@@ -1,0 +1,8 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+
+{% block main %}
+    <li class="{% if mypageno|default('') == 'card' %}active{% endif %}"><a{% if mypageno|default('') != 'card' %} href="{{ url('gmo_mypage_change_card') }}"{% endif %}>カード情報編集</a></li>
+{% endblock %}

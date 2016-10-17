@@ -1,0 +1,47 @@
+Plugin\GmoPaymentGateway\Entity\GmoMember:
+    type: entity
+    table: dtb_gmo_member
+    repositoryClass: Plugin\GmoPaymentGateway\Repository\GmoMemberRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+    fields:
+        customer_id:
+            type: integer
+            nullable: false
+        customer_create_date:
+            type: datetime
+            nullable: false
+        old_member_id:
+            type: text
+            nullable: true
+        new_member_id:
+            type: text
+            nullable: true
+        create_date:
+            type: datetime
+            nullable: false
+            unsigned: false
+        update_date:
+            type: datetime
+            nullable: false
+            unsigned: false
+    oneToOne:
+        Customer:
+            targetEntity: Eccube\Entity\Customer
+            joinColumn:
+                name: customer_id
+                referencedColumnName: customer_id
+    indexes:
+        dtb_gmo_member_customer_id_customer_create_date_index:
+            columns:
+                - customer_id
+                - customer_create_date
+            
+    lifecycleCallbacks: {  }
