@@ -243,6 +243,31 @@ h1.header_logo{
 	padding-top: 15px;
 	line-height: 140%;
 }
+.data-h3 {
+	font-weight: bold;
+	border-bottom: 4px solid #565656;
+	padding-bottom: 3px;
+	padding-top: 35px;
+	padding-left: 10px;
+	font-size: 1.25em;
+}
+.data-caption {
+	padding-top: 25px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+.data-caption:first-line {
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 1.25em;
+}
+.data-caption b {
+	color: #B70003;
+}
+.data-img {
+	padding-left: 20px;
+}
+
 
 
 
