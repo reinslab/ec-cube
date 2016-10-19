@@ -1,0 +1,68 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+    <div id="contents" class="main_only">
+        <div id="guide_wrap" class="container-fluid inner no-padding">
+            <div id="main">
+                <h1 class="page-heading">データ作成ガイド</h1>
+                <div id="guide_box__body"  class="container-fluid">
+                    <div id="guide_box__body_inner" class="row">
+                        <div id="guide_box__body_item" class="col-md-10 col-md-offset-1">
+                        
+                        <div class="guide-h2">入稿データについて</div>
+                        
+                        <div class="data-h3">データ形式とテンプレートについて</div>
+                        <div class="data-caption">
+                        入稿データは<b>PDF/X-4のみ</b>の対応となります。<br><br>
+                        製品のテンプレートは<b>Aiファイル</b>でご用意しております。<br>
+                        データ制作には、<b>Illustrator</b>をご使用下さい。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/X-4.png" alt=""/></div>
+                        
+                        <div class="data-caption">
+                        制作用データには、必ず当サイト<b>指定のテンプレート</b>を使用してください。<br><br>
+                        また、必ず<b>注文する商品のサイズ</b>で作成し、中に入る絵柄をデザインしてください。<br><br>
+                        商品サイズとテンプレートのサイズが違う場合、データとしては問題がなくても、<br>
+                        <b>データ不備</b>となり、印刷作業に進むことができません。<br><br>
+                        <a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">→【製品別テンプレート一覧】はコチラ。</a></div>
+                        
+                        
+                        <div class="data-h3">印刷用データの注意点</div>
+                        <div class="data-caption">
+                        紙端までデザイン（背景色・写真）がある場合、必ず<b>「塗り足し」</b>を付けてください。<br><br>
+                        色と色の境目ぴったりを、少しもずれずに用紙を断裁することは困難です。<br>
+                        断裁機の僅かな位置ズレにより、紙の白場が見えてしまうのを防ぐため、<br>
+                        仕上がりサイズの外側に<b>3mm以上</b>、わざと<b>はみ出すように余分にデザイン</b>しておくことを<br>
+                        「塗り足し」といいます。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-1.png" alt=""/></div>
+                        <div class="data-caption">
+                        紙端付近に配置された文字は、<b>切れてしまう可能性</b>があります。<br><br>
+                        「塗り足し」でも説明したように、断裁にはズレが生じる可能性があります。<br>
+                        仕上がりサイズの内側ギリギリに文字や図形などを置くと、<br>
+                        <b>意図しない部分まで切れてしまう</b>可能性があります。<br><br>
+                        切れて困る文字は、仕上がり線より<b>3mm以上内側</b>に収まるよう配置してください。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-2.png" alt=""/></div>
+                        <div class="data-caption">
+                        印刷用データのカラーモードは<b>“CMYK”</b>モードです。<br><br>
+                        一般的なデジカメ画像やWeb画像などで使われているRGBモードのデータの場合は、<br>
+                        色調が正しく再現されない場合があります。<br><br>
+                        また、<b>特色は使用できません</b>。<br>
+                        入稿時に必ず<b>「プロセスカラー」へ変換</b>をお願いします。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-3.png" alt=""/></div>
+                        <div class="data-caption">
+                        印刷用データとして利用する画像の解像度は、<b>350dpi以上</b>が必要です。<br><br>
+                        Webなどで使われる画像解像度が低いデータを利用した場合、<br>
+                        印刷物では粗く再現されてしまいます。<br><br>
+                        解像度（dpi）は、デジタル画像のきめの細やかさを表します。<br>
+                        印刷に使用される画像は、解像度350dpi前後あれば、充分な印刷品質を保つことができます。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-4.png" alt=""/></div>
+                        
+                        
+                        </div>
+                      </div><!-- /.col -->
+                    </div><!-- /.row -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

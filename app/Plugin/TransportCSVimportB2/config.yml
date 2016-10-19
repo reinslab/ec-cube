@@ -1,0 +1,8 @@
+name: ヤマトB2・CSV登録
+event: TransportCSVimportB2
+code: TransportCSVimportB2
+version: 1.0.0
+service: 
+    - TransportCSVimportB2ServiceProvider
+orm.path:
+    - /Resource/doctrine

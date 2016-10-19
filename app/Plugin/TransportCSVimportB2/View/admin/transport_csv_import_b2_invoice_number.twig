@@ -1,0 +1,27 @@
+{#
+ This file is part of EC-CUBE
+
+ Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+ http://www.lockon.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+            {# ヤマトB2送り状番号 #}
+            {% for shippingB2IN in arrShippingB2 %}
+            <div id="invoice_number_b2_info_box" class="box accordion">
+                <div id="invoice_number_b2_box__toggle" class="box-header toggle active">
+                    <h3 class="box-title">ヤマトB2送り状番号 お届け先{% if arrShippingB2|length > 1 %}({{ loop.index }}) <span class="small">{{ shippingB2IN.sippping_adrr }} {{ shippingB2IN.sippping_name }}様</span>{% endif %}<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+                </div><!-- /.box-header -->
+                <div id="invoice_number_b2_box__body" class="box-body accpanel" style="display: block;">
+                    <dl id="invoice_number_b2_box" class="dl-horizontal">
+                        <dt>送り状番号</dt>
+                        <dd class="form-group form-inline">
+                            {{ form_widget(form[shippingB2IN.name], {'value' : shippingB2IN.invoice_number}) }}
+                            {{ form_errors(form[shippingB2IN.name]) }}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            {% endfor %}
+            {{ form_rest(form) }}

@@ -1,0 +1,25 @@
+Plugin\TransportCSVimportB2\Entity\TransportCSVimportB2:
+    type: entity
+    table: plg_transport_csv_import_b2
+    repositoryClass: Plugin\TransportCSVimportB2\Repository\TransportCSVimportB2Repository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+    fields:
+        shipping_id:
+            type: smallint
+            nullable: false
+        order_id:
+            type: smallint
+            nullable: true
+        invoice_number:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }
+

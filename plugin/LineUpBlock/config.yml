@@ -1,6 +1,0 @@
-name: ラインナップ
-code: LineUpBlock
-version: 0.0.2
-event: LineUpEvent
-service:
-    - LineUpBlockServiceProvider

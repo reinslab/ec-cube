@@ -1,0 +1,67 @@
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+<script>
+$(document).ready(function(){
+    var resubmit = {{re_submit ?1:0}};
+    if (resubmit) {
+        autoSubmitForm('next', 0);
+    };
+
+    $("#return-button").click(function() {
+        autoSubmitForm('return', 0)
+    });
+
+    function autoSubmitForm(mode, time){
+        document.form1.gmo_payment_mode.value = mode;
+        setTimeout(function(){document.form1.submit();},time);
+    };
+});
+</script>
+{% endblock %}
+
+{% block main %}
+<h2 class="title">{{ tpl_title }}</h2>
+<form name="form1" id="form1" method="post" action="{{redirect_url}}">
+    {{ form_widget(form.mode) }}
+    {% if tpl_is_loding %}
+    <div id="payment_form_loading">
+        <div class="information">
+            {% if rakutenRequest %}
+            <p>楽天ID決済処理中です。そのまま、お待ち下さい。</p>
+            <span class="attention">金融機関反映のため、20秒程度お待ち下さい。自動で画面が切り替わります。</span>
+            <input type="hidden" name="AccessID" value="{{rakutenData.AccessID}}" />
+            <input type="hidden" name="Token" value="{{rakutenData.Token}}" />
+            {% else %}
+            <p>楽天ID決済処理中です。そのまま、お待ち下さい。</p>
+            <span class="text-danger">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+            {% endif %}
+        </div>
+        <div class="dl_table" style="margin-top: 20px;">
+            <dl>
+                <dd style="text-align: center;">
+                    <img src="{{ app.config.root_urlpath }}{{ app.config.plugin_html_urlpath }}gmo_pg/loading.gif"/>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    {% else %}
+    <div id="payment_form_body">
+        <div class="information">
+            <p>楽天ID決済エラー<br />
+            大変お手数ですがエラーの内容を確認して、再度お手続きを進めて下さい。</p>
+            <p class="text-danger">※ 決済でエラーが発生しました。</p>
+            {% for error in error %}
+            <p class="text-danger">{{ error }}</p><br/>
+            {% endfor %}
+        </div>
+        <div class="row no-padding" style="{% if tpl_is_loding %}display:none;{% endif %}">
+        <div class="btn_group col-sm-offset-4 col-sm-4">
+            <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+        </div>
+        </div>
+    </div>
+    {% endif %}
+    
+</form>
+{% endblock %}

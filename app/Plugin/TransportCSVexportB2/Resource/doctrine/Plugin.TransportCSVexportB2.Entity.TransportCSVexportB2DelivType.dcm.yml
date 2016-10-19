@@ -1,0 +1,18 @@
+Plugin\TransportCSVexportB2\Entity\TransportCSVexportB2DelivType:
+    type: entity
+    table: plg_transport_csv_export_b2_deliv_type
+    repositoryClass: Plugin\TransportCSVexportB2\Repository\TransportCSVexportB2DelivTypeRepository
+    id:
+        id:
+            type: smallint
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        name:
+            type: text
+            nullable: false
+        rank:
+            type: smallint
+            nullable: false
+    lifecycleCallbacks: {  }

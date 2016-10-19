@@ -1257,5 +1257,148 @@ class ShoppingService
 
     }
 
+///////////////////////////////////////////////////////
+    /**
+     * 受注情報を作成
+     *
+     * @param $Customer
+     * @return \Eccube\Entity\Order
+     */
+    public function createEstimateOrder($Customer)
+    {
+        // ランダムなpre_order_idを作成
+        do {
+            $preOrderId = sha1(Str::random(32));
+            $Order = $this->app['eccube.repository.order']->findOneBy(array(
+                'pre_order_id' => $preOrderId,
+                'OrderStatus' => $this->app['config']['order_processing'],
+            ));
+        } while ($Order);
+
+        // 受注情報、受注明細情報、お届け先情報、配送商品情報を作成
+        $Order = $this->registerEstimatePreOrder(
+            $Customer,
+            $preOrderId);
+
+        $this->cartService->setPreOrderId($preOrderId);
+        $this->cartService->save();
+
+        return $Order;
+    }
+
+    /**
+     * 見積保存を行う
+     *
+     * @param Order $Order
+     * @throws ShoppingException
+     */
+    public function estimatePurchase(Order $Order)
+    {
+        $em = $this->app['orm.em'];
+
+        // 受注情報を更新
+        $Order->setOrderDate(new \DateTime());
+        $OrderStatus = $this->app['eccube.repository.order_status']->find($this->app['config']['order_estimate']);
+
+        $this->setOrderStatus($Order, $OrderStatus);
+
+    }
+
+    /**
+     * 仮受注情報作成
+     *
+     * @param $Customer
+     * @param $preOrderId
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function registerEstimatePreOrder(Customer $Customer, $preOrderId)
+    {
+
+        $this->em = $this->app['orm.em'];
+
+        // 受注情報を作成
+        $Order = $this->getNewEstimateOrder($Customer);
+        $Order->setPreOrderId($preOrderId);
+
+        $this->em->persist($Order);
+
+        // 配送業者情報を取得
+        $deliveries = $this->getDeliveriesCart();
+
+        // お届け先情報を作成
+        $Order = $this->getNewShipping($Order, $Customer, $deliveries);
+
+        // 受注明細情報、配送商品情報を作成
+        $Order = $this->getNewDetails($Order);
+
+        // 小計
+        $subTotal = $this->orderService->getSubTotal($Order);
+
+        // 消費税のみの小計
+        $tax = $this->orderService->getTotalTax($Order);
+
+        // 配送料合計金額
+        $Order->setDeliveryFeeTotal($this->getShippingDeliveryFeeTotal($Order->getShippings()));
+
+        // 小計
+        $Order->setSubTotal($subTotal);
+
+        // 配送料無料条件(合計金額)
+        $this->setDeliveryFreeAmount($Order);
+
+        // 配送料無料条件(合計数量)
+        $this->setDeliveryFreeQuantity($Order);
+
+        // 初期選択の支払い方法をセット
+        $payments = $this->app['eccube.repository.payment']->findAllowedPayments($deliveries);
+        $payments = $this->getPayments($payments, $subTotal);
+
+        if (count($payments) > 0) {
+            $payment = $payments[0];
+            $Order->setPayment($payment);
+            $Order->setPaymentMethod($payment->getMethod());
+            $Order->setCharge($payment->getCharge());
+        } else {
+            $Order->setCharge(0);
+        }
+
+        $Order->setTax($tax);
+
+        // 合計金額の計算
+        $this->calculatePrice($Order);
+
+        $this->em->flush();
+
+        return $Order;
+
+    }
+
+    /**
+     * 見積情報を作成
+     * @param $Customer
+     * @return \Eccube\Entity\Order
+     */
+    public function getNewEstimateOrder(Customer $Customer)
+    {
+        $Order = $this->newEstimateOrder();
+        $this->copyToOrderFromCustomer($Order, $Customer);
+
+        return $Order;
+    }
+
+    /**
+     * 受注情報を作成
+     * @return \Eccube\Entity\Order
+     */
+    public function newEstimateOrder()
+    {
+
+        $OrderStatus = $this->app['eccube.repository.order_status']->find($this->app['config']['order_estimate']);
+        $Order = new \Eccube\Entity\Order($OrderStatus);
+        return $Order;
+    }
+
 
 }

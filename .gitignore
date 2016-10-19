@@ -8,7 +8,7 @@ composer.phar
 !/app/config/eccube/.gitkeep
 /app/log/*
 !/app/log/.gitkeep
-/app/Plugin/*
+!/app/Plugin/*
 !/app/Plugin/.gitkeep
 /app/template/*
 !/app/template/admin
@@ -25,8 +25,8 @@ composer.phar
 !/html/template/admin
 !/html/template/default
 !/html/template/install
-/html/user_data/*
-!/html/user_data/.gitkeep
+#/html/user_data/*
+#!/html/user_data/.gitkeep
 /phpunit.xml
 /src/Eccube/Resource/config/*.dist.php
 /tests/tmp/*
@@ -34,4 +34,4 @@ composer.phar
 .idea
 *.php~
 /nbproject/private/
-/app/template/default/Block/well_lineup_block.twig
+.DS_Store

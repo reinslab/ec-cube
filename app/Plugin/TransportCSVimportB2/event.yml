@@ -1,0 +1,8 @@
+eccube.event.render.admin_order_edit.before:
+    - [onRenderAdminOrderEditBefore, NORMAL]
+eccube.event.controller.admin_order_edit.before:
+    - [onControllerAdminOrderEditBefore, NORMAL]
+eccube.event.render.admin_order_mail.before:
+    - [onControllerAdminOrderMailBefore, NORMAL]
+eccube.event.render.admin_order.before:
+    - [onRenderAdminOrderBefore, NORMAL]

@@ -40,11 +40,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         {{ _self.tree(Category) }}
     {% endfor %} -->
 
-<li class="mainmenu">
-  <a href="{{ url('homepage') }}">トップページ</a>
-  </li>
   <li class="mainmenu">
-  <a href="#">商品一覧</a>
+  <a href="{{ url('product_list') }}">商品一覧</a>
 
   <ul>
 {% for Category in Categories %}
@@ -53,29 +50,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   </ul>
   </li>
   <li class="mainmenu">
-  <a href="#">ご利用ガイド</a>
-  <ul>
-    <li><a href="#">データの入稿方法</a></li>
-    <li><a href="#">注文・支払いについて</a></li>
-    <li><a href="#">発送・配送について</a></li>
-    <li><a href="#">変更・キャンセルについて</a></li>
-    <li><a href="#">製品の活用事例</a></li>
-  </ul>
+  <a href="{{ url('help_guide') }} ">ご利用ガイド</a>
   </li>
   <li class="mainmenu">
-  <a href="#">データの作り方</a>
-  <ul>
-    <li><a href="#">データ作成ガイド</a></li>
-    <li><a href="#">製品別テンプレート</a></li>
-  </ul>
-  </li>
+  <a href="{{ url(app.config.user_data_route, {"route": "creation"} )}} ">データ作成ガイド</a>
+ </li>
   <li class="mainmenu">
-  <a href="#">お問い合わせ</a>
-  <ul class="footermenu">
-    <li><a href="#">よくある質問</a></li>
-    <li><a href="#">問い合わせフォーム</a></li>
-  </ul>
-  </li>
+  <a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">製品別テンプレート</a>
+ </li>
+
 
     </ul> <!-- category-nav -->
 </nav>

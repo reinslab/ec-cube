@@ -1,0 +1,68 @@
+{#
+ This file is part of EC-CUBE
+
+ Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+ http://www.lockon.co.jp/
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown">ヤマトB2CSVダウンロード<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></a>
+
+{% block javascript %}
+<script>
+
+var exportB2 = "{{ url('admin_order_export_b2') }}";
+
+jQuery(function($){
+    $('.b2_csv').click(function(){
+        var ajaxB2 = "{{ url('admin_order_ajax_b2') }}";
+
+        if ($('#dropdown-form').serialize()) {
+            ajaxB2 = ajaxB2 + '?' + $('#dropdown-form').serialize();
+        }
+
+        $.ajax({
+            dataType: 'json',
+            url: ajaxB2,
+            success:function(data) {
+                if (data) {
+                    if (data['status'] && !confirm("【発送済み】もしくは【キャンセル】の商品が選択されています。\nこのままCSVダウンロードを続けますか？")) {
+                        return;
+                    }
+                    if (data['deliv'] && !confirm("複数の配送業者の受注データが混在しています。\nこのままCSVダウンロードを続けますか？")) {
+                        return;
+                    }
+                }
+                if (data['os_flg']) {
+                    var str = '';
+                    if (data['os_str']) {
+                        str = '対応状況変更設定されている\n【'+data['os_str']+'】を\n【発送済み】に変更します。\nよろしいですか？';
+                    } else {
+                        str = '対応状況を【発送済み】に変更します。\nよろしいですか？';
+                    }
+                    if (data['os_str'] && confirm(str)) {
+                        var urlB2 = exportB2 + 't';
+                        $('#dropdown-form').attr('action', urlB2).submit();
+                    } else {
+                        $('#dropdown-form').attr('action', exportB2).submit();
+                    }
+                } else {
+                    $('#dropdown-form').attr('action', exportB2).submit();
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
+            }
+        });
+    });
+
+});
+</script>
+{% endblock javascript %}
+
+                                    <ul class="dropdown-menu">
+                                        <li><a class="b2_csv" href="javascript:;" name="b2_csv">ヤマトB2CSVダウンロード</a></li>
+                                    </ul>
+                                </li>

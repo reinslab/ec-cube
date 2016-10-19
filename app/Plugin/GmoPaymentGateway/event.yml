@@ -1,0 +1,50 @@
+eccube.event.render.shopping.before:
+    - [onRenderShoppingBefore, NORMAL]
+eccube.event.render.shopping_complete.before:
+    - [onRenderShoppingCompleteBefore, NORMAL]
+eccube.event.render.admin_setting_shop_payment_edit.before:
+    - [onRenderAdminSettingShopPaymentEditBefore, NORMAL]
+eccube.event.controller.admin_setting_shop_payment_edit.after:
+    - [onControllerAdminSettingShopPaymentEditAfter, NORMAL]
+eccube.event.render.admin_order_edit.before:
+    - [onRenderAdminOrderEditBefore, NORMAL]
+eccube.event.render.admin_order_new.before:
+    - [onRenderAdminOrderNewBefore, NORMAL]
+eccube.event.controller.admin_order_edit.after:
+    - [onControllerAdminOrderEditControllerAfter, NORMAL]
+eccube.event.controller.shopping_confirm.before:
+    - [onControllerShoppingConfirmBefore, NORMAL]
+#Edit admin customer
+eccube.event.render.admin_customer_edit.before:
+    - [onRenderAdminCustomerEditBefore, NORMAL]
+#Admin delete payment method
+eccube.event.controller.admin_setting_shop_payment_delete.before:
+    - [onControllerAdminPaymentDeleteControllerBefore, NORMAL]
+    
+# Mypage events
+eccube.event.render.mypage.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_change.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_change_complete.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_delivery.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_delivery_new.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_delivery_edit.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_favorite.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_history.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_mail_view.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_order.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.mypage_withdraw.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.gmo_mypage_subscription_orders.before:
+    - [onRenderMypageBefore, NORMAL]
+eccube.event.render.gmo_mypage_change_card.before:
+    - [onRenderMypageBefore, NORMAL]

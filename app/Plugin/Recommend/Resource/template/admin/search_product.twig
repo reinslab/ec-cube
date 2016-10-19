@@ -1,0 +1,40 @@
+<script>
+    function fnSelectProduct($row, product_id, product_name) {
+
+        $('#product_name').text(product_name);
+        $('#admin_recommend_Product').val(product_id);
+
+        // モーダル閉じる.
+        $('#searchProductModal').modal('hide');
+
+        return false;
+    }
+</script>
+<div class="table-responsive">
+    <table class="table">
+        <tbody>
+        {% for Product in Products %}
+            <form name="product_form{{ Product.id }}">
+                {% set form = forms[Product.id] %}
+
+                <tr>
+                    <td>
+                        {{ Product.name }}
+                        {% if Product.hasProductClass %}
+                            <span><br/>{{ Product.code_min }}～{{ Product.code_max }}</span>
+                        {% else %}
+                            <span><br/>{{ Product.code_min }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <button onclick="fnSelectProduct($(this).parent().parent(), {{ Product.id }},  '{{ Product.name }}')" type="button" class="btn btn-default btn-sm">
+                            決定
+                        </button>
+                    </td>
+                </tr>
+            </form>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
