@@ -269,8 +269,6 @@ h1.header_logo{
 }
 
 
-
-
 @media only screen and (max-width: 767px) {
 .item_gallery li{
     display: none;
@@ -278,7 +276,6 @@ h1.header_logo{
 #main_middle{
 	width: 100%;
 	height: 15em;
-
 }
 }
 @media only screen and (min-width: 768px) {
@@ -316,8 +313,6 @@ h1.header_logo{
 	margin-left: auto;
 	margin-right: auto;
 }
-}
-@media only screen and (max-width: 852px) {
 #member{
 	display:none !important;
 }
@@ -343,7 +338,4 @@ h1.header_logo{
 	position: relative;
 	margin-top: -80px;
 }
-
-
-
 }
