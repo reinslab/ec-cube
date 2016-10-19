@@ -1,4 +1,5 @@
 order_estimate: 0
+order_download: 10
 pdf_size: 20
 re_order_limit_day: 30
 product_type_print: 2

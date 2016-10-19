@@ -1,13 +1,18 @@
-{#
-* Plugin Name : WellDirect
+<?php
+/*
+* Plugin Name : ProductOption
 *
 * Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
 * http://www.bratech.co.jp/
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
-#}
-<div style="text-align:center;">
-                            {{ form_widget(form.entry_checkbox) }}
-                            {{ form_errors(form.entry_checkbox) }}
-</div>
+*/
+
+namespace Plugin\WellDirect\Repository;
+
+use Doctrine\ORM\EntityRepository;
+
+class WellDirectRepository extends EntityRepository
+{
+}

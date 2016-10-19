@@ -8,7 +8,13 @@
 * file that was distributed with this source code.
 #}
 
-<p id="total_box__next_button" >
-    <a href="{{ path('history_delete')}}/#order_id#" class="btn btn-primary btn-block">見積削除</a>
-</p>
+<script type="text/javascript">
+function deleteOrder() {
+	if ( window.confirm('一度削除したデータは、元に戻せません。\n削除しても宜しいですか？') ) {
+		location.href = "{{ url('history_delete', { id:Order.id })}}";
+	}
+}
+</script>
+
+<a href="javascript:;" onclick="deleteOrder()" class="btn btn-default btn-sm">見積削除</a>
 

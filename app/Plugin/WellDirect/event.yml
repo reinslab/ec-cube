@@ -1,9 +1,57 @@
+##################################
 #front page event
+##################################
+
+Mypage/history.twig:
+    - [onRenderInsertDeleteButton, NORMAL]
+Entry/index.twig:
+    - [onRenderEntryIndexAddField, NORMAL]
+Entry/confirm.twig:
+    - [onRenderEntryConfirmAddField, NORMAL]
+Shopping/index.twig:
+    - [onRenderShoppingIndexAddField, NORMAL]
+Mypage/change.twig:
+    - [onRenderMyPageChangeAddField, NORMAL]
+    
+front.entry.index.initialize:
+    - [onRenderEntryIndexAddFieldInit, NORMAL]
+front.entry.index.initialize:
+    - [onRenderEntryIndexAddFieldInit, NORMAL]
+front.mypage.change.index.initialize:
+    - [onRenderMyPageChangeAddFieldInit, NORMAL]
+front.shopping.index.initialize:
+    - [onRenderShoppingIndexAddFieldInit, NORMAL]
+front.shopping.confirm.initialize:
+    - [onRenderShoppingIndexAddFieldInit, NORMAL]
+front.shopping.confirm.complete:
+    - [uploadPdfFile, NORMAL]
+
 eccube.event.render.cart.before:
     - [insertCartSaveButton, AFTER]
-eccube.event.render.mypage_history.before:
-    - [insertDeleteButton, AFTER]
 
+##################################
+#admin page event
+##################################
+
+Admin/Customer/edit.twig:
+    - [onRenderAdminCustomerAddField, NORMAL]
+
+Admin/Order/edit.twig:
+    - [onRenderAdminOrderAddField, NORMAL]
+
+admin.customer.edit.index.initialize:
+    - [onRenderAdminCustomerAddFieldInit, NORMAL]
+
+
+
+
+
+
+
+
+
+
+#///////////////////////////////////////////////////#
 #eccube.event.render.entry.before:
 #Entry/index.twig:
 #    - [insertAddEntryItemButton, AFTER]

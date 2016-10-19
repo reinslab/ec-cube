@@ -81,36 +81,40 @@ class AddCartType extends AbstractType
             ));
 
         if ($Product->getStockFind()) {
-            $builder
-                ->add('quantity', 'integer', array(
-                    'data' => 1,
-                    'attr' => array(
-                        'min' => 1,
-                        'maxlength' => $this->config['int_len'],
-                    ),
-                    'constraints' => array(
-                        new Assert\NotBlank(),
-                        new Assert\GreaterThanOrEqual(array(
-                            'value' => 1,
-                        )),
-                        new Assert\Regex(array('pattern' => '/^\d+$/')),
-                    ),
-                ))
-            ;
-            if ($Product && $Product->getProductClasses()) {
-                if (!is_null($Product->getClassName1())) {
-                    $builder->add('classcategory_id1', 'choice', array(
-                        'label' => $Product->getClassName1(),
-                        'choices'   => array('__unselected' => '選択してください') + $Product->getClassCategories1(),
-                    ));
-                }
-                if (!is_null($Product->getClassName2())) {
-                    $builder->add('classcategory_id2', 'choice', array(
-                        'label' => $Product->getClassName2(),
-                        'choices' => array('__unselected' => '選択してください'),
-                    ));
-                }
-            }
+// U => 物品販売のみ
+        	if ( !$Product->hasProductClass() ) {
+	            $builder
+	                ->add('quantity', 'integer', array(
+	                    'data' => 1,
+	                    'attr' => array(
+	                        'min' => 1,
+	                        'maxlength' => $this->config['int_len'],
+	                    ),
+	                    'constraints' => array(
+	                        new Assert\NotBlank(),
+	                        new Assert\GreaterThanOrEqual(array(
+	                            'value' => 1,
+	                        )),
+	                        new Assert\Regex(array('pattern' => '/^\d+$/')),
+	                    ),
+	                ))
+	            ;
+	            if ($Product && $Product->getProductClasses()) {
+	                if (!is_null($Product->getClassName1())) {
+	                    $builder->add('classcategory_id1', 'choice', array(
+	                        'label' => $Product->getClassName1(),
+	                        'choices'   => array('__unselected' => '選択してください') + $Product->getClassCategories1(),
+	                    ));
+	                }
+	                if (!is_null($Product->getClassName2())) {
+	                    $builder->add('classcategory_id2', 'choice', array(
+	                        'label' => $Product->getClassName2(),
+	                        'choices' => array('__unselected' => '選択してください'),
+	                    ));
+	                }
+	            }
+        	}
+// U => 物品販売のみ
 
             $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($Product) {
                 $data = $event->getData();
