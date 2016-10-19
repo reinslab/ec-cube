@@ -24,6 +24,7 @@
 namespace Eccube\Service;
 
 use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Eccube\Application;
 use Eccube\Common\Constant;
 use Eccube\Entity\Customer;
@@ -232,13 +233,13 @@ class ShoppingService
         return $Order;
     }
 
-
     /**
      * 受注情報を作成
      * @return \Eccube\Entity\Order
      */
     public function newOrder()
     {
+
         $OrderStatus = $this->app['eccube.repository.order_status']->find($this->app['config']['order_processing']);
         $Order = new \Eccube\Entity\Order($OrderStatus);
         return $Order;
@@ -1116,6 +1117,7 @@ class ShoppingService
 
         // 受注情報、配送情報を更新
         $Order = $this->calculateDeliveryFee($Order);
+
         $this->setOrderUpdateData($Order);
         // 在庫情報を更新
         $this->setStockUpdate($em, $Order);
@@ -1126,7 +1128,6 @@ class ShoppingService
         }
 
     }
-
 
     /**
      * 値引き可能かチェック
@@ -1202,6 +1203,7 @@ class ShoppingService
             ),
             null
         );
+
         $this->app['eccube.event.dispatcher']->dispatch(EccubeEvents::SERVICE_SHOPPING_ORDER_STATUS, $event);
 
         return $Order;
@@ -1256,7 +1258,6 @@ class ShoppingService
         $this->app['eccube.event.dispatcher']->dispatch(EccubeEvents::SERVICE_SHOPPING_NOTIFY_COMPLETE, $event);
 
     }
-
 ///////////////////////////////////////////////////////
     /**
      * 受注情報を作成
@@ -1398,6 +1399,57 @@ class ShoppingService
         $OrderStatus = $this->app['eccube.repository.order_status']->find($this->app['config']['order_estimate']);
         $Order = new \Eccube\Entity\Order($OrderStatus);
         return $Order;
+    }
+    
+    /**
+     * 注文IDをセット
+     *
+     * @param $em トランザクション制御されているEntityManager
+     * @param $Order
+     * @return \Eccube\Entity\Order
+     */
+    public function setCustomOrderId($app, \Eccube\Entity\Order $Order)
+    {
+    	$search_date_from = date('Y-m-d') . ' 00:00:00';
+    	$search_date_to   = date("Y-m-d",strtotime("+1 day")) . ' 00:00:00';
+    	
+    	$objFrom = new \DateTime($search_date_from);
+    	$objTo   = new \DateTime($search_date_to);
+    	
+    	//注文日毎SEQの最大値を取得する
+        $sql = "SELECT
+                    max(t1.daily_order_seq) as daily_order_seq
+                FROM
+                    dtb_order t1
+                WHERE
+                    t1.del_flg = 0
+                    AND (t1.create_date >= '%search_date_from%' AND t1.create_date < '%search_date_to%')";
+
+		$sql = str_replace('%search_date_from%', $search_date_from, $sql);
+		$sql = str_replace('%search_date_to%', $search_date_to, $sql);
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('daily_order_seq', 'daily_order_seq');
+        $query = $app['orm.em']->createNativeQuery($sql, $rsm);
+
+// TODO:適正の方法に修正が必要
+        //$query->setParameters(array(':search_date_from' => $p1));
+        //$query->setParameters(array(':search_date_to' => $p1));
+        $result = $query->getResult();
+        $max_daily_order_seq = $result[0]['daily_order_seq'];
+        if ( $max_daily_order_seq == null ) {
+        	$max_daily_order_seq = 0;
+        }
+        //１つ加算する
+        $max_daily_order_seq++;
+        
+        //注文ID
+        $custom_order_id = date('ymd') . '-' . sprintf("%05d", $max_daily_order_seq);
+		
+		$Order->setCustomOrderId($custom_order_id);
+		$Order->setDailyOrderSeq($max_daily_order_seq);
+
+    	return $Order;
     }
 
 
