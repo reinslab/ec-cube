@@ -22,20 +22,42 @@ class Version20161019102712 extends AbstractMigration
 	        $table->addColumn('name', 	'text', 		array('NotNull' => false));
 	        $table->addColumn('rank', 	'smallint', 	array('NotNull' => true));
 	        $table->setPrimaryKey(array('id'));
+	        
+	        //åˆæœŸãƒ‡ãƒ¼ã‚¿æŠ•å…¥
+	        $this->addSql("INSERT INTO mtb_nyukin_status (id, name, rank) VALUES (0, 'å…¥é‡‘æœ‰', 1);");
+	        $this->addSql("INSERT INTO mtb_nyukin_status (id, name, rank) VALUES (1, 'å…¥é‡‘ç„¡', 2);");
         }
 
-        if ($schema->hasTable('dtb_order')) { //Žó’ƒe[ƒuƒ‹‚Ì‘¶ÝŠm”F
-            $table = $schema->getTable('dtb_order'); //ƒe[ƒuƒ‹ƒIƒuƒWƒFƒNƒg‚ðŽæ“¾
-            $table->addColumn('daily_order_seq', 	'smallint', array('NotNull' => true, 	'Default' => 0, 	'Comment' => '“ú–ˆ‚Ì˜A”Ô')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
-            $table->addColumn('pdf_file_name', 		'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => '“üeƒf[ƒ^ƒtƒ@ƒCƒ‹–¼')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
-            $table->addColumn('reins_order_id', 	'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => 'ŠîŠ²ƒVƒXƒeƒ€Žó’”Ô†')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
-            $table->addColumn('custom_order_id', 	'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => '’•¶ID')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
+        if ($schema->hasTable('dtb_order')) { //å—æ³¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®å­˜åœ¨ç¢ºèª
+            $table = $schema->getTable('dtb_order'); //ãƒ†ãƒ¼ãƒ–ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+
+			//æ—¢å­˜ãƒ†ãƒ¼ãƒ–ãƒ«ã«è¿½åŠ ã™ã‚‹ã¨ãã¯ã€ã‚«ãƒ©ãƒ ã®æœ‰ç„¡ãƒã‚§ãƒƒã‚¯ãŒå¿…è¦
+            if ( !$table->hasColumn('daily_order_seq') ) {
+	            $table->addColumn('daily_order_seq', 	'smallint', array('NotNull' => true, 	'Default' => 0, 	'Comment' => 'æ—¥æ¯Žã®é€£ç•ª')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+	        }
+
+            if ( !$table->hasColumn('pdf_file_name') ) {
+	            $table->addColumn('pdf_file_name', 		'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => 'å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«å')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+	        }
+
+            if ( !$table->hasColumn('reins_order_id') ) {
+	            $table->addColumn('reins_order_id', 	'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => 'åŸºå¹¹ã‚·ã‚¹ãƒ†ãƒ å—æ³¨ç•ªå·')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+   			}
+
+            if ( !$table->hasColumn('custom_order_id') ) {
+            	$table->addColumn('custom_order_id', 	'text', 	array('NotNull' => false, 	'Default' => NULL,	'Comment' => 'æ³¨æ–‡ID')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+            }
         }
 
-        if ($schema->hasTable('dtb_customer')) { //Žó’ƒe[ƒuƒ‹‚Ì‘¶ÝŠm”F
-            $table = $schema->getTable('dtb_customer'); //ƒe[ƒuƒ‹ƒIƒuƒWƒFƒNƒg‚ðŽæ“¾
-            $table->addColumn('reins_customer_code', 'text', 	array('NotNull' => false, 	'Default' => NULL, 	'Comment' => 'ŠîŠ²ƒVƒXƒeƒ€ŽæˆøæƒR[ƒh')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
-            $table->addColumn('section_name', 		 'text', 	array('NotNull' => false, 	'Default' => NULL, 	'Comment' => '•”–¼')); //ƒJƒ‰ƒ€‚ð’Ç‰Á
+        if ($schema->hasTable('dtb_customer')) { //å—æ³¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®å­˜åœ¨ç¢ºèª
+            $table = $schema->getTable('dtb_customer'); //ãƒ†ãƒ¼ãƒ–ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+            
+            if ( !$table->hasColumn('reins_customer_code') ) {
+	            $table->addColumn('reins_customer_code', 'text', 	array('NotNull' => false, 	'Default' => NULL, 	'Comment' => 'åŸºå¹¹ã‚·ã‚¹ãƒ†ãƒ å–å¼•å…ˆã‚³ãƒ¼ãƒ‰')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+            }
+            if ( !$table->hasColumn('section_name') ) {
+	            $table->addColumn('section_name', 		 'text', 	array('NotNull' => false, 	'Default' => NULL, 	'Comment' => 'éƒ¨ç½²å')); //ã‚«ãƒ©ãƒ ã‚’è¿½åŠ 
+            }
         }
 
     }
@@ -46,6 +68,28 @@ class Version20161019102712 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
+        if (!$schema->hasTable('mtb_nyukin_status')) {
+	        $schema->dropTable('mtb_nyukin_status');
+	    }
 
+        if ($schema->hasTable('dtb_order')) { //å—æ³¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®å­˜åœ¨ç¢ºèª
+            $table = $schema->getTable('dtb_order'); //ãƒ†ãƒ¼ãƒ–ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+
+			//ã‚«ãƒ©ãƒ ã®æœ‰ç„¡ãƒã‚§ãƒƒã‚¯å¾Œã«å‰Šé™¤
+            if ( !$table->hasColumn('daily_order_seq') ) { $table->dropColumn('daily_order_seq');  }
+            if ( !$table->hasColumn('pdf_file_name') ) { $table->dropColumn('pdf_file_name'); }
+            if ( !$table->hasColumn('reins_order_id') ) { $table->dropColumn('reins_order_id'); }
+            if ( !$table->hasColumn('custom_order_id') ) { $table->dropColumn('custom_order_id'); }
+        }
+
+
+        if ($schema->hasTable('dtb_customer')) { //å—æ³¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®å­˜åœ¨ç¢ºèª
+            $table = $schema->getTable('dtb_customer'); //ãƒ†ãƒ¼ãƒ–ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+
+			//æ—¢å­˜ãƒ†ãƒ¼ãƒ–ãƒ«ã«è¿½åŠ ã™ã‚‹ã¨ãã¯ã€ã‚«ãƒ©ãƒ ã®æœ‰ç„¡ãƒã‚§ãƒƒã‚¯ãŒå¿…è¦
+            if ( !$table->hasColumn('reins_customer_code') ) { $table->dropColumn('reins_customer_code');  }
+            if ( !$table->hasColumn('section_name') ) { $table->dropColumn('section_name'); }
+        }
     }
+    
 }
