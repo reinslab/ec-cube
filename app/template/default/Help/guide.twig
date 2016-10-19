@@ -1,0 +1,134 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+    <div id="contents" class="main_only">
+        <div id="guide_wrap" class="container-fluid inner no-padding">
+            <div id="main">
+                <h1 class="page-heading">ご利用ガイド</h1>
+                <div id="guide_box__body"  class="container-fluid">
+                    <div id="guide_box__body_inner" class="row">
+                        <div id="guide_box__body_item" class="col-md-10 col-md-offset-1">
+                        
+                        <div class="guide-h2">ご利用の流れ</div>
+                        <div class="image-center col-md-10 col-md-offset-1"><img src="{{ app.config.front_urlpath }}/img/top/use-flow.png">
+                        <div class="guide-caption">
+                        ウイルダイレクトでは、デザインデータをお客様よりご入稿いただきます。発注したい商品のテンプレートをダウンロードした後、デザインデータを作成、入稿していただくことで、様々な印刷物を少部数から生産することができます。当サイトのご利用には会員登録が必要です。</div></div>
+                        
+                        <hr class="horizonline">
+                        
+                        <div class="guide-h2">注文の扱いについて</div>
+                        <div class="image-center col-md-10 col-md-offset-1">
+                        <div class="guide-caption">
+                        受注情報や入稿されてくるデータの処理は、営業日の<strong>午前9時～午後3時</strong>に行われます。<br>
+                        午後3時以降に送信された注文やデータは<strong>翌日処理</strong>となります。<br>
+                        また休業日の間に送信された注文やデータも、処理されるのは<strong>営業日に入ってから</strong>となります。<br>
+                        営業日に関しては、トップページにある「営業カレンダー」をご確認ください。</div></div>
+                        
+                        <hr class="horizonline">
+                        
+                        <div class="guide-h2">注文方法について</div>
+                        <div class="image-center col-md-6"><img src="{{ app.config.front_urlpath }}/img/top/0000.png" width="260" height="260">
+                        <div class="guide-caption caption-indent">
+                        ①商品詳細の画面から印刷製品の場合は希望の部数の欄にある金額のリンクを。　販売物の場合は個数を選んで<b>「カートに入れる」</b>ボタンを押してください。</div></div>
+                        <div class="image-center col-md-61"><img src="{{ app.config.front_urlpath }}/img/top/0000.png" width="260" height="260">
+                        <div class="guide-caption caption-indent">
+                        ②購入する内容の確認画面に移り、商品や購入個数に間違いがないか確認します。　この状態で<b>「見積保存」</b>のボタンを押すことで、見積書のPDFをダウンロードすることができます。</div></div>
+                        <div class="image-center col-md-6"><img src="{{ app.config.front_urlpath }}/img/top/0000.png" width="260" height="260">
+                        <div class="guide-caption caption-indent">
+                        ③<b>「レジに進む」</b>ボタンを押すと、注文内容の最終確認画面となります。ここで配送先を変更したり、支払い方法を選択することができます。また印刷製品の場合、印刷に必要な<em>入稿データ</em>をここからアップロードします。<em>入稿データ</em>の作成方法については、<a href="#">【データ作成ガイド】</a>をご覧ください。</div></div>
+                        <div class="image-center col-md-6"><img src="{{ app.config.front_urlpath }}/img/top/0000.png" width="260" height="260">
+                        <div class="guide-caption caption-indent">
+                        ④<b>「注文する」</b>ボタンを押すと注文情報がシステムに送信され購入が確定します。購入した内容の詳細や、支払い方法で銀行振込を選択した際に必要になる、入金の方法や入金先口座について記載したリターンメールがとどきますのでご確認ください。</div></div>
+                        
+                        <hr class="horizonline">
+                        
+                        <div class="guide-h2">支払いについて</div>
+                        <div class="image-center col-md-10 col-md-offset-1">
+                        <div class="guide-caption">ウイルダイレクトでは、3種類の支払い方法をご用意しております。</div>
+                        <div class="payinfobox">
+                          <div class="payinfobox-h1"><img src="{{ app.config.front_urlpath }}/img/top/use-title-card.png"></div>
+                          <div class="payinfobox-h2">■ご利用可能なクレジットカード</div>
+                          <div class="image-center"><img src="{{ app.config.front_urlpath }}/img/top/use-list-card.png"></div>
+                          <div class="payinfobox-p">※お支払回数は翌月一回払いのみとなります。<br>
+                          ※クレジットカード決済は即時決済となるため、支払い完了後は支払い方法の変更や、<br>
+                          　　ご注文の変更・キャンセル等ができません。<br>
+                          ※代金引換時におけるカード決済（「e-コレクト」等）には対応いたしておりません。</div>
+                        </div>
+                        <div class="payinfobox">
+                          <div class="payinfobox-h1"><img src="{{ app.config.front_urlpath }}/img/top/use-title-cvs.png"></div>
+                          <div class="payinfobox-h2">■ご利用可能なコンビニ</div>
+                          <div class="image-center"><img src="{{ app.config.front_urlpath }}/img/top/use-list-cvs.png"></div>
+                          <div class="payinfobox-h3">各コンビニの専用端末にて払込票を発券後、レジにてお支払いただけます。</div>
+                          <div class="payinfobox-p">※決済代金には送料等の全ての代金を含みます。<br>
+                          ※取引金額や時間帯によって支払時に別途手数料が発生する場合があります。</div>
+                        </div>
+                        <div class="payinfobox">
+                          <div class="payinfobox-h1"><img src="{{ app.config.front_urlpath }}/img/top/use-title-bank.png"></div>
+                          <div class="payinfobox-h2">■入金先口座情報</div>
+                          <div class="image-center"><img src="{{ app.config.front_urlpath }}/img/top/use-list-bank.png"></div>
+                          <div class="payinfobox-h3">振込名義人の欄は、<strong>「お客様名」+「注文番号」</strong>で入力して下さい。<br><span>(例：ウイルコタロウ15010101234)</span></div>
+                          <div class="payinfobox-p">※振込手数料はお客様負担にてお願いいたします。</div>
+                        </div>
+                        </div>
+                        
+                        <hr class="horizonline">
+                        
+                        <div class="guide-h2">商品の発送について</div>
+                        <div class="image-center col-md-10 col-md-offset-1"><img src="{{ app.config.front_urlpath }}/img/top/use-delivery-free.png"><br>
+                        <div class="guide-h3">商品のお届けは印刷完了日を含め、<strong>約2日～4日営業日</strong>となります。</div>
+                        <div class="guideinfobox">●ご希望のお届け日がある場合には、ご注文画面の特記事項欄へお書き添えください。<br>
+                          　空欄の場合は、お届け可能な最短日で手配いたします。<br>
+                          ●全て宅配便扱いとなりますので玄関先での御渡しとなります。<br>
+                          ●出荷手配の完了している商品の指定日変更等は受け付けられません。<br>
+                          ●商品の配送は日本国内のみとさせていただきます。<br>
+                          ●ダンボール、廃材等の回収は行っておりません。<br>
+                          ●交通事情や天候により、配送日時が変更になる場合がございます。<br>
+                          ●商品配送時に起こる繁忙期の混雑や悪天候などによる到着遅延など、二次的に発生する事由<br>
+                          　による一切の責任は負いかねます。<br>
+                          ●ご不在時には不在通知票が投函されますので、お客様ご自身にてご調整ください。</div>
+                        </div>
+                        
+                        <hr class="horizonline">
+                        
+                        <div class="guide-h2">キャンセルについて</div>
+                        <div class="image-center col-md-10 col-md-offset-1">
+                        <div class="guide-caption">
+                        商品の発注後、印刷工程に進行する前であれば無償でキャンセルが可能です。<br>
+                        印刷工程に進行後もキャンセルは可能ですが、キャンセル料として、代金の100％を頂きます。<br>
+                        キャンセルについては<a href="#">お問い合わせフォーム</a>よりご連絡ください。</div>
+                        <div class="guideinfobox">●印刷工程に入るタイミングは、発注後、入金が確認された段階です。<br>
+                        　銀行振込・コンビニ決済を選択された方は、自身が入金するまでは無償キャンセルが可能です。<br>
+                        ●クレジット決済に関しては即時処理となりますので、即座に印刷工程に進むため、<br>
+                        　キャンセルされても、代金はキャンセル料として徴収しますので、代金はお返しできません。<br>
+                        ●但し当社に不備があった場合のキャンセル・返品に関しては、代金の返金を行っております。　</div>
+                        </div>
+
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
