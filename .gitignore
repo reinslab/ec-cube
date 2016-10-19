@@ -25,8 +25,8 @@ composer.phar
 !/html/template/admin
 !/html/template/default
 !/html/template/install
-/html/user_data/*
-!/html/user_data/.gitkeep
+#/html/user_data/*
+#!/html/user_data/.gitkeep
 /phpunit.xml
 /src/Eccube/Resource/config/*.dist.php
 /tests/tmp/*
