@@ -237,6 +237,18 @@ class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface
      */
     private $Orders;
 
+// A => 規約同意チェックボックス
+    private $entryCheckbox;
+// A => 規約同意チェックボックス
+
+// A => 部署名
+    private $section_name;
+// A => 部署名
+
+// A => 取引先コード
+    private $reins_customer_code;
+// A => 取引先コード
+
     /**
      * Constructor
      */
@@ -1241,4 +1253,79 @@ class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface
 
         return $this;
     }
+
+// A => 規約同意チェックボックス
+    /**
+     * Set Job
+     *
+     * @param  \Eccube\Entity\Master\Job $job
+     * @return Customer
+     */
+    public function setEntryCheckbox($entryCheckbox = null)
+    {
+        $this->entryCheckbox = $entryCheckbox;
+
+        return $this;
+    }
+
+    /**
+     * Get Job
+     *
+     * @return \Eccube\Entity\Master\Job
+     */
+    public function getEntryCheckbox()
+    {
+        return $this->entryCheckbox;
+    }
+// A => 規約同意チェックボックス
+
+// A => 部署名
+    /**
+     * Set Job
+     *
+     * @param  string
+     * @return Customer
+     */
+    public function setSectionName($section_name = null)
+    {
+        $this->section_name = $section_name;
+
+        return $this;
+    }
+
+    /**
+     * Get Job
+     *
+     * @return string
+     */
+    public function getSectionName()
+    {
+        return $this->section_name;
+    }
+// A => 部署名
+// A => 取引先コード
+    /**
+     * Set Job
+     *
+     * @param  string
+     * @return Customer
+     */
+    public function setReinsCustomerCode($reins_customer_code = null)
+    {
+        $this->reins_customer_code = $reins_customer_code;
+
+        return $this;
+    }
+
+    /**
+     * Get Job
+     *
+     * @return string
+     */
+    public function getReinsCustomerCode()
+    {
+        return $this->reins_customer_code;
+    }
+// A => 取引先コード
+
 }

@@ -19,10 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #}
-<div class="item_gallery">
-    <ul class="row">
-        <li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner1.png"></li>
-<li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner2.jpg"></li>
-<li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner3.jpg"></li>
-    </ul>
-</div>
+
+
+<p id="number_info_box__pdf_file"><svg class="cb cb-clock"> <use xlink:href="#cb-clock" /></svg>入稿データ：<a href="{{ url('admin_order_pdf_download', {id: Order.id}) }}" target="_blank">{{ Order.pdf_file_name }}</a></p>

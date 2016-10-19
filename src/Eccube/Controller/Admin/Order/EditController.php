@@ -284,6 +284,13 @@ class EditController extends AbstractController
                 $times[$Delivery->getId()][$DeliveryTime->getId()] = $DeliveryTime->getDeliveryTime();
             }
         }
+        
+// TODO:
+		$payment_date = null;
+		if ( $TargetOrder->getPaymentDate() != null ) {
+			$payment_date = $TargetOrder->getPaymentDate()->format('Y-m-d');
+		}
+// TODO:
 
         return $app->render('Order/edit.twig', array(
             'form' => $form->createView(),
@@ -291,6 +298,9 @@ class EditController extends AbstractController
             'searchProductModalForm' => $searchProductModalForm->createView(),
             'Order' => $TargetOrder,
             'id' => $id,
+// TODO:
+            'payment_date' => $payment_date,
+// TODO:
             'shippingDeliveryTimes' => $app['serializer']->serialize($times, 'json'),
         ));
     }

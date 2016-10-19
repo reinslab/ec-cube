@@ -86,6 +86,14 @@ class SearchOrderType extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
             ))
+// TODO:
+            ->add('nyukinstatus', 'nyukinstatus', array(
+                'label' => '入金状況',
+                'required' => false,
+                'expanded' => true,
+                'multiple' => true,
+            ))
+// TODO:
             ->add('payment', 'payment', array(
                 'label' => '支払方法',
                 'required' => false,

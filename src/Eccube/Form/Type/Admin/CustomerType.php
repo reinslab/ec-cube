@@ -60,6 +60,18 @@ class CustomerType extends AbstractType
                     ))
                 ),
             ))
+//
+            ->add('reins_customer_code', 'text', array(
+                'label' => '取引先コード',
+                'required' => false,
+                'constraints' => array(
+                    new Assert\Length(array(
+                        'max' => $config['stext_len'],
+                    ))
+                ),
+            ))
+
+//
             ->add('zip', 'zip', array(
                 'required' => true,
             ))

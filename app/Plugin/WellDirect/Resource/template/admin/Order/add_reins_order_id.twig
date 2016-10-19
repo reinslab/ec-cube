@@ -19,10 +19,11 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #}
-<div class="item_gallery">
-    <ul class="row">
-        <li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner1.png"></li>
-<li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner2.jpg"></li>
-<li class="col-sm-4 col-xs-12"><img src="{{ app.config.front_urlpath }}/img/top/side-banner3.jpg"></li>
-    </ul>
-</div>
+
+
+
+                                <h4>基幹システム受注番号</h4>
+                                <div class="form-group">
+                                    {{ form_widget(form.reins_order_id) }}
+                                    {{ form_errors(form.reins_order_id) }}
+                                </div>

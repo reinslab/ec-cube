@@ -296,6 +296,10 @@ class EccubeServiceProvider implements ServiceProviderInterface
             $types[] = new \Eccube\Form\Type\Master\CategoryType();
             $types[] = new \Eccube\Form\Type\Master\TagType();
 
+// TODO:
+            $types[] = new \Eccube\Form\Type\Master\NyukinStatusType();
+// TODO:
+
             $types[] = new \Eccube\Form\Type\CustomerType($app); // 削除予定
 
             if (isset($app['security']) && isset($app['eccube.repository.customer_favorite_product'])) {
@@ -306,7 +310,11 @@ class EccubeServiceProvider implements ServiceProviderInterface
             $types[] = new \Eccube\Form\Type\ShippingItemType($app);
             $types[] = new \Eccube\Form\Type\ShippingMultipleType($app);
             $types[] = new \Eccube\Form\Type\ShippingMultipleItemType($app);
-            $types[] = new \Eccube\Form\Type\ShoppingType();
+
+// U => パラメータ追加
+//            $types[] = new \Eccube\Form\Type\ShoppingType();
+            $types[] = new \Eccube\Form\Type\ShoppingType($app);
+// U => パラメータ追加
 
             // front
             $types[] = new \Eccube\Form\Type\Front\EntryType($app['config']);

@@ -154,6 +154,21 @@ Eccube\Entity\Order:
             unsigned: false
             options:
                 default: '0'
+        pdffile:
+            type: text
+            nullable: true
+            column: pdf_file_name
+        daily_order_seq:
+            type: smallint
+            nullable: false
+            options:
+                default: '0'
+        reins_order_id:
+            type: text
+            nullable: true
+        custom_order_id:
+            type: text
+            nullable: true
     manyToOne:
         Customer:
             targetEntity: Eccube\Entity\Customer

@@ -395,6 +395,47 @@ class Order extends \Eccube\Entity\AbstractEntity
      */
     private $OrderStatusColor;
 
+    // ★ A => 追加カラム
+    /**
+     * 入稿データファイル名
+     * @var string
+     */
+    private $pdffile;
+
+    /**
+     * 日毎シーケンス番号
+     * @var int
+     */
+    private $daily_order_seq;
+
+    /**
+     * 基幹システム受注番号
+     * @var int
+     */
+    private $reins_order_id;
+
+    /**
+     * 注文ID
+     * @var int
+     */
+    private $custom_order_id;
+
+    // ★ A => 追加カラム
+// A => 入力項目追加(伝票番号)
+    /**
+     * 伝票番号
+     * @var int
+     */
+//    private $denpyo_number;
+
+    /**
+     * 発送個数
+     * @var int
+     */
+//    private $box_num;
+// A => 入力項目追加(伝票番号)
+
+
     /**
      * Constructor
      */
@@ -1564,4 +1605,144 @@ class Order extends \Eccube\Entity\AbstractEntity
     {
         return $this->OrderStatusColor;
     }
+
+////////////////////////////////////////////////
+    /**
+     * Set PdfFileName
+     *
+     * @param  string $pdfFile
+     * @return Order
+     */
+    public function setPdfFileName($pdfFile)
+    {
+        $this->pdffile = $pdfFile;
+
+        return $this;
+    }
+
+    /**
+     * Get PdfFileName
+     *
+     * @return string
+     */
+    public function getPdfFileName()
+    {
+        return $this->pdffile;
+    }
+
+    /**
+     * Set daily_order_seq
+     *
+     * @param  string $daily_order_seq
+     * @return Order
+     */
+    public function setDailyOrderSeq($daily_order_seq)
+    {
+        $this->daily_order_seq = $daily_order_seq;
+
+        return $this;
+    }
+
+    /**
+     * Get daily_order_seq
+     *
+     * @return string
+     */
+    public function getDailyOrderSeq()
+    {
+        return $this->daily_order_seq;
+    }
+
+    /**
+     * Set reins_order_id
+     *
+     * @param  string $reins_order_id
+     * @return Order
+     */
+    public function setReinsOrderId($reins_order_id)
+    {
+        $this->reins_order_id = $reins_order_id;
+
+        return $this;
+    }
+
+    /**
+     * Get reins_order_id
+     *
+     * @return string
+     */
+    public function getReinsOrderId()
+    {
+        return $this->reins_order_id;
+    }
+
+    /**
+     * Set custom_order_id
+     *
+     * @param  string $custom_order_id
+     * @return Order
+     */
+    public function setCustomOrderId($custom_order_id)
+    {
+        $this->custom_order_id = $custom_order_id;
+
+        return $this;
+    }
+
+    /**
+     * Get reins_order_id
+     *
+     * @return string
+     */
+    public function getCustomOrderId()
+    {
+        return $this->custom_order_id;
+    }
+
+    /**
+     * Set denpyo_number
+     *
+     * @param  int $denpyo_number
+     * @return Order
+     */
+//    public function setDenpyoNumber($denpyo_number)
+//    {
+//        $this->denpyo_number = $denpyo_number;
+//
+//        return $this;
+//    }
+
+    /**
+     * Get denpyo_number
+     *
+     * @return string
+     */
+//    public function getDenpyoNumber()
+//    {
+//        return $this->denpyo_number;
+//    }
+
+    /**
+     * Set box_num
+     *
+     * @param  int $box_num
+     * @return Order
+     */
+//    public function setBoxNum($box_num)
+//    {
+//        $this->box_num = $box_num;
+//
+//        return $this;
+//    }
+
+    /**
+     * Get box_num
+     *
+     * @return string
+     */
+//    public function getBoxNum()
+//    {
+//        return $this->box_num;
+//    }
+
 }
