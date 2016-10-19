@@ -1,0 +1,23 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+
+{# Gmo customer edit #}
+<div class="box accordion">
+    <div class="box-header toggle active">
+        <h3 class="box-title">{{ app.config.GmoPaymentGateway.const.PG_MULPAY_SERVICE_NAME }}決済情報<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+    </div><!-- /.box-header -->
+    <div class="box-body accpanel" style="display: block;">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2" style="margin-bottom: 10px;">GMOメンバーID</div>
+                <div class="col-sm-9 col-lg-10">
+                    <div class="form-inline">
+                        {{GmoMemberId}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            var resubmit = {{re_submit ?1:0}};
+            if (resubmit) {
+                autoSubmitForm('next', 0);
+            }
+            ;
+
+            $("#return-button").click(function () {
+                autoSubmitForm('return', 0)
+            });
+
+            function autoSubmitForm(mode, time) {
+                document.form1.gmo_payment_mode.value = mode;
+                setTimeout(function () {
+                    document.form1.submit();
+                }, time);
+            };
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+
+    <h2 class="title">{{ tpl_title }}</h2>
+    <form name="form1" id="form1" method="post" action="">
+        {{ form_widget(form.mode) }}
+        {% if tpl_is_loding %}
+            <div id="payment_form_loading">
+                <div class="information">
+                    {% if tpl_is_select_page_call %}
+                        <p>pay-easy決済(銀行ATM決済)と注文処理が完了しました。</p>
+                        <span class="text-danger">金融機関反映のため、20秒程度お待ち下さい。自動で画面が切り替わります。</span>
+                        <input type="hidden" name="code" value="{{ EncryptReceiptNo }}"/>
+                        <input type="hidden" name="rkbn" value="1"/>
+                    {% else %}
+                        <p>pay-easy決済(銀行ATM決済)処理中です。そのまま、お待ち下さい。</p>
+                        <span class="text-danger">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+                    {% endif %}
+                </div>
+                <div class="dl_table" style="margin-top: 20px;">
+                    <dl>
+                        <dd style="text-align: center;">
+                            <img src="{{ app.config.root_urlpath }}{{ app.config.plugin_html_urlpath }}gmo_pg/loading.gif"/>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        {% else %}
+            {% if error is not empty %}
+                <div class="message">
+                    <p class="errormsg bg-danger">
+                        <svg class="cb cb-warning">
+                            <use xlink:href="#cb-warning"></use>
+                        </svg>
+                        pay-easy決済でエラーが発生しました。<br/>
+                        {% for error in error %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                </div>
+            {% endif %}
+            <div id="payment_form_body">
+                <div class="row no-padding">
+                    <div class="btn_group col-sm-offset-4 col-sm-4">
+                        <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

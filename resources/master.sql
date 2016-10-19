@@ -36,7 +36,7 @@ CREATE TABLE `mtb_order_status` (
 
 LOCK TABLES `mtb_order_status` WRITE;
 /*!40000 ALTER TABLE `mtb_order_status` DISABLE KEYS */;
-INSERT INTO `mtb_order_status` VALUES (0,'入力中',0),(1,'注文受付',1),(3,'キャンセル',2),(4,'取り寄せ中',3),(5,'発送済み',8),(11,'入稿データ確認中',4),(12,'入稿データ確認済',5),(20,'印刷中',6),(21,'発送準備中',7);
+INSERT INTO `mtb_order_status` VALUES (0,'入力中',0),(1,'新規受付',91),(2,'入金待ち',1),(3,'キャンセル',2),(4,'取り寄せ中',4),(5,'発送済み',9),(6,'入金済み',3),(7,'決済処理中',92),(8,'購入処理中',93),(11,'入稿データ確認中',5),(12,'入稿データ確認済',6),(20,'印刷中',7),(21,'発送準備中',8);
 /*!40000 ALTER TABLE `mtb_order_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +61,7 @@ CREATE TABLE `mtb_customer_order_status` (
 
 LOCK TABLES `mtb_customer_order_status` WRITE;
 /*!40000 ALTER TABLE `mtb_customer_order_status` DISABLE KEYS */;
-INSERT INTO `mtb_customer_order_status` VALUES (0,'入力中',0),(1,'注文受付',1),(2,'入金待ち',99),(3,'キャンセル',3),(4,'取り寄せ中',3),(5,'発送済み',8),(6,'注文受付',2),(7,'注文未完了',99),(8,'注文未完了',99),(11,'入稿データ確認中',4),(12,'印刷中',5),(20,'印刷中',6),(21,'発送準備中',7);
+INSERT INTO `mtb_customer_order_status` VALUES (0,'入力中',0),(1,'注文受付',91),(2,'入金待ち',1),(3,'キャンセル',2),(4,'注文受付',4),(5,'発送済み',9),(6,'注文受付',3),(7,'注文未完了',92),(8,'注文未完了',93),(11,'入稿データ確認中',5),(12,'印刷中',6),(20,'印刷中',7),(21,'発送準備中',8);
 /*!40000 ALTER TABLE `mtb_customer_order_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,4 +99,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-14 12:08:18
+-- Dump completed on 2016-10-17 15:31:02

@@ -1,0 +1,306 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{#{% if Order.payment_method == appConst.PG_MULPAY_SERVICE_NAME %}#}
+
+
+<script type="text/javascript">
+    function fnPlgPgMulpayConfirm(mode, anchor, anchor_name) {
+        message = "決済操作を行います。\n受注データを編集していない場合は先に保存して下さい。\nよろしいですか？";
+        if (window.confirm(decNumRefToString(message))) {
+            fnModeSubmit(mode, anchor, anchor_name);
+        }
+    }
+
+    function fnModeSubmit(mode, keyname, keyid) {
+        document.form1.mode_type.value = mode;
+        if (keyname !== undefined && keyname !== "" && keyid !== undefined && keyid !== "") {
+            document.form1[keyname].value = keyid;
+        }
+        document.form1.submit();
+    }
+
+    function decNumRefToString(decNumRef) {
+        return decNumRef.replace(/&amp;#(\d+);/ig, function (match, $1, idx, all) {
+            return String.fromCharCode($1);
+        });
+    }
+    
+</script>
+
+<input type="hidden" name="{{ transactionId }}" value="{{ paramTransactionID }}"/>
+<input type="hidden" name="mode_type" value="" />
+<input type="hidden" name="order_id" value="{{ orderId }}"/>
+<input type="hidden" name="edit_customer_id" value=""/>
+<input type="hidden" name="anchor_key" value=""/>
+<input type="hidden" id="add_product_id" name="add_product_id" value=""/>
+<input type="hidden" id="add_product_class_id" name="add_product_class_id" value=""/>
+<input type="hidden" id="select_shipping_id" name="select_shipping_id" value=""/>
+<input type="hidden" id="edit_product_id" name="edit_product_id" value=""/>
+<input type="hidden" id="edit_product_class_id" name="edit_product_class_id" value=""/>
+<input type="hidden" id="no" name="no" value=""/>
+<input type="hidden" id="delete_no" name="delete_no" value=""/>
+
+<div class="box accordion">
+    <div class="box-header toggle">
+        <h3 class="box-title">{{ appConst.PG_MULPAY_SERVICE_NAME }}決済情報
+            <svg class="cb cb-angle-down icon_down">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cb-angle-down"/>
+            </svg>
+        </h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body accpanel" style="display: block;">
+        <div class="order_list form-horizontal">
+            {% if Order.payment_method is defined %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済種別</div>
+                    <div class="col-sm-9 col-lg-10">{{ Order.payment_method }}</div>
+                </div>
+            {% endif %}
+
+            {% if orderExtGetPaymentData is defined and orderExtGetPaymentData.pay_status is defined %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">取引状態</div>
+                    <div class="col-sm-9 col-lg-10">
+                        {{ paymentStatus[orderExtGetPaymentData.pay_status] }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if error is defined and error is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済操作エラー</div>
+                    <div class="col-sm-9 col-lg-10">{{ error }}</div>
+                </div>
+            {% endif %}
+
+            {% if orderExtGetPaymentData.OrderID is defined and orderExtGetPaymentData.OrderID is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済オーダーID</div>
+                    <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.OrderID }}</div>
+                </div>
+            {% endif %}
+
+            {# if have any error #}
+            {% if orderExtGetPaymentData.ErrInfo is defined and orderExtGetPaymentData.ErrInfo is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">最終エラーコード</div>
+                    <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.ErrInfo }}</div>
+                </div>
+            {% endif %}
+
+            {% if orderExtGetPaymentData.error_msg is defined and orderExtGetPaymentData.error_msg is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">最終エラーメッセージ</div>
+                    <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.error_msg }}</div>
+                </div>
+            {% endif %}
+            {# end if have any error #}
+
+            {% if plg_pg_mulpay_payid is defined and (plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_CREDIT or plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_REGIST_CREDIT or plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_TOKEN) %}
+                {% if orderExtGetPaymentData.pay_status is defined and orderExtGetPaymentData.pay_status != appConst.PG_MULPAY_PAY_STATUS_UNSETTLED %}
+                    {% if orderExtGetPaymentData.Approve is defined %}
+                        <div class="form-group">
+                            <div class="col-sm-3 col-lg-2">承認番号</div>
+                            <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.Approve }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if orderExtGetPaymentData.Method is defined %}
+                        <div class="form-group">
+                            <div class="col-sm-3 col-lg-2">支払い方法</div>
+                            <div class="col-sm-9 col-lg-10">
+                                {% if orderExtGetPaymentData.Method == '1' %}一括払い{% endif %}
+                                {% if orderExtGetPaymentData.Method == '2' %}
+                                    分割{% if orderExtGetPaymentData.PayTimes %} {{ orderExtGetPaymentData.PayTimes }}回払い{% endif %}
+                                {% endif %}
+                                {% if orderExtGetPaymentData.Method == '3' %}ボーナス一括{% endif %}
+                                {% if orderExtGetPaymentData.Method == '4' %}ボーナス分割{% endif %}
+                                {% if orderExtGetPaymentData.Method == '5' %}リボ払い{% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if orderExtGetPaymentData.Forward is defined %}
+                        <div class="form-group">
+                            <div class="col-sm-3 col-lg-2">仕向け先</div>
+                            <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.Forward }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if orderExtGetPaymentData.TranID is defined %}
+                        <div class="form-group">
+                            <div class="col-sm-3 col-lg-2">トランザクションID</div>
+                            <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.TranID }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if orderExtGetPaymentData.TranDate is defined %}
+                        <div class="form-group">
+                            <div class="col-sm-3 col-lg-2">与信日時</div>
+                            <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.TranDate }}</div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_CVS %}
+                {% if conveniStoresence is not empty and paymentData.Convenience is defined %}
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">支払い先コンビニ</div>
+                        <div class="col-sm-9 col-lg-10">{{ conveniStoresence[paymentData.Convenience] }}</div>
+                    </div>
+                {% endif %}
+
+                {% if orderExtGetPaymentData.ConfNo is defined %}
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">確認番号</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.ConfNo }}</div>
+                    </div>
+                {% endif %}
+
+                {% if orderExtGetPaymentData.ReceiptNo is defined %}
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">受付番号</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.ReceiptNo }}</div>
+                    </div>
+                {% endif %}
+
+                {% if orderExtGetPaymentData.PaymentTerm is defined %}
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">払込期限</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentData.PaymentTerm }}</div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_PAYEASY or plg_pg_mulpay_payid == appConst.PG_MULPAY_PAYID_ATM %}
+                {% if orderExtGetPaymentInfo is not empty %}
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">お客様番号</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentInfo.CustID.value }}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">収納機関番号</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentInfo.BkCode.value }}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">確認番号</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentInfo.ConfNo.value }}</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 col-lg-2">払込期限</div>
+                        <div class="col-sm-9 col-lg-10">{{ orderExtGetPaymentInfo.PaymentTerm.value }}</div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if orderExtGetPaymentData.Amount is defined and orderExtGetPaymentData.Amount is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済金額</div>
+                    <div class="col-sm-9 col-lg-10">
+                        {{ orderExtGetPaymentData.Amount|number_format }}円
+                        {% if Order.payment_total is defined %}
+                            {% if orderExtGetPaymentData.Amount != Order.payment_total %}
+                                <span class="attention">
+                                     ※決済金額とお支払い合計に差異があります。
+                                </span>
+                            {% endif %}
+                        {%endif%}
+                        
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if buttons|length>0 %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済操作</div>
+                    <div class="col-sm-9 col-lg-10">
+                        {% if buttons['COMMIT'] is defined %}
+                            <a class="btn btn-success" href="javascript:;"
+                               onclick="fnPlgPgMulpayConfirm('plg_pg_mulpay_commit','','');"
+                               disable="">売上確定(実売上)実行</a>
+                        {% endif %}
+
+                        {% if buttons['CANCEL'] is defined %}
+                            <a class="btn btn-danger" href="javascript:;"
+                               onclick="fnPlgPgMulpayConfirm('plg_pg_mulpay_cancel','','');">取消(返品)実行
+                            </a>
+                        {% endif %}
+
+                        {% if buttons['CHANGE'] is defined %}
+                            <a class="btn btn-info" href="javascript:;"
+                               onclick="fnPlgPgMulpayConfirm('plg_pg_mulpay_change','','');">決済金額変更
+                            </a>
+                        {% endif %}
+
+                        {% if buttons['REAUTHORIZE'] is defined %}
+                            <a class="btn btn-info" href="javascript:;"
+                               onclick="fnPlgPgMulpayConfirm('plg_pg_mulpay_reauth','','');">再オーソリ実行
+                           </a>
+                        {% endif %}
+
+                        {% if buttons['GETORDERINFO'] is defined %}
+                        <a class="btn btn-default" href="javascript:;"
+                           onclick="fnPlgPgMulpayConfirm('plg_pg_mulpay_get_status','','');">決済状態確認・反映
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if orderExtGetPaymentData.Amount is defined and orderExtGetPaymentData.Amount is not empty %}
+                <div class="form-group">
+                    <div class="col-sm-3 col-lg-2">決済ログ</div>
+                    <div class="col-sm-9 col-lg-10">
+                        <a href="javascript:;" onclick="$('#plg_pg_mulpay_log').slideToggle();">決済ログ表示・非表示</a>
+                        <br/>
+                        <table id="plg_pg_mulpay_log"
+                               style="display:none; margin-top:10px; border:#ccc; table-layout:fixed;width:100%;"
+                               class="list" border="1">
+                            <thead>
+                            <tr>
+                                <th width='20%'>時間</th>
+                                <th>内容</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for paymentLog in orderExtGetPaymentLog %}
+                                {% for key, logs in paymentLog %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td style="word-wrap:break-word;">
+                                            {% for lkey, log in logs %}
+                                                {# check log whether is array or not #}
+                                                {% if log is not empty %}
+                                                    {% if log is iterable %}
+                                                        {% for error in log %}
+                                                            {{ error }}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                    {{ lkey }}={{ log }}
+                                                    {{ loop.last ? '' : ',' }}
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="2">No any log</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div><!-- /.box-accordion -->
+
+{#{% endif %}#}

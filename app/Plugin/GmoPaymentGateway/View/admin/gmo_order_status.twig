@@ -1,0 +1,184 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% set menus = ['order', 'gmo_admin_order_status'] %}
+
+{% block title %}受注管理{% endblock %}
+{% block sub_title %}決済状況管理{% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(function () {
+            var data = '{{ form_widget(form.move.vars.prototype)}}';
+            $(".move").each(function () {
+                check = data.replace(/__name__/g, $(this).attr("data-order-id"));
+                $(check)
+                        .appendTo($(this));
+            });
+        });
+
+        function changeOrderStatus(changeWhat) {
+            if (changeWhat === 'status') {
+                if (!document.form1.form_status.value) {
+                    alert('セレクトボックスが選択されていません');
+                    return false;
+                }
+            } else if (changeWhat !== 'delete') {
+                if (!document.form1.form_payment_status.value) {
+                    alert('セレクトボックスが選択されていません');
+                    return false;
+                }
+            }
+            var someChecked = false;
+            $("[id^='form_move_']").each(function () {
+                if ($(this).prop('checked')) {
+                    someChecked = true;
+                    return false;
+                }
+                ;
+            });
+
+            if (!someChecked) {
+                alert('チェックボックスが選択されていません');
+                return false;
+            }
+            document.form1.form_mode.value = changeWhat;
+            document.form1.submit();
+            return false;
+        }
+
+        // 登録チェックボックス
+        $('#check-all').click(function () {
+            var checkall = $('#check-all').prop('checked');
+            if (checkall) {
+                $('input[id^=form_move_]').prop('checked', true);
+            } else {
+                $('input[id^=form_move_]').prop('checked', false);
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+
+    <form name="form1" id="form1" method="post" action="">
+        {{ form_widget(form._token) }}
+        {{ form_widget(form.mode) }}
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">決済種類 抽出条件</h3>
+                        <a disable="" class="{% if CurrentType|length > 0 %}btn btn-default{% else %}btn btn-info{% endif  %}" href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : CurrentStatus, 'paymentType' : null}) }}">全て</a>
+                        {% for key, type in PaymentTypes %}
+                            {% if CurrentType|length > 0 and (CurrentType == key) %}
+                                <a disable="" class="btn btn-info"
+                                   href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : CurrentStatus, 'paymentType' : key}, {}) }}">{{ type }}</a>
+                            {% else %}
+                                <a disable="" class="btn btn-default"
+                                   href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : CurrentStatus, 'paymentType' : key}) }}">{{ type }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-header">
+                        <h3 class="box-title">決済状況 抽出条件</h3>
+                        <a disable="" class="{% if CurrentStatus|length > 0 %}btn btn-default{% else %}btn btn-info{% endif  %}" href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : null, 'paymentType' : CurrentType}) }}">全て</a>
+
+                        {% for key, status in PaymentStatuses %}
+                            {% if CurrentStatus|length > 0 and (CurrentStatus == key) %}
+                                <a disable="" class="btn btn-info"
+                                   href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : key, 'paymentType' : CurrentType}) }}">{{ status }}</a>
+                            {% else %}
+                                <a disable="" class="btn btn-default"
+                                   href="{{ path( 'gmo_admin_order_status', { 'paymentStatus' : key, 'paymentType' : CurrentType}) }}">{{ status }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-header">
+                        <h3 class="box-title">対応状況変更</h3>
+                        {{ form_widget(form.status) }}
+                        <a href="#" class="btn btn-success" onclick="changeOrderStatus('status'); return false;">移動</a>
+                        <a href="#" class="btn btn-danger" onclick="changeOrderStatus('delete'); return false;">削除</a>
+
+                        <p class="small">※ {{ OrderStatuses[app.config.order_cancel].name }}に変更時には、在庫数を手動で戻してください。</p>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-header">
+                        <h3 class="box-title">決済状況変更</h3>
+                        {{ form_widget(form.payment_status) }}
+                        <a href="#" class="btn btn-success"
+                           onclick="changeOrderStatus('payment_status'); return false;">実行</a>
+
+                        {% for errMess in changePaymentStatusErrors %}
+                            <span class="attention">{{ errMess }}</span><br/>
+                        {% endfor %}
+
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table_list">
+                            <div class="table-responsive with-border">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th><label for="move_check">選択</label><br/><input type="checkbox"
+                                                                                          name="move_check"
+                                                                                          id="check-all"/></th>
+                                        <th>決済状況</th>
+                                        <th>支払方法</th>
+                                        <th>対応状況</th>
+                                        <th>注文番号</th>
+                                        <th>受注日</th>
+                                        <th>お名前</th>
+                                        <th>購入金額（円）</th>
+                                        <th>入金日</th>
+                                        <th>発送日</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Order in Orders %}
+                                        <tr>
+                                            <td class="move" data-order-id="{{ Order[0].id }}"></td>
+                                            <td>{% if(Order['memo04'] != null and (PaymentStatuses[Order['memo04']] is defined)) %}{{ PaymentStatuses[Order['memo04']] }}{% endif %}</td>
+                                            <td>{{ Order[0].payment_method }}</td>
+                                            <td>{{ OrderStatuses[Order[0].OrderStatus.id].name }}</td>
+                                            <td>
+                                                <a href="{{ path('admin_order_edit', { id: Order[0].id }) }}">{{ Order[0].id }}</a>
+                                            </td>
+                                            <td>{{ Order[0].create_date|date("Y/m/d H:i:s") }}</td>
+                                            <td>{{ Order[0].name01 }} {{ Order[0].name02 }}</td>
+                                            <td class="text-right">{{ Order[0].total|number_format }}</td>
+                                            <td>
+                                                {% if Order[0].payment_date is not null %}
+                                                    {{ Order[0].payment_date|date("Y-m-d H:i:s") }}
+                                                {% else %}
+                                                    未入金
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if Order[0].OrderStatus.id == 5 %}
+                                                    {{ Order[0].commit_date|date("Y-m-d H:i:s") }}
+                                                {% else %}
+                                                    未発送
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
