@@ -76,10 +76,10 @@ class Version20161019102712 extends AbstractMigration
             $table = $schema->getTable('dtb_order'); //テーブルオブジェクトを取得
 
 			//カラムの有無チェック後に削除
-            if ( !$table->hasColumn('daily_order_seq') ) { $table->dropColumn('daily_order_seq');  }
-            if ( !$table->hasColumn('pdf_file_name') ) { $table->dropColumn('pdf_file_name'); }
-            if ( !$table->hasColumn('reins_order_id') ) { $table->dropColumn('reins_order_id'); }
-            if ( !$table->hasColumn('custom_order_id') ) { $table->dropColumn('custom_order_id'); }
+            if ( $table->hasColumn('daily_order_seq') ) { $table->dropColumn('daily_order_seq');  }
+            if ( $table->hasColumn('pdf_file_name') ) { $table->dropColumn('pdf_file_name'); }
+            if ( $table->hasColumn('reins_order_id') ) { $table->dropColumn('reins_order_id'); }
+            if ( $table->hasColumn('custom_order_id') ) { $table->dropColumn('custom_order_id'); }
         }
 
 
@@ -87,8 +87,8 @@ class Version20161019102712 extends AbstractMigration
             $table = $schema->getTable('dtb_customer'); //テーブルオブジェクトを取得
 
 			//既存テーブルに追加するときは、カラムの有無チェックが必要
-            if ( !$table->hasColumn('reins_customer_code') ) { $table->dropColumn('reins_customer_code');  }
-            if ( !$table->hasColumn('section_name') ) { $table->dropColumn('section_name'); }
+            if ( $table->hasColumn('reins_customer_code') ) { $table->dropColumn('reins_customer_code');  }
+            if ( $table->hasColumn('section_name') ) { $table->dropColumn('section_name'); }
         }
     }
     
