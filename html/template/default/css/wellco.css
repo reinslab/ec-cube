@@ -314,7 +314,7 @@ h1.header_logo{
 	margin-right: auto;
 }
 #member{
-	display:none !important;
+	/*display:none !important;*/
 }
 }
 @media only screen and (min-width: 852px) {
