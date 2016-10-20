@@ -91,6 +91,14 @@ INSERT INTO `mtb_product_type` VALUES (1,'既製品',0),(2,'印刷商品',1);
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+--
+-- 暫定処置
+--
+INSERT INTO `mtb_nyukin_status` (`id`, `name`, `rank`) VALUES (0, '入金有', 0);
+INSERT INTO `mtb_nyukin_status` (`id`, `name`, `rank`) VALUES (1, '入金無', 1);
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
