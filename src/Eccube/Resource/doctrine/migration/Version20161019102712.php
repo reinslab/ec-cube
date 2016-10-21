@@ -22,10 +22,6 @@ class Version20161019102712 extends AbstractMigration
 	        $table->addColumn('name', 	'text', 		array('NotNull' => false));
 	        $table->addColumn('rank', 	'smallint', 	array('NotNull' => true));
 	        $table->setPrimaryKey(array('id'));
-	        
-	        //初期データ投入
-	        $this->addSql("INSERT INTO mtb_nyukin_status (id, name, rank) VALUES (0, '入金有', 1);");
-	        $this->addSql("INSERT INTO mtb_nyukin_status (id, name, rank) VALUES (1, '入金無', 2);");
         }
 
         if ($schema->hasTable('dtb_order')) { //受注テーブルの存在確認
