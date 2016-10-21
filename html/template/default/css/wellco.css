@@ -277,6 +277,19 @@ h1.header_logo{
 	width: 100%;
 	height: 15em;
 }
+/*ログイン名表示*/
+#welcome{
+    line-height: 1em;
+    font-size: 0.8em;
+    text-align: right;
+    margin-right: 15px;
+}
+#cart_area p{
+    margin: 12px;
+}
+.nav-trigger{
+    height: 70px;
+}
 }
 @media only screen and (min-width: 768px) {
 .header_logo_area{
@@ -314,12 +327,26 @@ h1.header_logo{
 	margin-right: auto;
 }
 #member{
-	display:none !important;
+	/*display:none !important;*/
+        padding-top:60px;
+}
+/*ログイン名表示*/
+#welcome{
+    line-height: 2em;
+    font-size: 0.8em;
+    text-align: right;
+    margin-right: 5px;
 }
 }
 @media only screen and (min-width: 852px) {
 #member{
-	padding-top: 40px;
+	padding-top: 60px;
+}
+/*ログイン名表示*/
+#welcome{
+    line-height: 2em;
+    font-size: 0.8em;
+    text-align: right;
 }
 }
 @media only screen and (min-width: 1050px) {
@@ -337,5 +364,12 @@ h1.header_logo{
 .slick-dots{
 	position: relative;
 	margin-top: -80px;
+}
+/*ログイン名表示*/
+#welcome{
+    line-height: 2em;
+    font-size: 0.8em;
+    text-align: right;
+    margin-right: 5px;
 }
 }
