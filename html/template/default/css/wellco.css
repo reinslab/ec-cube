@@ -268,16 +268,27 @@ h1.header_logo{
 	padding-left: 20px;
 }
 
-
 @media only screen and (max-width: 767px) {
 .item_gallery li{
     display: none;
 }
 #main_middle{
 	width: 100%;
-	height: 15em;
+	height: 100%;
+}
+#welcome{
+    display: none;
 }
 }
+@media only screen and (max-width: 852px) {
+#member{
+	display:none !important;
+}
+#welcome{
+    display: none;
+}
+}
+
 @media only screen and (min-width: 768px) {
 .header_logo_area{
 	margin-right:0px !important;
@@ -312,11 +323,6 @@ h1.header_logo{
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
-}
-}
-@media only screen and (max-width: 852px) {
-#member{
-	display:none !important;
 }
 }
 @media only screen and (min-width: 852px) {
