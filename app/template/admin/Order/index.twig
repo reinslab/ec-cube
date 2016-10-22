@@ -336,7 +336,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         <td id="result_list_main__id--{{ Order.id }}"><a href="{{ url('admin_order_edit', { id : Order.id }) }}">{{ Order.id }}</a></td>
                                         <td id="result_list_main__name--{{ Order.id }}">{{ Order.name01 }} {{ Order.name02 }}</td>
                                         <td id="result_list_main__payment_method--{{ Order.id }}">{{ Order.payment_method }}</td>
-                                        <td id="result_list_main__payment_date--{{ Order.id }}">{{ Order.payment_date }}</td>
+                                        <td id="result_list_main__payment_date--{{ Order.id }}">{{ Order.payment_date|date_format }}</td>
                                         <td id="result_list_main__payment_total--{{ Order.id }}" class="text-right">{{ Order.payment_total|number_format }}</td>
                                         <td id="result_list_main__commit_date--{{ Order.id }}">{{ Order.commit_date|date_format }}</td>
                                         <td id="result_list_main__order_status--{{ Order.id }}">{{ Order.OrderStatus }}</td>
