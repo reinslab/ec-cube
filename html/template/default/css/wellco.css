@@ -286,10 +286,10 @@ h1.header_logo{
     margin-right: 15px;
 }
 #cart_area p{
-    margin: 12px;
+    margin: 15px;
 }
 .nav-trigger{
-    height: 70px;
+    height: 80px;
 }
 
 }
@@ -297,9 +297,12 @@ h1.header_logo{
 #member{
 	display:none !important;
 }
-/*#welcome{
-    display: none;
-}*/
+/*ログイン名表示*/
+#welcome{
+    line-height: 1.5em;
+    font-size: 0.8em;
+    text-align: right;
+}
 .temp-waku {
 	background-repeat: no-repeat;
 	background-size: 765px auto;
