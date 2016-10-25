@@ -29,7 +29,7 @@ class Version20161019102712 extends AbstractMigration
 
 			//既存テーブルに追加するときは、カラムの有無チェックが必要
             if ( !$table->hasColumn('daily_order_seq') ) {
-	            $table->addColumn('daily_order_seq', 	'smallint', array('NotNull' => true, 	'Default' => 0, 	'Comment' => '日毎の連番')); //カラムを追加
+	            $table->addColumn('daily_order_seq', 	'smallint', array('NotNull' => false, 	'Default' => 0, 	'Comment' => '日毎の連番')); //カラムを追加
 	        }
 
             if ( !$table->hasColumn('pdf_file_name') ) {
