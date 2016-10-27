@@ -33,7 +33,7 @@ class WellDirectCustomerExtension extends AbstractTypeExtension
     {
 
         $builder->add('section_name', 'text', array(
-                'label' => '•”–¼',
+                'label' => 'éƒ¨ç½²å',
                 'required' => false,
                 'constraints' => array(
                     new Assert\Length(array(
@@ -42,7 +42,7 @@ class WellDirectCustomerExtension extends AbstractTypeExtension
                 ),
     		));
         $builder->add('entry_checkbox', 'checkbox', array(
-                'label' => '‹K–ñ‚É“¯ˆÓ‚·‚é',
+                'label' => 'è¦ç´„ã«åŒæ„ã™ã‚‹',
                 'required' => true,
     		));
     }

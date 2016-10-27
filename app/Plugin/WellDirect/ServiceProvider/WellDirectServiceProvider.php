@@ -14,24 +14,24 @@ class WellDirectServiceProvider implements ServiceProviderInterface
     public function register(BaseApplication $app)
     {
 		///////////////////////////////////////////////
-		//ƒ‹[ƒeƒBƒ“ƒOÝ’è
+		//ãƒ«ãƒ¼ãƒ†ã‚£ãƒ³ã‚°è¨­å®š
 		///////////////////////////////////////////////
-        // Œ©Ï•Û‘¶
+        // è¦‹ç©ä¿å­˜
         $app->match('/cart/eststep', '\Plugin\WellDirect\Controller\WellDirectController::eststep')->bind('cart_eststep');
 
-        // Œ©Ïíœ
+        // è¦‹ç©å‰Šé™¤
         $app->match('/history/delete/{id}', '\Plugin\WellDirect\Controller\WellDirectController::historydelete')->value('id', null)->assert('id', '\d+|')->bind('history_delete');
 
-		// ƒf[ƒ^Ä“üe
+		// ãƒ‡ãƒ¼ã‚¿å†å…¥ç¨¿
         $app->match('/shopping/{id}', '\Plugin\WellDirect\Controller\::index_reupload')->bind('shopping_confirm_reupload')->assert('id', '\d+');
 
-        // “üeƒf[ƒ^ƒ_ƒEƒ“ƒ[ƒh
+        // å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
         $app->match('/' . $app["config"]["admin_route"] . '/order/download/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pdfDownload')->value('id', null)->assert('id', '\d+|')->bind('admin_order_pdf_download');
 
 
 
 		///////////////////////////////////////////////
-        // Œ^“o˜^
+        // åž‹ç™»éŒ²
 		///////////////////////////////////////////////
         // Form/Type
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use($app) {

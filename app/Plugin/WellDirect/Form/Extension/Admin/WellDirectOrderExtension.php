@@ -33,20 +33,20 @@ class WellDirectOrderExtension extends AbstractTypeExtension
     {
         $builder
             ->add('pdffile', 'file', array(
-                'label' => '“üeƒf[ƒ^‘I‘ð',
+                'label' => 'å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿é¸æŠž',
                 'mapped' => false,
                 'required' => true,
                 'constraints' => array(
-                    new Assert\NotBlank(array('message' => 'ƒtƒ@ƒCƒ‹‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B')),
+                    new Assert\NotBlank(array('message' => 'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚')),
                     new Assert\File(array(
                         'maxSize' => $this->app['config']['pdf_size'] . 'M',
-                        'maxSizeMessage' => 'PDFƒtƒ@ƒCƒ‹‚Í' . $this->app['config']['pdf_size'] . 'MˆÈ‰º‚ÅƒAƒbƒvƒ[ƒh‚µ‚Ä‚­‚¾‚³‚¢B',
+                        'maxSizeMessage' => 'PDFãƒ•ã‚¡ã‚¤ãƒ«ã¯' . $this->app['config']['pdf_size'] . 'Mä»¥ä¸‹ã§ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã—ã¦ãã ã•ã„ã€‚',
                     )),
                 ),
             ));
 
         $builder->add('reins_order_id', 'text', array(
-                'label' => 'ŠîŠ²ƒVƒXƒeƒ€Žó’”Ô†',
+                'label' => 'åŸºå¹¹ã‚·ã‚¹ãƒ†ãƒ å—æ³¨ç•ªå·',
                 'required' => false,
                 'constraints' => array(
                     new Assert\Length(array(
@@ -56,7 +56,7 @@ class WellDirectOrderExtension extends AbstractTypeExtension
     		));
 /*
         $builder->add('denpyo_number', 'text', array(
-                'label' => '“`•[”Ô†',
+                'label' => 'ä¼ç¥¨ç•ªå·',
                 'required' => false,
                 'constraints' => array(
                     new Assert\Length(array(
@@ -65,7 +65,7 @@ class WellDirectOrderExtension extends AbstractTypeExtension
                 ),
     		));
         $builder->add('box_num', 'text', array(
-                'label' => '”z‘—ŒÂ”',
+                'label' => 'é…é€å€‹æ•°',
                 'required' => false,
                 'constraints' => array(
 					new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
