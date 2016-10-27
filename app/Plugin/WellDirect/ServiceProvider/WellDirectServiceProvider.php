@@ -14,31 +14,29 @@ class WellDirectServiceProvider implements ServiceProviderInterface
     public function register(BaseApplication $app)
     {
 		///////////////////////////////////////////////
-		//ƒ‹[ƒeƒBƒ“ƒOÝ’è
+		//ãƒ«ãƒ¼ãƒ†ã‚£ãƒ³ã‚°è¨­å®š
 		///////////////////////////////////////////////
-        // Œ©Ï•Û‘¶
+        // è¦‹ç©ä¿å­˜
         $app->match('/cart/eststep', '\Plugin\WellDirect\Controller\WellDirectController::eststep')->bind('cart_eststep');
 
-        // Œ©Ïíœ
+        // è¦‹ç©å‰Šé™¤
         $app->match('/history/delete/{id}', '\Plugin\WellDirect\Controller\WellDirectController::historydelete')->value('id', null)->assert('id', '\d+|')->bind('history_delete');
 
-		// ƒf[ƒ^Ä“üe
+		// ãƒ‡ãƒ¼ã‚¿å†å…¥ç¨¿
         $app->match('/shopping/{id}', '\Plugin\WellDirect\Controller\::index_reupload')->bind('shopping_confirm_reupload')->assert('id', '\d+');
 
-        // Œ©Ï¨’•¶
+        // è¦‹ç©â†’æ³¨æ–‡
         $app->match('/mypage/est2order/{id}', '\Plugin\WellDirect\Controller\WellDirectController::est2order')->value('id', null)->assert('id', '\d+|')->bind('mypage_est2order');
         
-        // Œ©Ï‘ƒ_ƒEƒ“ƒ[ƒh
+        // è¦‹ç©æ›¸ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
         $app->match('/mypage/estdownload/{id}', '\Plugin\WellDirect\Controller\WellDirectController::estdownload')->value('id', null)->assert('id', '\d+|')->bind('mypage_estdownload');
 
-        // “üeƒf[ƒ^ƒ_ƒEƒ“ƒ[ƒh
+        // å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
         $app->match('/' . $app["config"]["admin_route"] . '/order/download/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pdfDownload')->value('id', null)->assert('id', '\d+|')->bind('admin_order_pdf_download');
 
 
-
-
 		///////////////////////////////////////////////
-        // Œ^“o˜^
+        // Formã‚¿ã‚¤ãƒ—è¿½åŠ 
 		///////////////////////////////////////////////
         // Form/Type
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use($app) {
@@ -62,9 +60,9 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         });
 
         // -----------------------------
-        // ƒT[ƒrƒX‚Ì“o˜^
+        // ã‚µãƒ¼ãƒ“ã‚¹ã®ç™»éŒ²
         // -----------------------------
-        // ’ •[ì¬
+        // å¸³ç¥¨ä½œæˆ
         $app['eccube.plugin.welldirect.service.order_pdf'] = $app->share(function () use ($app) {
             return new \Plugin\WellDirect\Service\OrderPdfService($app);
         });

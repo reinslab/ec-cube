@@ -34,7 +34,7 @@ class WellDirectCustomerExtension extends AbstractTypeExtension
 var_dump("duapi");
 exit;
         $builder->add('reins_order_code', 'text', array(
-                'label' => 'æˆøæƒR[ƒh',
+                'label' => 'å–å¼•å…ˆã‚³ãƒ¼ãƒ‰',
                 'required' => false,
                 'constraints' => array(
                     new Assert\Length(array(
@@ -44,7 +44,7 @@ exit;
     		));
 
         $builder->add('section_name', 'text', array(
-                'label' => '•”–¼',
+                'label' => 'éƒ¨ç½²å',
                 'required' => false,
                 'constraints' => array(
                     new Assert\Length(array(
