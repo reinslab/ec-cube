@@ -325,6 +325,11 @@ class EccubeServiceProvider implements ServiceProviderInterface
             $types[] = new \Eccube\Form\Type\Front\ForgotType();
             $types[] = new \Eccube\Form\Type\Front\CustomerLoginType($app['session']);
 
+// A => 新規追加
+            $types[] = new \Eccube\Form\Type\Front\MyPageHistoryType($app);
+// A => 新規追加
+
+
             // admin
             $types[] = new \Eccube\Form\Type\Admin\LoginType($app['session']);
             $types[] = new \Eccube\Form\Type\Admin\ChangePasswordType($app);

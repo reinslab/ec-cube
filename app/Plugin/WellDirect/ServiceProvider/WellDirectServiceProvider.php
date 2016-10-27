@@ -14,29 +14,31 @@ class WellDirectServiceProvider implements ServiceProviderInterface
     public function register(BaseApplication $app)
     {
 		///////////////////////////////////////////////
-		//ãƒ«ãƒ¼ãƒ†ã‚£ãƒ³ã‚°è¨­å®š
+		//ƒ‹[ƒeƒBƒ“ƒOÝ’è
 		///////////////////////////////////////////////
-        // è¦‹ç©ä¿å­˜
+        // Œ©Ï•Û‘¶
         $app->match('/cart/eststep', '\Plugin\WellDirect\Controller\WellDirectController::eststep')->bind('cart_eststep');
 
-        // è¦‹ç©å‰Šé™¤
+        // Œ©Ïíœ
         $app->match('/history/delete/{id}', '\Plugin\WellDirect\Controller\WellDirectController::historydelete')->value('id', null)->assert('id', '\d+|')->bind('history_delete');
 
-		// ãƒ‡ãƒ¼ã‚¿å†å…¥ç¨¿
-        $app->match('/shopping/{id}', '\Plugin\WellDirect\Controller\::index_reupload')->bind('shopping_confirm_reupload')->assert('id', '\d+');
+		// ƒf[ƒ^Ä“üe
+        $app->match('/mypage/history/upload/{id}', '\Plugin\WellDirect\Controller\WellDirectController::upload')->value('id', null)->assert('id', '\d+')->bind('history_upload');
 
-        // è¦‹ç©â†’æ³¨æ–‡
+        // Œ©Ï¨’•¶
         $app->match('/mypage/est2order/{id}', '\Plugin\WellDirect\Controller\WellDirectController::est2order')->value('id', null)->assert('id', '\d+|')->bind('mypage_est2order');
         
-        // è¦‹ç©æ›¸ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
+        // Œ©Ï‘ƒ_ƒEƒ“ƒ[ƒh
         $app->match('/mypage/estdownload/{id}', '\Plugin\WellDirect\Controller\WellDirectController::estdownload')->value('id', null)->assert('id', '\d+|')->bind('mypage_estdownload');
 
-        // å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
+        // “üeƒf[ƒ^ƒ_ƒEƒ“ƒ[ƒh
         $app->match('/' . $app["config"]["admin_route"] . '/order/download/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pdfDownload')->value('id', null)->assert('id', '\d+|')->bind('admin_order_pdf_download');
 
 
+
+
 		///////////////////////////////////////////////
-        // Formã‚¿ã‚¤ãƒ—è¿½åŠ 
+        // Œ^“o˜^
 		///////////////////////////////////////////////
         // Form/Type
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use($app) {
@@ -60,9 +62,9 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         });
 
         // -----------------------------
-        // ã‚µãƒ¼ãƒ“ã‚¹ã®ç™»éŒ²
+        // ƒT[ƒrƒX‚Ì“o˜^
         // -----------------------------
-        // å¸³ç¥¨ä½œæˆ
+        // ’ •[ì¬
         $app['eccube.plugin.welldirect.service.order_pdf'] = $app->share(function () use ($app) {
             return new \Plugin\WellDirect\Service\OrderPdfService($app);
         });

@@ -155,6 +155,12 @@ class MypageController extends AbstractController
             throw new NotFoundHttpException();
         }
         
+// A => フォーム生成
+        $builder = $app['form.factory']->createBuilder('mypage_history');
+        $form = $builder->getForm();
+// A => フォーム生成
+        
+        
 // A => 再注文ボタンを制御する
         //再注文ボタン表示フラグ
         $flg_re_order = false;
@@ -173,6 +179,9 @@ class MypageController extends AbstractController
 // A => 再注文ボタンを制御する
             'flg_re_order' => $flg_re_order,
 // A => 再注文ボタンを制御する
+// A => form
+			'form' => $form->createView(),
+// A => form
         ));
     }
 

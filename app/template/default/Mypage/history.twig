@@ -35,7 +35,17 @@ $(function(){
         $(this).parent().slideToggle();
     });
 });
+
+function confirmUpload(url) {
+console.log(document.form1.pdf_upload);
+	if ( window.confirm('入稿ファイルを更新します。宜しいですか？') ) {
+		document.form1.action = url;
+		document.form1.method = "post";
+		document.form1.submit();
+	}
+}
 </script>
+
 {% endblock %}
 {% block main %}
     <h1 class="page-heading">マイページ/ご注文履歴詳細</h1>
@@ -191,6 +201,16 @@ $(function(){
                 <div id="detail_box__pdf_file" class="column">
                     <p>
                         <a href="/upload/save_image/{{ Order.pdf_file_name }}" target="_blank">{{ Order.pdf_file_name }}</a>
+                        <form name="form1" id="form1" action="?"  enctype="multipart/form-data">
+                    	<p>【データ再入稿】</p>
+                    	ファイル選択後、更新ボタンを押してください。
+                    	<div>
+	                        {{ form_widget(form.pdffile, {'attr': {'accept': 'application/pdf'}}) }}
+	                        {{ form_errors(form.pdffile) }}
+                    		<a href="javascript:;" onclick="confirmUpload('{{ url('history_upload', { id:Order.id })}}')" class="btn btn-default btn-sm">更新</a>
+                        </div>
+                        {{ form_widget(form._token) }}
+                        </form>
                     </p>
                 </div>
                 <h2 class="heading02">お問い合わせ</h2>
