@@ -38,7 +38,7 @@ class WellDirect {
         $source = $event->getSource();
 
 		//受注ステータスが入力中の場合のみ差し込む
-        if(preg_match('/<(.*)\s*id="total_box__top_button.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="total_box__top_button.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -89,7 +89,7 @@ class WellDirect {
 
 		//受注ステータスが入力中の場合のみ差し込む
 		if ( $Order->getOrderStatus()->getId() == $app['config']['order_estimate'] ) {
-	        if(preg_match('/<(.*)\s*class="col-sm-4 col-sm-offset-4.*>\n/',$source, $result)){
+	        if(preg_match('/<(.*)\s*class="col-sm-4 col-sm-offset-4.*>/',$source, $result)){
 	            $start_tag = $result[0];
 	            $tag_name = trim($result[1]);
 	            $end_tag = '</' . $tag_name . '>';
@@ -152,7 +152,7 @@ class WellDirect {
         $source = $event->getSource();
         
         //入力画面
-        if(preg_match('/<(.*)\s*id="top_box__company_name.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="top_box__company_name.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -169,7 +169,7 @@ class WellDirect {
             $source = str_replace($search, $replace, $source);
         }
 
-        if(preg_match('/<(.*)\s*id="top_box__agreement.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="top_box__agreement.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -203,7 +203,7 @@ class WellDirect {
         $source = $event->getSource();
         
         //確認画面
-        if(preg_match('/<(.*)\s*id="confirm_box__company_name.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="confirm_box__company_name.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -294,7 +294,7 @@ class WellDirect {
 		//印刷商品のみ
         if ( $flgPrintItem ) {
 	        //PDFアップロード差込
-	        if(preg_match('/<(.*)\s*class="heading02.*>\n/',$source, $result)){
+	        if(preg_match('/<(.*)\s*class="heading02.*>/',$source, $result)){
 	            $start_tag = $result[0];
 	                
 		        // 差込テンプレート(部署名)
@@ -485,7 +485,7 @@ class WellDirect {
         $source = $event->getSource();
 
         //入力画面
-        if(preg_match('/<(.*)\s*id="detail_box__company_name.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="detail_box__company_name.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -620,7 +620,7 @@ class WellDirect {
         $source = $event->getSource();
 
         //基幹システム受注番号
-        if(preg_match('/<(.*)\s*id="number_info_box__order_status_info.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="number_info_box__order_status_info.*>/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -639,7 +639,7 @@ class WellDirect {
         }
         
         //発送個数、伝票番号
-        if(preg_match('/<(.*)\s*id="detail__insert_button.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="detail__insert_button.*>/',$source, $result)){
 
             $start_tag = $result[0];
                 
@@ -652,7 +652,7 @@ class WellDirect {
         }
         
         //入稿データダウンロード
-        if(preg_match('/<(.*)\s*id="number_info_box__update_date.*>\n/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="number_info_box__update_date.*>/',$source, $result)){
 
             $start_tag = $result[0];
             $tag_name = trim($result[1]);

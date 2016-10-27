@@ -144,6 +144,10 @@ class WellDirectController extends AbstractController
         // 削除用受注ID
         $app['session']->set('estimate_order_id', $id);
 
+        
+        // プレIDを設定しておく
+        $app['eccube.service.cart']->setPreOrderId($Order->getPreOrderId());
+
 		//マイページにリダイレクト 
         return $app->redirect($app->url('shopping'));
     }
