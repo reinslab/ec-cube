@@ -998,6 +998,9 @@ class ShoppingService
             'payments' => $payments,
             'payment' => $Order->getPayment(),
             'message' => $message,
+        // A => 受注
+        	'order' => $Order,
+        // A => 受注
         ));
 
         $builder
@@ -1031,6 +1034,9 @@ class ShoppingService
             'payments' => $payments,
             'payment' => $Order->getPayment(),
             'message' => $message,
+        // A => 受注
+        	'order' => $Order,
+        // A => 受注
         ));
 
         $builder
@@ -1222,8 +1228,30 @@ class ShoppingService
         // メール送信
         $message = $this->app['eccube.service.mail']->sendOrderMail($Order);
 
+// A => 支払方法でテンプレートを切り分け
+        //支払方法
+        $objPayment = $Order->getPayment();
+        $payment_id = $objPayment->getId();
+        $template_id = 1;
+        switch($payment_id) {
+        case $this->app['config']['payment_type_creditcard']: //クレジットカード
+	        $template_id = 1;
+        	break;
+        case $this->app['config']['payment_type_convenience']: //コンビニ決済
+	        $template_id = 1;
+        	break;
+        case $this->app['config']['payment_type_bank']: //銀行振込
+	        $template_id = 1;
+        	break;
+        	
+        }
+// A => 支払方法でテンプレートを切り分け
+
         // 送信履歴を保存.
-        $MailTemplate = $this->app['eccube.repository.mail_template']->find(1);
+// U => 支払方法でテンプレートを切り分け
+        //$MailTemplate = $this->app['eccube.repository.mail_template']->find(1);
+        $MailTemplate = $this->app['eccube.repository.mail_template']->find($template_id);
+// U => 支払方法でテンプレートを切り分け
 
         $MailHistory = new MailHistory();
         $MailHistory
@@ -1300,6 +1328,7 @@ class ShoppingService
         // 受注情報を更新
         $Order->setOrderDate(new \DateTime());
         $OrderStatus = $this->app['eccube.repository.order_status']->find($this->app['config']['order_estimate']);
+
 
         $this->setOrderStatus($Order, $OrderStatus);
 

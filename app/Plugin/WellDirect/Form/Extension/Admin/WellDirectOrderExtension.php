@@ -54,7 +54,6 @@ class WellDirectOrderExtension extends AbstractTypeExtension
                     )),
                 ),
     		));
-/*
         $builder->add('denpyo_number', 'text', array(
                 'label' => '“`•[”Ô†',
                 'required' => false,
@@ -72,7 +71,6 @@ class WellDirectOrderExtension extends AbstractTypeExtension
 		            new Assert\NotBlank(),
                 ),
     		));
-*/
     }
 
     /**

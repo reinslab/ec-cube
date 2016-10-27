@@ -158,9 +158,15 @@ Eccube\Entity\Order:
             type: text
             nullable: true
             column: pdf_file_name
+        pdffile_upload_flg:
+            type: smallint
+            nullable: true
+            column: pdf_upload_flg
+            options:
+                default: '0'
         daily_order_seq:
             type: smallint
-            nullable: false
+            nullable: true
             options:
                 default: '0'
         reins_order_id:

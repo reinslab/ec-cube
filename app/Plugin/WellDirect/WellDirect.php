@@ -31,43 +31,31 @@ class WellDirect {
      * @param Event $event
      * @return type
      */
-    public function insertCartSaveButton(FilterResponseEvent $event)
+    public function onRenderCartSaveButton(TemplateEvent $event)
     {
         $app = $this->app;
 
-        $request = $event->getRequest();
-        $response = $event->getResponse();
-        $html = $response->getContent();
+        $source = $event->getSource();
+
+		//受注ステータスが入力中の場合のみ差し込む
+        if(preg_match('/<(.*)\s*id="total_box__top_button.*>\n/',$source, $result)){
+            $start_tag = $result[0];
+            $tag_name = trim($result[1]);
+            $end_tag = '</' . $tag_name . '>';
+            $start_index = strpos($source, $start_tag);
+            $end_index = strpos($source, $end_tag, $start_index);
+
+            $search = substr($source, $start_index, ($end_index - $start_index));
+            $search .= $end_tag;
+                
+	        // 差込テンプレート
+	        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Cart/index_button_cart_save.twig');
+            $replace = $search.$snipet;
+
+            $source = str_replace($search, $replace, $source);
+		}
         
-        $crawler = new Crawler($html);
-
-        
-        $oldCrawler = $crawler
-            ->filter('div#total_box__user_action_menu')
-            ->eq(0);
-        $html = $this->getHtml($crawler);
-        $oldHtml = '';
-        $newHtml = '';
-
-        if (count($oldCrawler) > 0) {
-            $oldHtml = $oldCrawler->html();
-            $oldHtml = html_entity_decode($oldHtml, ENT_NOQUOTES, 'UTF-8');
-
-            $twig = $app->renderView(
-                'WellDirect/Resource/template/default/Cart/cart_save_button.twig'
-            );
-
-			if ( strpos($oldHtml, $twig) === false ) {
-	            $newHtml = $twig . $oldHtml;
-			} else {
-				$newHtml = $oldHtml;
-			}
-        }
-
-        $html = str_replace($oldHtml, $newHtml, $html);
-        
-        $response->setContent($html);
-        $event->setResponse($response);
+        $event->setSource($source);
     }
     
 
@@ -93,26 +81,33 @@ class WellDirect {
         $app = $this->app;
 
         $parameters = $event->getParameters();
+        
+        $source = $event->getSource();
 
         $Order = $parameters['Order'];
 
-        $source = $event->getSource();
-        if(preg_match('/<(.*)\s*class="col-sm-4 col-sm-offset-4.*>\n/',$source, $result)){
-            $start_tag = $result[0];
-            $tag_name = trim($result[1]);
-            $end_tag = '</' . $tag_name . '>';
-            $start_index = strpos($source, $start_tag);
-            $end_index = strpos($source, $end_tag, $start_index);
 
-            $search = substr($source, $start_index, ($end_index - $start_index));
-                
-	        // 差込テンプレート
-	        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Mypage/order_delete_button.twig');
-            $replace = $search.$snipet;
-            $replace .= $end_tag;
+		//受注ステータスが入力中の場合のみ差し込む
+		if ( $Order->getOrderStatus()->getId() == $app['config']['order_estimate'] ) {
+	        if(preg_match('/<(.*)\s*class="col-sm-4 col-sm-offset-4.*>\n/',$source, $result)){
+	            $start_tag = $result[0];
+	            $tag_name = trim($result[1]);
+	            $end_tag = '</' . $tag_name . '>';
+	            $start_index = strpos($source, $start_tag);
+	            $end_index = strpos($source, $end_tag, $start_index);
 
-            $source = str_replace($search, $replace, $source);
-        }
+	            $search = substr($source, $start_index, ($end_index - $start_index));
+	                
+		        // 差込テンプレート
+		        $snipet1 = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Mypage/index_button_order_delete.twig');
+		        $snipet2 = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Mypage/index_button_pdf_download.twig');
+		        $snipet = $snipet1 . $snipet2;
+	            $replace = $search.$snipet;
+	            $replace .= $end_tag;
+
+	            $source = str_replace($search, $replace, $source);
+	        }
+		}
         
         $event->setSource($source);
     }
@@ -237,21 +232,37 @@ class WellDirect {
     public function onRenderShoppingIndexAddFieldInit(EventArgs $event)
     {
         $app = $this->app;
-
+/*
         $builder = $event->getArgument('builder');
-        $builder
-            ->add('pdffile', 'file', array(
-                'label' => '入稿データ選択',
-                'mapped' => false,
-                'required' => true,
-                'constraints' => array(
-                    new Assert\NotBlank(array('message' => 'ファイルを選択してください。')),
-                    new Assert\File(array(
-                        'maxSize' => $app['config']['pdf_size'] . 'M',
-                        'maxSizeMessage' => 'PDFファイルは' . $app['config']['pdf_size'] . 'M以下でアップロードしてください。',
-                    )),
-                ),
-            ));
+        $objOrder = $event->getArgument('Order');
+        $objOrderDetail = $objOrder->getOrderDetails();
+        $arrOrderDetail = $objOrderDetail->toArray();
+        $flgPrintItem = false;
+        foreach($arrOrderDetail as $idx => $order_detail) {
+        	$objProduct = $order_detail->getProduct();
+        	//印刷販売か否か
+        	if ( $objProduct->hasProductClass() ) {
+        		$flgPrintItem = true;
+        		break;
+        	}
+        }
+
+        if ( $flgPrintItem ) {
+	        $builder
+	            ->add('pdffile', 'file', array(
+	                'label' => '入稿データ選択',
+	                'mapped' => false,
+	                'required' => true,
+	                'constraints' => array(
+	                    new Assert\NotBlank(array('message' => 'ファイルを選択してください。')),
+	                    new Assert\File(array(
+	                        'maxSize' => $app['config']['pdf_size'] . 'M',
+	                        'maxSizeMessage' => 'PDFファイルは' . $app['config']['pdf_size'] . 'M以下でアップロードしてください。',
+	                    )),
+	                ),
+	            ));
+        }
+*/
     }
 
     /**
@@ -263,25 +274,35 @@ class WellDirect {
     public function onRenderShoppingIndexAddField(TemplateEvent $event)
     {
         $app = $this->app;
+
+        $parameters = $event->getParameters();
+        $Order = $parameters['Order'];
+        $objOrderDetail = $Order->getOrderDetails();
+        $arrOrderDetail = $objOrderDetail->toArray();
+        $flgPrintItem = false;
+        foreach($arrOrderDetail as $idx => $order_detail) {
+        	$objProduct = $order_detail->getProduct();
+        	//印刷販売か否か
+        	if ( $objProduct->hasProductClass() ) {
+        		$flgPrintItem = true;
+        		break;
+        	}
+        }
         
         $source = $event->getSource();
 
-        //入力画面
-        if(preg_match('/<(.*)\s*id="payment_list.*>/',$source, $result)){
-            $start_tag = $result[0];
-            $tag_name = trim($result[1]);
-            $end_tag = '</' . $tag_name . '>';
-            $start_index = strpos($source, $start_tag);
-            $end_index = strpos($source, $end_tag, $start_index);
+		//印刷商品のみ
+        if ( $flgPrintItem ) {
+	        //PDFアップロード差込
+	        if(preg_match('/<(.*)\s*class="heading02.*>\n/',$source, $result)){
+	            $start_tag = $result[0];
+	                
+		        // 差込テンプレート(部署名)
+		        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Shopping/index_file_upload_pdf.twig');
+	            $replace = $snipet . $start_tag;
 
-            $search = substr($source, $start_index, ($end_index - $start_index));
-            $search .= $end_tag;
-                
-	        // 差込テンプレート(部署名)
-	        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/Shopping/upload_pdf_file.twig');
-            $replace = $search.$snipet;
-
-            $source = str_replace($search, $replace, $source);
+	            $source = str_replace($start_tag, $replace, $source);
+	        }
         }
 
         $event->setSource($source);
@@ -296,7 +317,6 @@ class WellDirect {
      */
     public function uploadPdfFile(EventArgs $event)
     {
-    
         $app = $this->app;
 
     	$request = $event->getRequest();
@@ -308,9 +328,12 @@ class WellDirect {
 
 		$pdf_files = $request->files->get('shopping');
 		$objPdffile = $pdf_files['pdffile'];
-		$orgFileName = $objPdffile->getClientOriginalName();
+
 		//未選択時は処理しない
-		if ( $orgFileName != '' ) {
+		if ( !is_null($objPdffile) ) {
+
+			$orgFileName = $objPdffile->getClientOriginalName();
+
 			if ( strpos($orgFileName, '.pdf') === false ) {
 				throw new UnsupportedMediaTypeHttpException();
 			}
@@ -321,7 +344,8 @@ class WellDirect {
 			$app['eccube.service.shopping']->setOrderStatus($Order, $app['config']['order_new']);
 			//ファイル名セット
 			$Order->setPdfFileName($pdf_file_name);
-			//IDセット
+			//入稿データ登録済みフラグ
+			$Order->setPdfUploadFlg(1);
 
 	        // DB更新
 	        $app['orm.em']->persist($Order);
@@ -332,6 +356,101 @@ class WellDirect {
 		}
     }
 
+    /**
+     * PDFUpload処理(GMO決済使用時)
+     *
+     * GMO決済前にファイル移動をすると入力バリデーターでエラーになる
+     * 決済前にDBに一時ファイル情報を保存し、購入完了のタイミングでファイル移動を行う。
+     
+     * @param TemplateEvent $event
+     * @return type
+     */
+    public function uploadPdfTmpFile(EventArgs $event)
+    {
+        $app = $this->app;
+
+		//受注ID
+        $order_id   = $event->getArgument('orderId');
+        
+        //受注検索
+        $Order = $app['eccube.repository.order']->findOneBy(array('id' => $order_id));
+
+        if ( !is_null($Order) && !$Order->isPdfUploadFlg() ) {
+        	$pdf_file = $Order->getPdfFileName();
+
+        	//ファイル移動
+        	@copy($app['config']['image_temp_realdir'] . '/' . $pdf_file, $app['config']['image_save_realdir'] . '/' . $pdf_file);
+        	@unlink($app['config']['image_temp_realdir'] . '/' . $pdf_file);
+
+			//入稿データ登録済みフラグ
+			$Order->setPdfUploadFlg(1);
+
+	        // DB更新
+	        $app['orm.em']->persist($Order);
+	        $app['orm.em']->flush($Order);
+
+        }
+    	
+    }
+
+    /**
+     * クレジット決済およびコンビニ決済押下時の処理
+     * GMOペイメント処理の前にCallされます。
+     * @param TemplateEvent $event
+     * @return type
+     */
+    public function onControllerShoppingConfirmBefore($event = null) {
+    	$request = $event->getRequest();
+    	
+		// 入力中受注ID
+		$pre_order_id = $this->app['session']->get('estimate_order_id');
+		
+		// MyPageから来た場合
+		$Order = null;
+		if ( $pre_order_id != '' ) {
+        	$Order = $this->app['eccube.repository.order']->findOneBy(array('id' => $pre_order_id));
+		} else {
+			$Order = $this->app['eccube.repository.order']->findOneBy(array('pre_order_id' => $this->app['eccube.service.cart']->getPreOrderId()));
+		}
+    	
+		$flg_pdf_file_save = false;
+		//ファイル名
+        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
+		$pdf_files = $request->files->get('shopping');
+		$objPdffile = $pdf_files['pdffile'];
+
+		//未選択時は処理しない
+		if ( !is_null($objPdffile) ) {
+			$orgFileName = $objPdffile->getClientOriginalName();
+
+			if ( strpos($orgFileName, '.pdf') === false ) {
+				throw new UnsupportedMediaTypeHttpException();
+			}
+			//カスタム注文IDもセットする
+			$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
+
+			//受注ステータス
+			//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);
+			//ファイル名セット
+			$Order->setPdfFileName($pdf_file_name);
+
+			//入稿データ登録済みフラグ
+			$Order->setPdfUploadFlg(0);
+			//IDセット
+
+	        // DB更新
+	        $this->app['orm.em']->persist($Order);
+	        $this->app['orm.em']->flush($Order);
+
+			//一時ファイル名取得
+			$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
+
+			//一時領域にコピー
+			@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $pdf_file_name);
+			//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
+
+		}
+    }
 
     /**
      * マイページ会員情報変更入力項目差込
@@ -377,7 +496,7 @@ class WellDirect {
             $search .= $end_tag;
                 
 	        // 差込テンプレート(部署名)
-	        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/MyPage/entry_text_section_name.twig');
+	        $snipet = file_get_contents($app['config']['plugin_realdir']. '/WellDirect/Resource/template/default/MyPage/change_textbox_entry_section_name.twig');
             $replace = $search.$snipet;
 
             $source = str_replace($search, $replace, $source);
@@ -385,6 +504,34 @@ class WellDirect {
         
         $event->setSource($source);
 
+    }
+
+    /**
+     * 見積情報削除（見積→注文時）
+     * @param TemplateEvent $event
+     * @return type
+     */
+    public function deleteEstimateOrder(EventArgs $event)
+    {
+        $app = $this->app;
+        $pre_order_id = $app['session']->get('estimate_order_id');
+
+		//見積IDがある場合のみ
+		if ( $pre_order_id != '' ) {
+	        //$Order = $app['eccube.repository.order']->findOneBy(array('id' => $pre_order_id));
+	        
+	        //削除フラグセット
+	        //$Order->setDelFlg(Constant::ENABLED);
+
+	        //$app['orm.em']->persist($Order);
+	        //$app['orm.em']->flush();
+	        //$app['orm.em']->refresh($Order);
+	        
+	        //見積ID削除
+	        $app['session']->set('estimate_order_id', '');
+		}
+        
+        return;
     }
 
 /////////////////////////////////////////////////////////////////////////
@@ -492,7 +639,6 @@ class WellDirect {
         }
         
         //発送個数、伝票番号
-/*
         if(preg_match('/<(.*)\s*id="detail__insert_button.*>\n/',$source, $result)){
 
             $start_tag = $result[0];
@@ -504,7 +650,7 @@ class WellDirect {
 
             $source = str_replace($start_tag, $replace, $source);
         }
-*/        
+        
         //入稿データダウンロード
         if(preg_match('/<(.*)\s*id="number_info_box__update_date.*>\n/',$source, $result)){
 
@@ -528,5 +674,7 @@ class WellDirect {
         $event->setSource($source);
 
     }
+    
+    
 
 }

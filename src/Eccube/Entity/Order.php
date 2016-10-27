@@ -403,6 +403,12 @@ class Order extends \Eccube\Entity\AbstractEntity
     private $pdffile;
 
     /**
+     * 入稿データ登録フラグ
+     * @var string
+     */
+    private $pdffile_upload_flg;
+
+    /**
      * 日毎シーケンス番号
      * @var int
      */
@@ -426,13 +432,13 @@ class Order extends \Eccube\Entity\AbstractEntity
      * 伝票番号
      * @var int
      */
-//    private $denpyo_number;
+    private $denpyo_number;
 
     /**
      * 発送個数
      * @var int
      */
-//    private $box_num;
+    private $box_num;
 // A => 入力項目追加(伝票番号)
 
 
@@ -1631,6 +1637,43 @@ class Order extends \Eccube\Entity\AbstractEntity
     }
 
     /**
+     * Set PdfFileName
+     *
+     * @param  string $pdfFile
+     * @return Order
+     */
+    public function setPdfUploadFlg($pdffile_upload_flg)
+    {
+        $this->pdffile_upload_flg = $pdffile_upload_flg;
+
+        return $this;
+    }
+
+    /**
+     * Get PdfFileName
+     *
+     * @return string
+     */
+    public function getPdfUploadFlg()
+    {
+        return $this->pdffile_upload_flg;
+    }
+
+    /**
+     * Get PdfFileName
+     *
+     * @return string
+     */
+    public function isPdfUploadFlg()
+    {
+    	if ( $this->pdffile_upload_flg == 0 ) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+
+    /**
      * Set daily_order_seq
      *
      * @param  string $daily_order_seq
@@ -1705,22 +1748,22 @@ class Order extends \Eccube\Entity\AbstractEntity
      * @param  int $denpyo_number
      * @return Order
      */
-//    public function setDenpyoNumber($denpyo_number)
-//    {
-//        $this->denpyo_number = $denpyo_number;
-//
-//        return $this;
-//    }
+    public function setDenpyoNumber($denpyo_number)
+    {
+        $this->denpyo_number = $denpyo_number;
+
+        return $this;
+    }
 
     /**
      * Get denpyo_number
      *
      * @return string
      */
-//    public function getDenpyoNumber()
-//    {
-//        return $this->denpyo_number;
-//    }
+    public function getDenpyoNumber()
+    {
+        return $this->denpyo_number;
+    }
 
     /**
      * Set box_num
@@ -1728,21 +1771,21 @@ class Order extends \Eccube\Entity\AbstractEntity
      * @param  int $box_num
      * @return Order
      */
-//    public function setBoxNum($box_num)
-//    {
-//        $this->box_num = $box_num;
-//
-//        return $this;
-//    }
+    public function setBoxNum($box_num)
+    {
+        $this->box_num = $box_num;
+
+        return $this;
+    }
 
     /**
      * Get box_num
      *
      * @return string
      */
-//    public function getBoxNum()
-//    {
-//        return $this->box_num;
-//    }
+    public function getBoxNum()
+    {
+        return $this->box_num;
+    }
 
 }

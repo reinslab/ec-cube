@@ -190,7 +190,7 @@ $(function(){
                 <h2 class="heading02">入稿データ</h2>
                 <div id="detail_box__pdf_file" class="column">
                     <p>
-                        {{ Order.pdf_file_name }}  (<a href="{{ url('shopping_confirm_reupload', {'id': Order.id }) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">再入稿</a>)
+                        <a href="/upload/save_image/{{ Order.pdf_file_name }}" target="_blank">{{ Order.pdf_file_name }}</a>
                     </p>
                 </div>
                 <h2 class="heading02">お問い合わせ</h2>
@@ -256,7 +256,7 @@ $(function(){
                         	{% if Order.CustomerOrderStatus.id != app.config.order_estimate %}
                             <a href="{{ url('mypage_order', {'id': Order.id }) }}" class="btn btn-primary btn-block" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">再注文する</a>
                             {% else %}
-                            <a href="{{ url('mypage_order', {'id': Order.id }) }}" class="btn btn-primary btn-block" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">注文する</a>
+                            <a href="{{ url('mypage_est2order', {'id': Order.id }) }}" class="btn btn-primary btn-block" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">注文する</a>
                             {% endif %}
                         </p>
                         {% endif %}

@@ -108,6 +108,7 @@ class CartController extends AbstractController
     {
         $productClassId = $request->get('product_class_id');
         $quantity = $request->request->has('quantity') ? $request->get('quantity') : 1;
+		
 
         // FRONT_CART_ADD_INITIALIZE
         $event = new EventArgs(

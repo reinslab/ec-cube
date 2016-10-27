@@ -2,8 +2,8 @@
 #front page event
 ##################################
 
-Mypage/history.twig:
-    - [onRenderInsertDeleteButton, NORMAL]
+#Mypage/history.twig:
+#    - [onRenderInsertDeleteButton, NORMAL]
 Entry/index.twig:
     - [onRenderEntryIndexAddField, NORMAL]
 Entry/confirm.twig:
@@ -12,6 +12,10 @@ Shopping/index.twig:
     - [onRenderShoppingIndexAddField, NORMAL]
 Mypage/change.twig:
     - [onRenderMyPageChangeAddField, NORMAL]
+Cart/index.twig:
+    - [onRenderCartSaveButton, NORMAL]
+#Mypage/index.twig:
+#    - [onRenderInsertDeleteButton, NORMAL]
     
 front.entry.index.initialize:
     - [onRenderEntryIndexAddFieldInit, NORMAL]
@@ -23,11 +27,23 @@ front.shopping.index.initialize:
     - [onRenderShoppingIndexAddFieldInit, NORMAL]
 front.shopping.confirm.initialize:
     - [onRenderShoppingIndexAddFieldInit, NORMAL]
+front.shopping.payment.initialize:
+    - [onRenderShoppingIndexAddFieldInit, NORMAL]
+front.shopping.complete.initialize:
+    - [deleteEstimateOrder, NORMAL]
+    - [uploadPdfTmpFile, NORMAL]
+
+#eccube.event.render.shopping_complete.before:
+#    - [onRenderShoppingCompleteBefore, NORMAL]
+eccube.event.controller.shopping_confirm.before:
+    - [onControllerShoppingConfirmBefore, NORMAL]
 front.shopping.confirm.complete:
     - [uploadPdfFile, NORMAL]
+#front.shopping.payment.complete:
+#    - [uploadPdfFile, NORMAL]
 
-eccube.event.render.cart.before:
-    - [insertCartSaveButton, AFTER]
+#eccube.event.render.cart.before:
+#    - [insertCartSaveButton, AFTER]
 
 ##################################
 #admin page event
@@ -41,8 +57,6 @@ Admin/Order/edit.twig:
 
 admin.customer.edit.index.initialize:
     - [onRenderAdminCustomerAddFieldInit, NORMAL]
-
-
 
 
 

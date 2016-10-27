@@ -187,7 +187,9 @@ $(function() {
                             {% endfor %}
                         </div>
                     </div><!--/cart_item-->
+                    {% if flgPrintItem == false %}
                     <p><a id="confirm_box__quantity_edit_button" href="{{ url('cart') }}" class="btn btn-default btn-sm">数量を変更または削除する</a></p>
+                    {% endif %}
                     <h2 class="heading02">お客様情報</h2>
                     <div id="customer_detail_box" class="column is-edit">
                         <p id="customer_detail_box__customer_address" class="address"><span class="customer-edit customer-name01">{{ Order.name01 }}</span> <span class="customer-edit customer-name02">{{ Order.name02 }}</span> 様<br>

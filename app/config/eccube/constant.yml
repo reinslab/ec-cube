@@ -4,3 +4,7 @@ pdf_size: 20
 re_order_limit_day: 30
 product_type_print: 2
 product_type_article: 1
+payment_type_creditcard: 5
+payment_type_convenience: 6
+payment_type_bank: 3
+file_size: 20000000

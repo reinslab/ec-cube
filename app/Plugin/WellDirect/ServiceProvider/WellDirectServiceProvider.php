@@ -25,8 +25,15 @@ class WellDirectServiceProvider implements ServiceProviderInterface
 		// データ再入稿
         $app->match('/shopping/{id}', '\Plugin\WellDirect\Controller\::index_reupload')->bind('shopping_confirm_reupload')->assert('id', '\d+');
 
+        // 見積→注文
+        $app->match('/mypage/est2order/{id}', '\Plugin\WellDirect\Controller\WellDirectController::est2order')->value('id', null)->assert('id', '\d+|')->bind('mypage_est2order');
+        
+        // 見積書ダウンロード
+        $app->match('/mypage/estdownload/{id}', '\Plugin\WellDirect\Controller\WellDirectController::estdownload')->value('id', null)->assert('id', '\d+|')->bind('mypage_estdownload');
+
         // 入稿データダウンロード
         $app->match('/' . $app["config"]["admin_route"] . '/order/download/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pdfDownload')->value('id', null)->assert('id', '\d+|')->bind('admin_order_pdf_download');
+
 
 
 
@@ -35,7 +42,7 @@ class WellDirectServiceProvider implements ServiceProviderInterface
 		///////////////////////////////////////////////
         // Form/Type
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use($app) {
-//            $types[] = new \Plugin\WellDirect\Form\Type\Master\NyukinStatusType($app);
+            $types[] = new \Plugin\WellDirect\Form\Type\OrderPdfType($app);
             return $types;
         }));
 
@@ -52,6 +59,14 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         //Repository
         $app['eccube.welldirect.repository.nyukinstatus'] = $app->share(function () use ($app) {
             return $app['orm.em']->getRepository('Plugin\WellDirect\Entity\Master\NyukinStatus');
+        });
+
+        // -----------------------------
+        // サービスの登録
+        // -----------------------------
+        // 帳票作成
+        $app['eccube.plugin.welldirect.service.order_pdf'] = $app->share(function () use ($app) {
+            return new \Plugin\WellDirect\Service\OrderPdfService($app);
         });
 
         // locale message

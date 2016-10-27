@@ -25,6 +25,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 {% set body_class = 'mypage' %}
 
+{% block stylesheet %}
+<style type="text/css">
+<!--
+.del_btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+}
+
+div[id^="history_list__item--"] {
+    position: relative;
+}
+-->
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+function deleteOrder(url) {
+	if ( window.confirm('一度削除したデータは、元に戻せません。\n削除しても宜しいですか？') ) {
+		location.href = url;
+	}
+}
+</script>
+{% endblock %}
+
 {% block main %}
     <h1 class="page-heading">マイページ/ご注文履歴</h1>
     <div id="history_wrap" class="container-fluid">
@@ -49,7 +75,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         <dd id="history_list__order_status--{{ Order.id }}">{{ Order.CustomerOrderStatus }}</dd>
                                     {% endif %}
                                 </dl>
+                                
+                                {# U => 受注ステータスでボタン制御 #}
+                                {% if Order.OrderStatus.id == app.config.order_estimate  %}
+                                <p id="history_list__detail_button--{{ Order.id }}">
+                                	{% if date(Order.create_date) >= date("-" ~ app.config.re_order_limit_day ~ "days") %}
+                                	<a href="{{ url('mypage_est2order', {'id': Order.id }) }}" class="btn btn-default btn-sm" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">レジに進む</a>
+                                	{% endif %}
+                                	<a href="{{ url('mypage_estdownload', { id:Order.id })}}" target="_blank" class="btn btn-default btn-sm">見積書ダウンロード</a>
+                                </p>
+                                {% else %}
                                 <p id="history_list__detail_button--{{ Order.id }}"><a class="btn btn-default btn-sm" href="{{ url('mypage_history', {'id': Order.id}) }}">詳細を見る</a></p>
+                                {% endif %}
+                                {# U => 受注ステータスでボタン制御 #}
                             </div>
                             <div id="history_detail_list--{{ Order.id }}" class="col-sm-8">
                                 {% for OrderDetail in Order.OrderDetails %}
@@ -84,6 +122,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                     </div><!--/item_box-->
                                 {% endfor %}
                             </div>
+                            {# U => 受注ステータスでボタン制御 #}
+                            {% if Order.OrderStatus.id == app.config.order_estimate  %}
+                            <div class="del_btn"><a href="javascript:;" onclick="deleteOrder('{{ url('history_delete', { id:Order.id })}}')" class="btn btn-default btn-sm">削除</a></div>
+                            {% endif %}
+                            {# U => 受注ステータスでボタン制御 #}
                         </div><!--/historylist_column-->
                     {% endfor %}
 

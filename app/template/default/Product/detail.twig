@@ -27,14 +27,96 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <script>
     eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
 
+    // 規格1選択時
+    $('select[name=classcategory_id1]')
+    .change(function() {
+        var $form = $(this).parents('form');
+        var product_id = $form.find('input[name=product_id]').val();
+        var $sele1 = $(this);
+        
+	    {% if form.classcategory_id2 is defined %}
+	        //規格2設定
+	        fnSetClassCategories($form, {{ form.classcategory_id2.vars.value|json_encode|raw }});
+	    {% endif %}
+    });
+
     // 規格2に選択肢を割り当てる。
     function fnSetClassCategories(form, classcat_id2_selected) {
         var $form = $(form);
         var product_id = $form.find('input[name=product_id]').val();
         var $sele1 = $form.find('select[name=classcategory_id1]');
-        var $sele2 = $form.find('select[name=classcategory_id2]');
-        eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+        
+        var classcat_id1 = $sele1.val() ? $sele1.val() : '';
+        classcat2 = eccube.classCategories[classcat_id1];
+        
+		var classcat_id1 = $sele1.val() ? $sele1.val() : '';
+
+		//初期化
+		$("#classcategory_id2").html("");
+		
+		//テーブル用DIV
+        var table = $('#classcategory_id2');
+        
+        //table内をクリア
+        table.children().remove();
+
+		if ( classcat_id1 == '__unselected' ) {
+			//$("#classcategory_id2").html("選択肢なし");
+			return;
+		}
+		classcat2 = eccube.classCategories[classcat_id1];
+
+        var th = $('<tr>')
+        	.append('<th style="padding:5px;">&nbsp;</th>')
+        	.append('<th style="width:100px;padding:5px;">部数</th>')
+        	.append('<th style="width:100px;padding:5px;">金額</td>');
+        
+        table.append($('<thead>').append(th));
+        
+        var tbody = $('<tbody>');
+        // 規格2の要素を設定
+        for (var key in classcat2) {
+            if (classcat2.hasOwnProperty(key)) {
+                var id = classcat2[key].classcategory_id2;
+                var name = classcat2[key].name;
+                var price01 = classcat2[key].price01;
+                var price02 = classcat2[key].price02;
+                var product_class_id = classcat2[key].product_class_id;
+                
+                //カンマ編集
+                price01 = String(price01).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                price02 = String(price02).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                
+                var checked = "";
+                var option = $('<option />').val(id ? id : '').text(name);
+                if (id === classcat_id2_selected) {
+					checked = "checked";
+                }
+                //未選択は許可しない
+                if ( id == "" ) {
+                	continue;
+                }
+                // trタグ生成
+		        var td = $('<tr>')
+		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ')" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
+		        	.append('<td style="width:100px;padding:5px;">' + name + '</td>')
+		        	.append('<td style="width:100px;padding:5px;">' + price02 + '円</td>');
+
+		        tbody.append(td);
+            }
+        }
+        table.append(tbody);
+	        
+/*      eccube.checkStock($form, product_id, $sele1.val() ? $sele1.val() : '__unselected2', $sele2.val() ? $sele2.val() : '');*/
+
     }
+    var setCate = function(product_class_id) {
+        var form = document.form1;
+        var $product_class_id_dynamic = form.product_class_id;
+        
+        // product_class_idセット
+        $product_class_id_dynamic.value = product_class_id;
+    };
 
     {% if form.classcategory_id2 is defined %}
     fnSetClassCategories(
@@ -188,43 +270,46 @@ $(function(){
                             {% if Product.stock_find %}
 
                                 {# 規格 #}
-
-{# D => 非表示 #}
-{#                                {% if form.classcategory_id1 is defined %}#}
-{#                                <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">#}
-                                    {# 規格1 #}
-{#                                    <li>#}
-{#                                        {{ form_widget(form.classcategory_id1) }}#}
-{#                                        {{ form_errors(form.classcategory_id1) }}#}
-{#                                    </li>#}
-                                    {# 規格2 #}
-{#                                    {% if form.classcategory_id2 is defined %}#}
-{#                                        <li>#}
-{#                                            {{ form_widget(form.classcategory_id2) }}#}
-{#                                            {{ form_errors(form.classcategory_id2) }}#}
-{#                                        </li>#}
-{#                                     {% endif %}#}
-{#                                </ul>#}
-{#                                {% endif %}#}
-{# D => 非表示 #}
-								{% if flg_product_type == 0 %}
-                                <table border="1" cellpadding="4" cellspacing="0">
-                                <tr>
-                                <td style="width:100px">部数</td>
-                                <td style="width:200px">金額</td>
-                                </tr>
-                                {% for item in ProductClassDetail %}
-                                <tr>
-                                <td>{{ item.class_name }}</td>
-                                <td><a href="javascript:;" onclick="changeAction('/cart/add');eccube.setModeAndSubmit('cart_add', 'product_class_id', '{{ item.product_class_id }}')">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</a></td>
-                                </tr>
-                                {% endfor %}
-                                </table>
-                                {% else %}
+                                {% if form.classcategory_id1 is defined %}
+                                <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
+                                     規格1 
+                                    <li>
+                                    {% if form.classcategory_id2 is defined %}
+                                        {{ form_widget(form.classcategory_id1) }}
+                                        {{ form_errors(form.classcategory_id1) }}
+                                        <p class="errormsg text-danger"><span id="error_msg_classcategory_id1"></span></p>
+                                    {% else %}
+		                                <table border="0" cellpadding="4" cellspacing="0">
+		                                <tr>
+		                                <td style="padding:5px;">&nbsp;</td>
+		                                <td style="width:100px;padding:5px;">部数</td>
+		                                <td style="width:100px;padding:5px;">金額</td>
+		                                </tr>
+		                                {% for item in ProductClass1 %}
+		                                <tr>
+		                                <td style="padding:5px;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }})" /></td>
+		                                <td style="width:100px;padding:5px;">{{ item.class_name }}</td>
+		                                <td style="width:100px;padding:5px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
+		                                </tr>
+		                                {% endfor %}
+		                                </table>
+                                        {{ form_errors(form.classcategory_id1) }}
+                                    {% endif %}
+                                    </li>
+                                    {% if form.classcategory_id2 is defined %}
+                                     規格2 
+                                        <li>
+                                            {{ form_widget(form.classcategory_id2) }}
+                                            {{ form_errors(form.classcategory_id2) }}
+                                            <p class="errormsg text-danger"><span id="error_msg_classcategory_id2"></span></p>
+                                        </li>
+                                     {% endif %}
+                                </ul>
+                                {% endif %}
 
                                 {# 数量 #}
                                 <dl id="detail_cart_box__cart_quantity" class="quantity">
-                                    <dt>数量A</dt>
+                                    <dt>{% if Product.hasProductClass == false %}数量{% endif %}</dt>
                                     <dd>
                                         {{ form_widget(form.quantity) }}
                                         {{ form_errors(form.quantity) }}
@@ -254,7 +339,6 @@ $(function(){
                                     </ul>
                                     {% endif %}
                                 </div>
-                                {% endif %}
                             {% else %}
                                 {# 在庫がない場合は品切れボタンのみ表示 #}
                                 <div id="detail_cart_box__button_area" class="btn_area">
@@ -265,7 +349,18 @@ $(function(){
                             {% endif %}
                         </div>
                         <!--▲買い物かご-->
-                        {{ form_rest(form) }}
+                        {# D => 削除 #}
+                        {#{ form_rest(form) }#}
+                        {# D => 削除 #}
+                        {% if Product.hasProductClass %}
+                        <input type="hidden" class="form-control" name="product_class_id" id="product_class_id" value="" />
+                        {% else %}
+                        <input type="hidden" class="form-control" name="product_class_id" id="product_class_id" value="{{ product_class_id }}" />
+                        {% endif %}
+                        <input type="hidden" class="form-control" name="mode" id="mode" value="" />
+                        <input id="product_id" name="product_id" class="form-control" value="{{ Product.id }}" type="hidden">
+                        {{ form_widget(form._token) }}
+                        
                     </form>
 
                     <!--★商品説明★-->

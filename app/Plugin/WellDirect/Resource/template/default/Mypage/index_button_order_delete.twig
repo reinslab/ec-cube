@@ -1,0 +1,20 @@
+{#
+* Plugin Name : WellDirect
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<script type="text/javascript">
+function deleteOrder() {
+	if ( window.confirm('一度削除したデータは、元に戻せません。\n削除しても宜しいですか？') ) {
+		location.href = "{{ url('history_delete', { id:Order.id })}}";
+	}
+}
+</script>
+
+<a href="javascript:;" onclick="deleteOrder()" class="btn btn-default btn-sm">見積削除</a>
+

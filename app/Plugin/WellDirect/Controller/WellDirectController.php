@@ -46,16 +46,34 @@ class WellDirectController extends AbstractController
     public function eststep(Application $app, Request $request)
     {
     
+        // 未ログインの場合, ログイン画面へリダイレクト.
+        if (!$app->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $app->redirect($app->url('mypage_login'));
+        }
+
 		// カート情報保存
 		$Customer = $app->user();
 
         // 受注情報を作成
         $Order = $app['eccube.service.shopping']->createEstimateOrder($Customer);
+
+		//カスタム注文IDをセットする
+		$Order = $app['eccube.service.shopping']->setCustomOrderId($app, $Order);
         
+        // 見積情報作成
         $app['eccube.service.shopping']->estimatePurchase($Order);
 
+        // DB更新
+        $app['orm.em']->persist($Order);
+        $app['orm.em']->flush($Order);
         // 受注関連情報を最新状態に更新
         //$app['orm.em']->refresh($Order);
+
+        // 受注IDセッションを削除
+        $app['session']->remove('eccube.front.shopping.order.id');
+        
+        // カートセッションクリア
+        $app['eccube.service.cart']->clear();
 
 		//マイページにリダイレクト 
         return $app->redirect($app->url('mypage'));
@@ -86,5 +104,86 @@ class WellDirectController extends AbstractController
 
 		//マイページにリダイレクト 
         return $app->redirect($app->url('mypage'));
+    }
+
+    /**
+     * 見積→注文処理
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function est2order(Application $app, Request $request, $id)
+    {
+
+    	// カートセッションを作成する
+    	// 既存のカート情報はクリア(商品種別が異なっていると面倒なので)
+        $app['eccube.service.cart']->clear();
+        
+		// 受注検索
+        $Order = $app['eccube.repository.order']->findOneBy(array(
+            'id' => $id,
+            'Customer' => $app->user(),
+        ));
+		
+        $this->isTokenValid($app);
+        
+        // プロダクトクラスIDを取得
+        $arrDetail = $Order->getOrderDetails()->toArray();
+        
+        foreach($arrDetail as $idx => $objDetail) {
+        	$objProductClass = $objDetail->getProductClass();
+            $productClassId = $objProductClass->getId();
+            $quantity = $objDetail->getQuantity();
+            $app['eccube.service.cart']->addProduct($productClassId, $quantity)->save();
+        }
+        
+        $app['eccube.service.cart']->lock();
+        $app['eccube.service.cart']->save();
+        
+        // 削除用受注ID
+        $app['session']->set('estimate_order_id', $id);
+
+		//マイページにリダイレクト 
+        return $app->redirect($app->url('shopping'));
+    }
+
+    /**
+     * 見積書ダウンロード
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function estdownload(Application $app, Request $request, $id)
+    {
+    
+        // サービスの取得
+        $service = $app['eccube.plugin.welldirect.service.order_pdf'];
+
+        // 購入情報からPDFを作成する
+        $status = $service->makePdf($id);
+
+        // 異常終了した場合の処理
+/*
+        if (!$status) {
+            $service->close();
+            $app->addError('admin.order_pdf.download.failure', 'admin');
+            return $app->render('OrderPdf/View/admin/order_pdf.twig', array(
+                'form' => $form->createView()
+            ));
+        }
+*/
+        // ダウンロードする
+        $response = new Response(
+            $service->outputPdf(),
+            200,
+            array('content-type' => 'application/pdf')
+        );
+
+        // レスポンスヘッダーにContent-Dispositionをセットし、ファイル名をreceipt.pdfに指定
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $service->getPdfFileName() .'"');
+
+        return $response;
     }
 }
