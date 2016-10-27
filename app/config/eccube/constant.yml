@@ -1,5 +1,8 @@
 order_estimate: 0
-order_download: 10
+order_data_check_now: 11
+order_data_check_end: 12
+order_print_now: 20
+order_print_end: 21
 pdf_size: 20
 re_order_limit_day: 30
 product_type_print: 2
@@ -7,4 +10,3 @@ product_type_article: 1
 payment_type_creditcard: 5
 payment_type_convenience: 6
 payment_type_bank: 3
-file_size: 20000000
