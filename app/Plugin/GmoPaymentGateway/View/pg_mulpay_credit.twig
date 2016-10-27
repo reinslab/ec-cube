@@ -1,0 +1,251 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% extends  'default_frame.twig' %}
+
+{% block javascript %}
+    <script>
+        {% if dataReturn.tpl_payment_onload and  creditReloadFlg is defined and creditReloadFlg == true %}
+            document.formCredit.submit();
+        {%elseif dataReturn.tpl_payment_onload and  registReloadFlg is defined and registReloadFlg == true %}
+             document.formRegist.submit();   
+        {% endif%}
+        $( "form" ).submit(function( event ) {
+            $(".btn").attr("disabled",true);
+      });
+    </script>
+    <style type="text/css">
+        .gmo-payment-inner table{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+        }
+        .gmo-payment-inner .text-center{
+            text-align: center;
+        }
+        .gmo-payment-inner .text-right{
+            text-align: right;
+        }
+        .gmo-payment-inner .dl_table dd {
+            padding: 8px;
+        }
+        @media only screen and (min-width: 768px){
+            .gmo-payment-inner .dl_table dd {
+                padding: 8px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div id="main_middle">
+        <div class="container-fluid gmo-container">
+            <h2 class="title">{{ title }}</h2>
+                {% if error.payment is not empty %}
+                    <div class="message">
+                        <p class="errormsg bg-danger">
+                            <svg class="cb cb-warning">
+                            <use xlink:href="#cb-warning"></use>
+                            </svg>{{ error.payment|raw }}
+                        </p>
+                    </div>
+                {% endif %}
+            <div class="gmo-payment-inner">
+                <form name="formCredit" id="formCredit" method="post" action="{% if dataReturn.next_action is not empty %}{{ dataReturn.next_action }}{% else %}{{ url('gmo_shopping_payment') }}{% endif %}" {{ form_enctype(formCredit) }} >
+                    {{ form_widget(formCredit._token) }}
+                    <input type="hidden" name="mode" value="next"/>
+                    {% if dataReturn.tpl_is_td_tran %}
+                        <div id="payment_form_td_tran" style="{% if dataReturn.tpl_is_td_tran == false %}display:none; {% endif %} ">
+                            <div class="information">
+                                <p>本人認証サービス(3-Dセキュア認証)の画面に移動します。</p>
+                                <span class="text-danger">※画面が切り替るまで少々時間がかかる場合がございますが、そのままお待ちください。</span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="PaReq" value="{{ dataReturn.arrTdData.PaReq }}"/>
+                        <input type="hidden" name="PaRes" value="{{ dataReturn.arrTdData.PaRes }}"/>
+                        <input type="hidden" name="TermUrl" value="{{ dataReturn.arrTdData.TermUrl }}"/>
+                        <input type="hidden" name="MD" value="{{ dataReturn.arrTdData.MD }}"/>
+                    {% endif %}
+                    <div id="payment_form_loading"
+                         style="{% if tpl_is_loding == false and do_request == false %}display:none;{% endif %}">
+                        <div class="dl_table" style="margin-top: 20px;">
+                            <dl>
+                                <dd style="text-align: center;">
+                                    <img src="{{ app.config.root_urlpath }}{{ app.config.plugin_html_urlpath }}gmo_pg/loading.gif"/>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="dl_table" id="payment_form_body" style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+                        <h3>カード情報を入力</h3>
+                        <dl>
+                            <dt>クレジットカード番号<span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-group form-inline {% if formCredit.card_no.vars.errors is not empty %}has-error{% endif %}">
+                                    {{ form_widget(formCredit.card_no) }}
+                                    {{ form_errors(formCredit.card_no) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>カード有効期限<span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-group form-inline {% if formCredit.expire_month.vars.errors is not empty or formCredit.expire_year.vars.errors is not empty %}has-error{% endif %}">
+                                    {{ form_widget(formCredit.expire_month) }}月 /20 {{ form_widget(formCredit.expire_year) }}年
+                                    {{ form_errors(formCredit.expire_month) }}
+                                    {{ form_errors(formCredit.expire_year) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>カード名義人名<span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    <div class="{% if formCredit.card_name1.vars.errors is not empty %}has-error{% endif %}" style="float:left">
+                                        名：{{ form_widget(formCredit.card_name1) }}  &nbsp;
+                                        {{ form_errors(formCredit.card_name1) }}
+                                    </div>
+                                    <div class="{% if formCredit.card_name2.vars.errors is not empty %}has-error{% endif %}">
+                                        姓：{{ form_widget(formCredit.card_name2) }} （例：TARO YAMADA）                                    
+                                        {{ form_errors(formCredit.card_name2) }}
+                                    </div>
+                                </div>
+
+                            </dd>
+                        </dl>
+                        {% if paymentInfo.use_securitycd == '1' %}
+                            <dl>
+                                <dt>
+                                セキュリティコード
+                                {% if paymentInfo.use_securitycd_option == '0' %}
+                                    <span class="required">必須</span>
+                                {% endif %}
+                                </dt>
+                                <dd>
+                                    <div class="form-group form-inline {% if formCredit.security_code.vars.errors is not empty %}has-error{% endif %}">
+                                        {{ form_widget(formCredit.security_code) }}  （例: 123）
+                                        {{ form_errors(formCredit.security_code) }}
+                                        <p class="attention">主にカード裏面の署名欄に記載されている末尾３桁～４桁の数字をご記入下さい。</p>
+                                    </div>
+                                </dd>
+                            </dl>
+                        {% endif %}
+                        <dl>
+                            <dt>支払い方法<span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-group form-inline {% if formCredit.method.vars.errors is not empty %}has-error{% endif %}">
+                                    {{ form_widget(formCredit.method) }}
+                                    {{ form_errors(formCredit.method) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        {% if tpl_pg_regist_card_form %}
+                            <dl class="save_card">
+                                <dt>カード情報登録</dt>
+                                <dd>
+                                    <div class="form-group form-inline {% if formCredit.register_card.vars.errors is not empty %}has-error{% endif %}">
+                                        {{ form_row(formCredit.register_card) }}
+                                        {{ form_errors(formCredit.register_card) }}
+                                        <p>カード情報を登録すると次回より入力無しで購入出来ます。<br />カード情報は当店では保管いたしません。<br />委託する決済代行会社にて安全に保管されます。</p>
+                                    </div>
+                                </dd>
+                            </dl>
+                        {% endif %}        
+                        {% if dataReturn.tpl_pg_regist_card_max %}
+                            <dl>
+                                <dt>カード情報登録</dt>
+                                <dd>
+                                    <div class="form-group form-inline">
+                                        <span class="text-danger">カード情報が既に{{ app.config.GmoPaymentGateway.const.PG_MULPAY_REGIST_CARD_NUM }}個登録されています。<br />これ以上は新規で登録出来ません。</span>
+                                        <p>新たに登録したい場合は、大変お手数ですが後ほどマイページにて編集して下さい。</p> 
+                                    </div>
+                                </dd>
+                            </dl>
+                        {% endif %}
+                    </div>
+                    <div class="row no-padding" style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><button type="submit" class="btn btn-primary btn-block">ご注文完了ページへ</button></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {%if isDisplayRegistCredit%}
+            <div class="gmo-payment-inner">
+                <h3>登録済みカードを選択</h3>
+                <p>決済に利用するカードをご選択ください。<br>
+                選択後、一番下の「ご注文完了ページへ」ボタンをクリックしてください。</p>
+                {{ form_errors(formRegist.CardSeq) }}
+                <form name="formRegist" id="formRegist" method="post" action="{% if dataReturn.next_action is not empty %}{{ dataReturn.next_action }}{% else %}{{ url('gmo_shopping_payment') }}{% endif %}" {{ form_enctype(formRegist) }} >
+                    {{ form_widget(formRegist._token) }}
+                    <input type="hidden" name="type_submit" value="regist"/>
+                    <input type="hidden" name="mode" value="next"/>
+                    {% if dataReturn.tpl_is_td_tran %}
+                        <input type="hidden" name="PaReq" value="{{ dataReturn.arrTdData.PaReq }}"/>
+                        <input type="hidden" name="PaRes" value="{{ dataReturn.arrTdData.PaRes }}"/>
+                        <input type="hidden" name="TermUrl" value="{{ dataReturn.arrTdData.TermUrl }}"/>
+                        <input type="hidden" name="MD" value="{{ dataReturn.arrTdData.MD }}"/>
+                     {% endif %}
+                    <div class="table-responsive">
+                        <table class="table table-nonfluid">
+                            
+                            <thead>
+                                <tr>
+                                    <th >選択<span class="required">必須</span></th>
+                                    <th >カード番号</th>
+                                    <th >有効期限</th>
+                                    <th >名義人</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in listData %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="radio" name="CardSeq" value="{{ data.CardSeq }}"
+                                            {% if tpl_plg_target_seq == data.CardSeq %}checked="checked"{% endif %}/> 
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{ data.CardNo }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ data.expire_year }}年{{ data.expire_month }}月
+                                        </td>
+                                        <td class="text-center">
+                                            {{ data.HolderName }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                    
+                                    <tr>
+                                        <td class="text-center">支払い方法<span class="required">必須</span></td>
+                                        <td class="text-center">
+                                           <div class="form-group form-inline {% if formRegist.method.vars.errors is not empty %}has-error{% endif %}">
+                                                {{ form_widget(formRegist.method) }}
+                                                {{ form_errors(formRegist.method) }}
+                                            </div> 
+                                        </td>
+                                    <td colspan="3"></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row no-padding" style="{% if tpl_is_loding and do_request %}display:none;{% endif %}">
+                        <div class="btn_group col-sm-offset-2 col-sm-4">
+                            <p><a href="{{ path('gmo_shopping_payment_back') }}" class="btn btn-info btn-block">戻る</a></p>
+                        </div>
+                        <div class="btn_group col-sm-4">
+                                <p><button type="submit" class="btn btn-primary btn-block">ご注文完了ページへ</button></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+{% endblock %}

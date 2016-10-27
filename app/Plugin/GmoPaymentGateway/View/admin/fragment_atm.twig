@@ -1,0 +1,301 @@
+{#
+Copyright(c) 2015 GMO Payment Gateway, Inc. All rights reserved.
+http://www.gmo-pg.com/
+#}
+{% block main %}
+    <style type="text/css">
+        .small {
+            font-size: 80%;
+        }
+
+        .caution {
+            color: #DE5D50;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .width222 {
+            width: 222px;
+            display: inline-block;
+        }
+
+        .width54 {
+            width: 70px;
+            display: inline-block;
+        }
+
+        .area {
+            width: 433px;
+            height: 134px;
+        }
+
+        .warningError {
+            color: #F00;
+        }
+    </style>
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">GMOペイメント設定</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">支払期限</label>
+
+                <div class="col-sm-10 {% if form.payment_term_day.vars.errors is not empty %}has-error{% endif %}">
+                    {# {% if errPaymentTermDay is not empty  %} <p class='caution'>{{errPaymentTermDay}}</p> {% endif %} #}
+                    {{ form_widget(form.payment_term_day) }} 日 <span class='caution'>（半角数字で入力）</span>
+                    {{ form_errors(form.payment_term_day) }}
+                    <p class='small'>※省略時は、ショップ管理画面のショップ情報に設定された支払期限で処理されます。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">PGメール送信</label>
+
+                <div class="col-sm-10  {% if form.enable_mail.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.enable_mail) }}
+                    {{ form_errors(form.enable_mail) }}
+                    <p class='small'>※決済時にECサイトからと併せて、決済サーバーからもメールを送信するかどうかを設定します。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄1(店名)</label>
+
+                <div class="col-sm-10  {% if form.register_disp1.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp1) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp1) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄2</label>
+
+                <div class="col-sm-10  {% if form.register_disp2.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp2) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp2) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄3</label>
+
+                <div class="col-sm-10  {% if form.register_disp3.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp3) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp3) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄4</label>
+
+                <div class="col-sm-10  {% if form.register_disp4.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp4) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp4) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄5</label>
+
+                <div class="col-sm-10  {% if form.register_disp5.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp5) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp5) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄6</label>
+
+                <div class="col-sm-10  {% if form.register_disp6.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp6) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp6) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄7</label>
+
+                <div class="col-sm-10  {% if form.register_disp7.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp7) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp7) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">ATM表示欄8</label>
+
+                <div class="col-sm-10  {% if form.register_disp8.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.register_disp8) }} <span class='caution'>（上限16文字）</span>
+                    {{ form_errors(form.register_disp8) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄1</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp1.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp1) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp1) }}
+                    <p class='small'>例）ご利用ありがとうございました。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄2</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp2.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp2) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp2) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄3</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp3.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp3) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp3) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄4</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp4.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp4) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp4) }}
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄5</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp5.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp5) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp5) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄6</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp6.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp6) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp6) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄7</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp7.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp7) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp7) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄8</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp8.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp8) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp8) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄9</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp9.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp9) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp9) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">利用明細表示欄10</label>
+
+                <div class="col-sm-10  {% if form.receipts_disp10.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp10) }}<span class='caution'>（上限30文字）</span>
+                    {{ form_errors(form.receipts_disp10) }}
+                </div>
+            </div>
+                
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">お問合せ先<span class='warningError'>*</span></label>
+
+                <div class="col-sm-10  {% if form.receipts_disp11.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp11) }}<span class='caution'>（上限42文字）</span>
+                    {{ form_errors(form.receipts_disp11) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">お問合せ先電話番号<span class='warningError'>*</span></label>
+
+                <div class="col-sm-10 {% if form.receipts_disp12_1.vars.errors is not empty %}has-error{% endif %} {% if form.receipts_disp12_2.vars.errors is not empty %}has-error{% endif %} {% if form.receipts_disp12_3.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp12_1) }} − {{ form_widget(form.receipts_disp12_2) }}
+                    − {{ form_widget(form.receipts_disp12_3) }}<span class='caution'>（半角数字で入力）</span>
+                    {{ form_errors(form.receipts_disp12_1) }}
+                    {{ form_errors(form.receipts_disp12_2) }}
+                    {{ form_errors(form.receipts_disp12_3) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">お問合せ先受付時間<span class='warningError'>*</span></label>
+
+                <div class="col-sm-10 {% if form.receipts_disp13_1.vars.errors is not empty %}has-error{% endif %} {% if form.receipts_disp13_2.vars.errors is not empty %}has-error{% endif %} {% if form.receipts_disp13_3.vars.errors is not empty %}has-error{% endif %} {% if form.receipts_disp13_4.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.receipts_disp13_1) }} ： {{ form_widget(form.receipts_disp13_2) }}
+                    − {{ form_widget(form.receipts_disp13_3) }} ： {{ form_widget(form.receipts_disp13_4) }}
+                    {{ form_errors(form.receipts_disp13_1) }}
+                    {{ form_errors(form.receipts_disp13_2) }}
+                    {{ form_errors(form.receipts_disp13_3) }}
+                    {{ form_errors(form.receipts_disp13_4) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">決済完了案内タイトル</label>
+
+                <div class="col-sm-10 {% if form.order_mail_title1.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.order_mail_title1) }}<span class='caution'>（上限50文字）</span>
+                    {{ form_errors(form.order_mail_title1) }}
+                    <p class='small'>ご注文完了画面とご注文完了メールに、支払いに関する案内文を入れる場合にはタイトルと本文を入れて下さい。(両方入っていない場合は有効になりません。)</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">決済完了案内本文</label>
+
+                <div class="col-sm-10 {% if form.order_mail_body1.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.order_mail_body1) }}<span class='caution'>（上限1000文字）</span>
+                    {{ form_errors(form.order_mail_body1) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">自由項目1</label>
+
+                <div class="col-sm-10 {% if form.ClientField1.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.ClientField1) }}<span class='caution'>（上限100文字）</span>
+                    {{ form_errors(form.ClientField1) }}
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label required">自由項目2</label>
+
+                <div class="col-sm-10 {% if form.ClientField2.vars.errors is not empty %}has-error{% endif %}">
+                    {{ form_widget(form.ClientField2) }}<span class='caution'>（上限100文字）</span>
+                    {{ form_errors(form.ClientField2) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
