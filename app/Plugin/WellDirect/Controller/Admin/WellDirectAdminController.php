@@ -75,6 +75,11 @@ class WellDirectAdminController extends AbstractController
                 throw new NotFoundHttpException();
             }
             
+            //PDFファイルが無い場合はスキップする
+            if ( $TargetOrder->getPdfFileName() == '' ) {
+            	continue;
+            }
+            
             $custom_order_id = $TargetOrder->getCustomOrderId();
             $zip->addFromString($custom_order_id . '_' . $TargetOrder->getPdfFileName(), file_get_contents($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName()));
             
