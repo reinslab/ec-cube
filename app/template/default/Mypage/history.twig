@@ -197,6 +197,7 @@ console.log(document.form1.pdf_upload);
                         支払方法： {{ Order.PaymentMethod }}
                     </p>
                 </div>
+                {% if flgPrintItem %}
                 <h2 class="heading02">入稿データ</h2>
                 <div id="detail_box__pdf_file" class="column">
                     <p>
@@ -213,6 +214,7 @@ console.log(document.form1.pdf_upload);
                         </form>
                     </p>
                 </div>
+                {% endif %}
                 <h2 class="heading02">お問い合わせ</h2>
                 <div id="detail_box__message" class="column">
                     <p>

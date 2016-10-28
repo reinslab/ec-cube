@@ -37,19 +37,22 @@ use Symfony\Component\Validator\ExecutionContext;
 class AddCartType extends AbstractType
 {
 
+	public $app;
     public $config;
     public $security;
     public $customerFavoriteProductRepository;
     public $Product = null;
 
     public function __construct(
-        $config,
-        \Symfony\Component\Security\Core\SecurityContext $security,
-        \Eccube\Repository\CustomerFavoriteProductRepository $customerFavoriteProductRepository
+    	$app
+//        $config,
+//        \Symfony\Component\Security\Core\SecurityContext $security,
+//        \Eccube\Repository\CustomerFavoriteProductRepository $customerFavoriteProductRepository
     ) {
-        $this->config = $config;
-        $this->security = $security;
-        $this->customerFavoriteProductRepository = $customerFavoriteProductRepository;
+    	$this->app = $app;
+        $this->config = $app['config'];
+        $this->security = $app['security'];
+        $this->customerFavoriteProductRepository = $app['eccube.repository.customer_favorite_product'];
     }
 
     /**
@@ -83,9 +86,12 @@ class AddCartType extends AbstractType
         if ($Product->getStockFind()) {
 // U => 物品販売のみ
 //        	if ( !$Product->hasProductClass() ) {
+			$is_print_product = $this->app['eccube.service.product']->isPrintProduct($Product);
 			$quantity_form_type = 'integer';
-			if ( $Product->hasProductClass() ) {
+			$expanded = false;
+			if ( $is_print_product ) {
 				$quantity_form_type = 'hidden';
+				$expanded = true;
 			}
 			
 			
@@ -121,7 +127,7 @@ class AddCartType extends AbstractType
                 if (!is_null($Product->getClassName2())) {
                     $builder->add('classcategory_id2', 'choice', array(
                         'label' => $Product->getClassName2(),
-                        'expanded' => true,
+                        'expanded' => $expanded,
                         'choices' => array(),
                         'required' => true,
                     ));

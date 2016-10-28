@@ -13,6 +13,7 @@ namespace Eccube\Form\Type\Front;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class MyPageHistoryType extends AbstractType
@@ -35,6 +36,13 @@ class MyPageHistoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $config = $this->app['config'];
+        $Order = $options['order'];
+        
+		$flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($Order);
+		$required = false;
+		if ( $flgPrintItem ) {
+			$required = true;
+		}
         
         $chkArr = array();
        	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));
@@ -44,9 +52,16 @@ class MyPageHistoryType extends AbstractType
             ->add('pdffile', 'file', array(
                 'label' => '入稿データ選択',
                 'mapped' => false,
-                'required' => true,
+                'required' => $required,
                 'constraints' => $chkArr,
             ));
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'order' => null,
+        ));
     }
 
     /**

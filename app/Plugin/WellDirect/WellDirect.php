@@ -277,17 +277,8 @@ class WellDirect {
 
         $parameters = $event->getParameters();
         $Order = $parameters['Order'];
-        $objOrderDetail = $Order->getOrderDetails();
-        $arrOrderDetail = $objOrderDetail->toArray();
-        $flgPrintItem = false;
-        foreach($arrOrderDetail as $idx => $order_detail) {
-        	$objProduct = $order_detail->getProduct();
-        	//印刷販売か否か
-        	if ( $objProduct->hasProductClass() ) {
-        		$flgPrintItem = true;
-        		break;
-        	}
-        }
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
         
         $source = $event->getSource();
 

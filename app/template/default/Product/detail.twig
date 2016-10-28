@@ -45,6 +45,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         var $form = $(form);
         var product_id = $form.find('input[name=product_id]').val();
         var $sele1 = $form.find('select[name=classcategory_id1]');
+        var $sele2 = $form.find('select[name=classcategory_id2]');
+        eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+    }
+
+    // 規格2に選択肢を割り当てる。
+    function fnSetClassCategoriesPrint(form, classcat_id2_selected) {
+        var $form = $(form);
+        var product_id = $form.find('input[name=product_id]').val();
+        var $sele1 = $form.find('select[name=classcategory_id1]');
         
         var classcat_id1 = $sele1.val() ? $sele1.val() : '';
         classcat2 = eccube.classCategories[classcat_id1];
@@ -119,9 +128,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     };
 
     {% if form.classcategory_id2 is defined %}
+    	{% if flg_product_type == app.config.product_type_print %}
+    fnSetClassCategoriesPrint(
+            document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+    );
+    	{% else %}
     fnSetClassCategories(
             document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
     );
+    	{% endif %}
     {% endif %}
     
 </script>
@@ -274,6 +289,7 @@ $(function(){
                                 <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
                                      {{ Product.className1 }}
                                     <li>
+                                    {% if flg_product_type == app.config.product_type_print %}
                                     {% if form.classcategory_id2 is defined %}
                                         {{ form_widget(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
@@ -294,6 +310,12 @@ $(function(){
 		                                {% endfor %}
 		                                </table>
                                         {{ form_errors(form.classcategory_id1) }}
+                                    {% endif %}
+                                    {% else %}
+                                    <li>
+                                        {{ form_widget(form.classcategory_id1) }}
+                                        {{ form_errors(form.classcategory_id1) }}
+                                    </li>
                                     {% endif %}
                                     </li>
                                     {% if form.classcategory_id2 is defined %}

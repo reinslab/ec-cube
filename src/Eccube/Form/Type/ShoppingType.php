@@ -50,17 +50,9 @@ class ShoppingType extends AbstractType
 // A => 受注 TODO
         $order = $options['order'];
 
-        $objOrderDetail = $order->getOrderDetails();
-        $arrOrderDetail = $objOrderDetail->toArray();
-        $flgPrintItem = false;
-        foreach($arrOrderDetail as $idx => $order_detail) {
-        	$objProduct = $order_detail->getProduct();
-        	//印刷販売か否か
-        	if ( $objProduct->hasProductClass() ) {
-        		$flgPrintItem = true;
-        		break;
-        	}
-        }
+        //印刷商品判定
+        $flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($order);
+
         $chkArr = array();
         if ( $flgPrintItem ) {
         	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));

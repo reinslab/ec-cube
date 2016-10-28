@@ -78,6 +78,11 @@ class EccubeServiceProvider implements ServiceProviderInterface
             return new \Eccube\Service\ShoppingService($app, $app['eccube.service.cart'], $app['eccube.service.order']);
         });
 
+// A => #836 処理の共通化
+        $app['eccube.service.product'] = $app->share(function () use ($app) {
+            return new \Eccube\Service\ProductService($app);
+        });
+// A => #836
         // Repository
         $app['eccube.repository.master.authority'] = $app->share(function () use ($app) {
             return $app['orm.em']->getRepository('Eccube\Entity\Master\Authority');
@@ -303,7 +308,8 @@ class EccubeServiceProvider implements ServiceProviderInterface
             $types[] = new \Eccube\Form\Type\CustomerType($app); // 削除予定
 
             if (isset($app['security']) && isset($app['eccube.repository.customer_favorite_product'])) {
-                $types[] = new \Eccube\Form\Type\AddCartType($app['config'], $app['security'], $app['eccube.repository.customer_favorite_product']);
+//                $types[] = new \Eccube\Form\Type\AddCartType($app['config'], $app['security'], $app['eccube.repository.customer_favorite_product']);
+                $types[] = new \Eccube\Form\Type\AddCartType($app);
             }
             $types[] = new \Eccube\Form\Type\SearchProductType();
             $types[] = new \Eccube\Form\Type\OrderSearchType($app);

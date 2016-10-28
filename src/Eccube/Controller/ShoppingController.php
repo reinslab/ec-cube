@@ -155,17 +155,9 @@ class ShoppingController extends AbstractController
             $app['session']->set($this->sessionMultipleKey, 'multiple');
         }
         
-        $objOrderDetail = $Order->getOrderDetails();
-        $arrOrderDetail = $objOrderDetail->toArray();
-        $flgPrintItem = false;
-        foreach($arrOrderDetail as $idx => $order_detail) {
-        	$objProduct = $order_detail->getProduct();
-        	//印刷販売か否か
-        	if ( $objProduct->hasProductClass() ) {
-        		$flgPrintItem = true;
-        		break;
-        	}
-        }        
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
+        
         return $app->render('Shopping/index.twig', array(
             'form' => $form->createView(),
             'Order' => $Order,

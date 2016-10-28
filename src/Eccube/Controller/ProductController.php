@@ -232,16 +232,9 @@ class ProductController
 
 // A => 商品規格
         /** @var $qb \Doctrine\ORM\QueryBuilder */
-        $flg_product_type = 0; //0:印刷販売 1:物品販売
-        $product_class_id = '';
-        if ( !$Product->hasProductClass() ) {
-        	$flg_product_type = 1;
-        	
-        	//product_class_idを取得
-        	$objProductClass = $Product->getProductClasses();
-        	$arrProductClass = $objProductClass->toArray();
-        	$product_class_id = $arrProductClass[0]->getId();
-        }
+        $flg_product_type = $app['eccube.service.product']->getProductType($Product);
+        $product_class_id = $app['eccube.service.product']->getProductClassId($Product);
+
         $arrRes = array();
         foreach ($Product->getProductClasses() as $ProductClass) {
 	        $objClassCategory = $ProductClass->getClassCategory1();

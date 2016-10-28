@@ -156,7 +156,7 @@ class MypageController extends AbstractController
         }
         
 // A => フォーム生成
-        $builder = $app['form.factory']->createBuilder('mypage_history');
+        $builder = $app['form.factory']->createBuilder('mypage_history', null, array('order' => $Order));
         $form = $builder->getForm();
 // A => フォーム生成
         
@@ -173,6 +173,9 @@ class MypageController extends AbstractController
         	$flg_re_order = true;
         }
 // A => 再注文ボタンを制御する
+		
+		//印刷商品判定
+		$flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Mypage/history.twig', array(
             'Order' => $Order,
@@ -182,6 +185,9 @@ class MypageController extends AbstractController
 // A => form
 			'form' => $form->createView(),
 // A => form
+// A => 印刷商品判定フラグ
+            'flgPrintItem' => $flgPrintItem,
+// A => 印刷商品判定フラグ
         ));
     }
 
