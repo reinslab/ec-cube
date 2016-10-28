@@ -68,7 +68,7 @@ err_color: '#ffe8e8'
 error_log_realfile: /PATH/TO/WEB_ROOT/data/logs/error.log
 favorite_error: 13
 file_name_len: 10
-file_size: 10000
+file_size: 2000000
 forgot_mail: 0
 form_country_enable: false
 graph_label_max: 40

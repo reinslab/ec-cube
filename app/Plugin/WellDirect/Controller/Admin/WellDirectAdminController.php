@@ -75,10 +75,11 @@ class WellDirectAdminController extends AbstractController
                 throw new NotFoundHttpException();
             }
             
-            $zip->addFromString($oid . '_' . $TargetOrder->getPdfFileName(), file_get_contents($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName()));
+            $custom_order_id = $TargetOrder->getCustomOrderId();
+            $zip->addFromString($custom_order_id . '_' . $TargetOrder->getPdfFileName(), file_get_contents($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName()));
             
             //受注ステータス更新
-            $OrderStatus = $app['eccube.repository.order_status']->find($app['config']['order_download']);
+            $OrderStatus = $app['eccube.repository.order_status']->find($app['config']['order_data_check_now']);
             $orderRepository = $app['orm.em']->getRepository('Eccube\Entity\Order');
             $orderRepository->changeStatus($oid, $OrderStatus);
     	}

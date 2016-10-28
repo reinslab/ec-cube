@@ -332,6 +332,24 @@ class OrderRepository extends EntityRepository
                 ->setParameter('sex', $searchData['sex']->toArray());
         }
 
+// TODO:
+        // nyukinstatus
+        if (!empty($searchData['nyukinstatus']) && count($searchData['nyukinstatus']) == 1) {
+        	$objNyukinStatus = $searchData['nyukinstatus'];
+        	$arrNyukinStatus = $objNyukinStatus->toArray();
+
+        	$nyukin_id = $arrNyukinStatus[0]->getId();
+        	switch ($nyukin_id) {
+        	case 0:
+        		$qb->andWhere('o.payment_date is not null');
+        		break;
+        	case 1:
+        		$qb->andWhere('o.payment_date is null');
+        		break;
+        	}
+        }
+// TODO:
+
         // payment
         if (!empty($searchData['payment']) && count($searchData['payment'])) {
             $payments = array();
