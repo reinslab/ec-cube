@@ -1132,6 +1132,11 @@ class ShoppingService
             // 会員の場合、購入金額を更新
             $this->setCustomerUpdate($Order, $this->app->user());
         }
+        
+// A => カスタム注文ID
+		$this->setCustomOrderId($this->app, $Order);
+// A => カスタム注文ID
+
 
     }
 
