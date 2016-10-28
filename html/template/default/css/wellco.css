@@ -271,6 +271,16 @@ h1.header_logo{
 	padding-left: 20px;
 }
 
+.classcategory_list li{
+	padding-bottom: 30px;
+}
+#classcategory_id2 thead{
+	background-color: #EEE;
+}
+#classcategory_id2 td{
+	border-bottom: 1px solid #CCC;
+}
+
 @media only screen and (max-width: 767px) {
 .item_gallery li{
     display: none;
@@ -286,10 +296,10 @@ h1.header_logo{
     margin-right: 15px;
 }
 #cart_area p{
-    margin: 15px;
+    margin: 12px;
 }
 .nav-trigger{
-    height: 80px;
+    height: 70px;
 }
 
 }
@@ -297,12 +307,9 @@ h1.header_logo{
 #member{
 	display:none !important;
 }
-/*ログイン名表示*/
-#welcome{
-    line-height: 1.5em;
-    font-size: 0.8em;
-    text-align: right;
-}
+/*#welcome{
+    display: none;
+}*/
 .temp-waku {
 	background-repeat: no-repeat;
 	background-size: 765px auto;
