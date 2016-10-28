@@ -272,7 +272,7 @@ $(function(){
                                 {# 規格 #}
                                 {% if form.classcategory_id1 is defined %}
                                 <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
-                                     規格1 
+                                     {{ Product.className1 }}
                                     <li>
                                     {% if form.classcategory_id2 is defined %}
                                         {{ form_widget(form.classcategory_id1) }}
@@ -297,7 +297,7 @@ $(function(){
                                     {% endif %}
                                     </li>
                                     {% if form.classcategory_id2 is defined %}
-                                     規格2 
+                                     {{ Product.className2 }}
                                         <li>
                                             {{ form_widget(form.classcategory_id2) }}
                                             {{ form_errors(form.classcategory_id2) }}
