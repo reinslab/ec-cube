@@ -147,39 +147,30 @@ class OrderPdfService extends AbstractFPDIService
             return false;
         }
     
-        // 発行日の設定(見積作成日)
-        $this->issueDate = '作成日: ' . $this->order_data->getCreateDate()->format('Y年m月d日');
+        // 有効期間の設定(1ヶ月は30日計算)
+        $this->issueDate = '有効期限: ' . $this->app['config']['re_order_limit_day'] / 30 . 'ヶ月';
         
         // ダウンロードファイル名の初期化
         $this->downloadFileName = null;
         
-/*
-        // 注文番号をStringからarrayに変換
-        $ids = explode(',', $formData['ids']);
-
-        // 注文番号の総件数を保持する
-        $this->orderIdCnt = count($ids);
-
-        // 空文字列の場合のデフォルトメッセージを設定する
-        $this->setDefaultData($formData);
-*/
         // テンプレートファイルを読み込む
         $templateFilePath =  __DIR__ . self::PDF_TEMPLATE_FILE_PATH;
         $this->setSourceFile($templateFilePath);
 
-//        foreach ($ids as $id) {
-            $this->lastOrderId = $this->order_data->getCustomOrderId();
+		$this->lastOrderId = $this->order_data->getCustomOrderId();
 
-            // 注文番号から受注情報を取得する
-//            $order = $this->app[self::REPOSITORY_ORDER_PDF]->find($id);
-//            if(is_null($order)) {
-                // 注文情報の取得ができなかった場合
-//                continue;
-//            }
+		$objOrderDetail = $this->order_data->getOrderDetails();
+		$order_count  = $objOrderDetail->count();
+		$arrOrderDetail = $objOrderDetail->toArray();
 
+		for($i=0; $i<$order_count; $i++) {
+			
             // PDFにページを追加する
             $this->addPdfPage();
-
+            
+            // ページ番号設定
+            $this->lfText(180, 10, ($i+1) . '/' . $order_count, 7, '');
+		
             // タイトルを描画する
             $this->renderTitle('御 見 積 書');
 
@@ -187,17 +178,8 @@ class OrderPdfService extends AbstractFPDIService
             $this->renderShopData();
 
             // 注文情報を描画する
-            //$this->renderOrderData($this->order_data);
-
-            // メッセージを描画する
-            //$this->renderMessageData($formData);
-
-            // 受注詳細情報を描画する
-            //$this->renderOrderDetailData($this->order_data);
-
-            // 備考を描画する
-            //$this->renderEtcData($formData);
-//        }
+            $this->renderOrderData($this->order_data, $arrOrderDetail[$i]);
+        }
 
         return true;
     }
@@ -219,10 +201,7 @@ class OrderPdfService extends AbstractFPDIService
         if(!is_null($this->downloadFileName)) {
             return $this->downloadFileName;
         }
-        $this->downloadFileName = self::DEFAULT_PDF_FILE_NAME;
-        if($this->PageNo() == 1) {
-            $this->downloadFileName = 'mitsumori-No' . $this->lastOrderId . '.pdf';
-        }
+        $this->downloadFileName = 'mitsumori-No' . $this->lastOrderId . '.pdf';
         return $this->downloadFileName;
     }
 
@@ -259,33 +238,40 @@ class OrderPdfService extends AbstractFPDIService
 //        $Help = $this->app['eccube.plugin.order_pdf.repository.order_pdf_help']->get();
 
         // ショップ名
-        $this->lfText(125, 60, $this->BaseInfo['shop_name'], 8, 'B');
+        //$this->lfText(150, 58, $this->BaseInfo['shop_name'], 8, 'B');
+
         // URL
-        $this->lfText(125, 63, '', 8);
+        $url  = empty($_SERVER["HTTPS"]) ? "http://" : "https://";
+        $url .= $_SERVER["HTTP_HOST"];
+        $url .= '/';
+        //$this->lfText(150, 61, $url, 8, '');
+        
         // 会社名
-        $this->lfText(125, 68, $this->BaseInfo['company_name'], 8);
+        $this->lfText(150, 40, $this->BaseInfo['company_name'], 8);
+        
         // 郵便番号
-        $text = '〒 ' . $this->BaseInfo['zip01'] . ' - ' . $this->BaseInfo['zip02'];
-        $this->lfText(125, 71, $text, 8);
+        //$text = '〒 ' . $this->BaseInfo['zip01'] . ' - ' . $this->BaseInfo['zip02'];
+        //$this->lfText(125, 71, $text, 8);
         // 都道府県+所在地
         $lawPref = is_null($this->BaseInfo['Pref']) ? null : $this->BaseInfo['Pref'];
         $text = $lawPref . $this->BaseInfo['addr01'];
-        $this->lfText(125, 74, $text, 8);
-        $this->lfText(125, 77, $this->BaseInfo['addr02'], 8);
+        $this->lfText(151, 44, $text . $this->BaseInfo['addr02'], 7, '');
+        //$this->lfText(125, 77, $this->BaseInfo['addr02'], 8);
 
         // 電話番号
         $text = 'TEL: ' . $this->BaseInfo['tel01'] . '-' . $this->BaseInfo['tel02'] . '-' . $this->BaseInfo['tel03'];
+        $this->lfText(151, 50, $text, 8, '');  //TEL
 
         //FAX番号が存在する場合、表示する
         if (strlen($this->BaseInfo['fax01']) > 0) {
-            $text .= '　FAX: ' . $this->BaseInfo['fax01'] . '-' . $this->BaseInfo['fax02'] . '-' . $this->BaseInfo['fax03'];
+            $text = 'FAX: ' . $this->BaseInfo['fax01'] . '-' . $this->BaseInfo['fax02'] . '-' . $this->BaseInfo['fax03'];
+	        $this->lfText(151, 54, $text, 8, '');  //FAX
         }
-        $this->lfText(125, 80, $text, 8);  //TEL・FAX
 
         // メールアドレス
         if (strlen($this->BaseInfo['email01']) > 0) {
             $text = 'Email: '.$this->BaseInfo['email01'];
-            $this->lfText(125, 83, $text, 8);      //Email
+            //$this->lfText(125, 83, $text, 8);      //Email
         }
         // ロゴ画像
 //        $logoFilePath =  __DIR__ . '/../Resource/template/logo.png';
@@ -340,7 +326,7 @@ class OrderPdfService extends AbstractFPDIService
         $this->backupFont();
 
        //文書タイトル（納品書・請求書）
-        $this->SetFont(self::FONT_GOTHIC, '', 15);
+        $this->SetFont(self::FONT_GOTHIC, '', 18);
         $this->Cell(0, 10, $title, 0, 2, 'C', 0, '');
         $this->Cell(0, 66, '', 0, 2, 'R', 0, '');
         $this->Cell(5, 0, '', 0, 0, 'R', 0, '');
@@ -350,51 +336,104 @@ class OrderPdfService extends AbstractFPDIService
     }
 
     /**
-     * 購入者情報を設定する
+     * 注文情報を設定する
      *
-     * @param \Plugin\OrderPdf\Entity\OrderPdfOrder $order
+     * @param \Eccube\Entity\Order $order
+     * @param \Eccube\Entity\OrderDetail $order_detail
      */
-    protected function renderOrderData(\Eccube\Entity\Order $order) {
+    protected function renderOrderData(\Eccube\Entity\Order $order, \Eccube\Entity\OrderDetail $order_detail) {
         // 基準座標を設定する
         $this->setBasePosition();
 
         // フォント情報のバックアップ
         $this->backupFont();
+        
+        
 
         // =========================================
         // 購入者情報部
         // =========================================
         // 郵便番号
-        $text = '〒 '.$order->getZip01() . ' - ' . $order->getZip02();
-        $this->lfText(23, 43, $text, 10);
+        //$text = '〒 '.$order->getZip01() . ' - ' . $order->getZip02();
+        //$this->lfText(23, 43, $text, 10);
 
         // 購入者都道府県+住所1
-        $text = $order->getPref() . $order->getAddr01();
-        $this->lfText(27, 47, $text, 10);
-        $this->lfText(27, 51, $order->getAddr02(), 10); //購入者住所2
+        //$text = $order->getPref() . $order->getAddr01();
+        //$this->lfText(27, 47, $text, 10);
+        //$this->lfText(27, 51, $order->getAddr02(), 10); //購入者住所2
 
+		// 購入企業名
+		$text = $order->getCompanyName();
+        $this->lfText(18, 40, $text, 11);
+		
         // 購入者氏名
         $text = $order->getName01() . '　' . $order->getName02() . '　様';
-        $this->lfText(27, 59, $text, 11);
+        $this->lfText(18, 47, $text, 11);
+
+        // =========================================
+        // 固定文章
+        // =========================================
+        $this->SetFont(self::FONT_SJIS, '', 8);
+        $this->lfText(18, 54, ' 毎度格別のお引き立てを賜り、厚く御礼申し上げます。', 8);
+        $this->lfText(18, 58, '下記のとおり御見積もりいたしました。', 8);
+        $this->lfText(18, 62, ' ご検討のうえ、ご用命賜りますようお願い致します。', 8);
+
+        // =========================================
+        // 右上表示
+        // =========================================
+        //見積番号
+        $this->lfText(165, 25, 'No. ' . $order->getCustomOrderId(), 6);
+        //見積作成日
+        $this->lfText(162, 28, $order->getCreateDate()->format('Y年m月d日'), 8);
+        //キャッチフレーズ
+        $this->lfText(151, 32, '"私たちはお客様に安心品質を', 7, 'I');
+        $this->lfText(158, 35, 'お届けします"', 7, 'I');
 
         // =========================================
         // お買い上げ明細部
         // =========================================
-        $this->SetFont(self::FONT_SJIS, '', 10);
+        //品名
+        $product_name = $order_detail->getProductName();
+        $this->lfText(18, 77, '品名：' . $product_name, 10, '');
+        
+        //項目名
+        $this->lfText(55, 86.5, '項　　目', 9, '');
+        $this->lfText(120, 86.5, '数　量', 9, '');
+        $this->lfText(146, 86.5, '単　価', 9, '');
+        $this->lfText(172, 86.5, '金　額', 9, '');
+        
+        //明細(商品情報)
+        $class_name1 = $order_detail->getClassName1();
+        $class_name2 = $order_detail->getClassName2();
+        
+        //規格有無で表示を分岐
+        if ( $class_name1 == '' && $class_name2 == '' ) {
+        	//実物販売は商品名を出力
+        	$this->lfText(30, 96, $product_name, 9, '');
+        } else 
+        if ( $class_name1 != '' && $class_name2 == '' ) {
+        	$product_class_name1 = $order_detail->getClassCategoryName1();
+        	//印刷物(規格2なし)の場合は規格を出力
+        	$this->lfText(30, 96, $class_name1 . '：' . $product_class_name1 , 9, '');
+        	
+        } else 
+        {
+        	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
+        	$product_class_name1 = $order_detail->getClassCategoryName1();
+        	$product_class_name2 = $order_detail->getClassCategoryName2();
+        	$this->lfText(30, 96,  $class_name1 . '：' . $product_class_name1 , 9, '');
+        	$this->lfText(30, 100, $class_name2 . '：' . $product_class_name2 , 9, '');
+        }
 
-        //ご注文日
-        $this->lfText(25, 125, $order->getCreateDate()->format('Y/m/d H:i'), 10);
-        //注文番号
-        $this->lfText(25, 135, $order->getId(), 10);
-
-        // 総合計金額
-        $this->SetFont(self::FONT_SJIS, 'B', 15);
-        $paymentTotalText =  number_format($order->getPaymentTotal()).' ' . self::MONETARY_UNIT;
-
-        $this->setBasePosition(120, 95.5);
-        $this->Cell(5, 7, '', 0, 0, '', 0, '');
-        $this->Cell(67, 8, $paymentTotalText, 0, 2, 'R', 0, '');
-        $this->Cell(0, 45, '', 0, 2, '', 0, '');
+		//明細(全パターン共通)
+    	//数量
+    	$this->lfText(130, 96, number_format($order_detail->getQuantity()), 9, '');
+    	//単価
+    	$this->lfText(152, 96, number_format($order_detail->getPrice()), 9, '');
+    	//金額
+    	$this->lfText(176, 96, number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
+    	//合計
+    	$this->lfText(176, 243.5, '\\ ' . number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
 
         // フォント情報の復元
         $this->restoreFont();
