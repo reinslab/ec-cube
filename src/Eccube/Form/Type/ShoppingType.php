@@ -47,18 +47,18 @@ class ShoppingType extends AbstractType
         $payments = $options['payments'];
         $payment = $options['payment'];
         $message = $options['message'];
-// A => Žó’ TODO
+// A => å—æ³¨ TODO
         $order = $options['order'];
 
-        //ˆóü¤•i”»’è
+        //å°åˆ·å•†å“åˆ¤å®š
         $flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($order);
 
         $chkArr = array();
         if ( $flgPrintItem ) {
-        	$chkArr[] = new Assert\NotBlank(array('message' => 'ƒtƒ@ƒCƒ‹‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢B'));
+        	$chkArr[] = new Assert\NotBlank(array('message' => 'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚'));
         }
-        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFƒtƒ@ƒCƒ‹‚Í' . $this->app['config']['pdf_size'] . 'MˆÈ‰º‚ÅƒAƒbƒvƒ[ƒh‚µ‚Ä‚­‚¾‚³‚¢B'));
-// A => Žó’ TODO
+        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFãƒ•ã‚¡ã‚¤ãƒ«ã¯' . $this->app['config']['pdf_size'] . 'Mä»¥ä¸‹ã§ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã—ã¦ãã ã•ã„ã€‚'));
+// A => å—æ³¨ TODO
 
         $builder
             ->add('payment', 'entity', array(
@@ -73,7 +73,7 @@ class ShoppingType extends AbstractType
             ))
 
             ->add('pdffile', 'file', array(
-                'label' => '“üeƒf[ƒ^‘I‘ð',
+                'label' => 'å…¥ç¨¿ãƒ‡ãƒ¼ã‚¿é¸æŠž',
                 'mapped' => false,
                 'required' => $flgPrintItem,
                 'constraints' => $chkArr
