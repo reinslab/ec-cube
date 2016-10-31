@@ -47,6 +47,7 @@ class WellDirectController extends AbstractController
     {
         // 未ログインの場合, ログイン画面へリダイレクト.
         if (!$app->isGranted('IS_AUTHENTICATED_FULLY')) {
+        	$app->setLoginTargetPath('/cart/eststep');
             return $app->redirect($app->url('mypage_login'));
         }
     
