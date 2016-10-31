@@ -297,9 +297,9 @@ $(function(){
                                 {# 規格 #}
                                 {% if form.classcategory_id1 is defined %}
                                 <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
-                                     {{ Product.className1 }}
-                                    <li>
                                     {% if flg_product_type == app.config.product_type_print %}
+                                    <li>
+                                     <div>{{ Product.className1 }}</div>
                                     {% if form.classcategory_id2 is defined %}
                                         {{ form_widget(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
@@ -321,16 +321,18 @@ $(function(){
 		                                </table>
                                         {{ form_errors(form.classcategory_id1) }}
                                     {% endif %}
+                                    </li>
                                     {% else %}
                                     <li>
+										<div>{{ Product.className1 }}</div>
                                         {{ form_widget(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
                                     </li>
                                     {% endif %}
                                     </li>
                                     {% if form.classcategory_id2 is defined %}
-                                     {{ Product.className2 }}
                                         <li>
+	                                     <div>{{ Product.className2 }}</div>
                                             {{ form_widget(form.classcategory_id2) }}
                                             {{ form_errors(form.classcategory_id2) }}
                                             <p class="errormsg text-danger"><span id="error_msg_classcategory_id2"></span></p>
@@ -341,7 +343,7 @@ $(function(){
 
                                 {# 数量 #}
                                 <dl id="detail_cart_box__cart_quantity" class="quantity">
-                                    <dt>{% if Product.hasProductClass == false %}数量{% endif %}</dt>
+                                    <dt>{% if flg_product_type != app.config.product_type_print %}数量{% endif %}</dt>
                                     <dd>
                                         {{ form_widget(form.quantity) }}
                                         {{ form_errors(form.quantity) }}
