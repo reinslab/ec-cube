@@ -1444,6 +1444,9 @@ class ShoppingService
      */
     public function setCustomOrderId($app, \Eccube\Entity\Order $Order)
     {
+    	if ( $Order->getCustomOrderId() != '' ) {
+    		return $Order;
+    	}
     	$search_date_from = date('Y-m-d') . ' 00:00:00';
     	$search_date_to   = date("Y-m-d",strtotime("+1 day")) . ' 00:00:00';
     	
