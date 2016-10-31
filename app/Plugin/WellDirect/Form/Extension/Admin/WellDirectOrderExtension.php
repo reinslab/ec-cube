@@ -35,9 +35,9 @@ class WellDirectOrderExtension extends AbstractTypeExtension
             ->add('pdffile', 'file', array(
                 'label' => '入稿データ選択',
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
                 'constraints' => array(
-                    new Assert\NotBlank(array('message' => 'ファイルを選択してください。')),
+                    //new Assert\NotBlank(array('message' => 'ファイルを選択してください。')),
                     new Assert\File(array(
                         'maxSize' => $this->app['config']['pdf_size'] . 'M',
                         'maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。',
@@ -54,7 +54,7 @@ class WellDirectOrderExtension extends AbstractTypeExtension
                     )),
                 ),
     		));
-        $builder->add('denpyo_number', 'text', array(
+/*        $builder->add('denpyo_number', 'text', array(
                 'label' => '伝票番号',
                 'required' => false,
                 'constraints' => array(
@@ -62,13 +62,13 @@ class WellDirectOrderExtension extends AbstractTypeExtension
                         'max' => $this->app['config']['stext_len'],
                     )),
                 ),
-    		));
+    		));*/
         $builder->add('box_num', 'text', array(
                 'label' => '配送個数',
                 'required' => false,
                 'constraints' => array(
 					new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
-		            new Assert\NotBlank(),
+		            //new Assert\NotBlank(),
                 ),
     		));
     }

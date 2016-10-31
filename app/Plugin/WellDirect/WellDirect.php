@@ -631,7 +631,7 @@ class WellDirect {
         
         //発送個数、伝票番号
         if(preg_match('/<(.*)\s*id="detail__insert_button.*>/',$source, $result)){
-
+/*
             $start_tag = $result[0];
                 
 
@@ -640,6 +640,7 @@ class WellDirect {
             $replace = $snipet . $start_tag;
 
             $source = str_replace($start_tag, $replace, $source);
+*/
         }
         
         //入稿データダウンロード
