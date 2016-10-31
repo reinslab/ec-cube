@@ -386,11 +386,7 @@ $(function(){
                         {# D => 削除 #}
                         {#{ form_rest(form) }#}
                         {# D => 削除 #}
-                        {% if Product.hasProductClass %}
-                        <input type="hidden" class="form-control" name="product_class_id" id="product_class_id" value="" />
-                        {% else %}
                         <input type="hidden" class="form-control" name="product_class_id" id="product_class_id" value="{{ product_class_id }}" />
-                        {% endif %}
                         <input type="hidden" class="form-control" name="mode" id="mode" value="" />
                         <input id="product_id" name="product_id" class="form-control" value="{{ Product.id }}" type="hidden">
                         {{ form_widget(form._token) }}
