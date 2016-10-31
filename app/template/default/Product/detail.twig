@@ -35,8 +35,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         var $sele1 = $(this);
         
 	    {% if form.classcategory_id2 is defined %}
+	    	{% if flg_product_type == app.config.product_type_print %}
+	    fnSetClassCategoriesPrint(
+	            document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+	    );
+	    	{% else %}
+	    fnSetClassCategories(
+	            document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+	    );
+	    	{% endif %}
+
 	        //規格2設定
-	        fnSetClassCategories($form, {{ form.classcategory_id2.vars.value|json_encode|raw }});
+//	        fnSetClassCategories($form, {{ form.classcategory_id2.vars.value|json_encode|raw }});
 	    {% endif %}
     });
 
