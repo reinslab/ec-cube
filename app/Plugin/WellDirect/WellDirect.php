@@ -136,6 +136,9 @@ class WellDirect {
         $builder->add('entry_checkbox', 'checkbox', array(
                 'label' => '規約に同意する',
                 'required' => true,
+                'constraints' => array(
+                    new Assert\NotBlank(),
+                ),
     		));
 
     }
