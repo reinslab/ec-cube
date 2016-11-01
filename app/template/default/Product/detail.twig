@@ -343,7 +343,7 @@ $(function(){
 
                                 {# 数量 #}
                                 <dl id="detail_cart_box__cart_quantity" class="quantity">
-                                    <dt>{% if flg_product_type != app.config.product_type_print %}数量{% endif %}</dt>
+                                    {% if flg_product_type != app.config.product_type_print %}<dt>数量</dt>{% endif %}
                                     <dd>
                                         {{ form_widget(form.quantity) }}
                                         {{ form_errors(form.quantity) }}
