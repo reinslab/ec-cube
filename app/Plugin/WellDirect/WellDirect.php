@@ -136,6 +136,9 @@ class WellDirect {
         $builder->add('entry_checkbox', 'checkbox', array(
                 'label' => '規約に同意する',
                 'required' => true,
+                'constraints' => array(
+                    new Assert\NotBlank(),
+                ),
     		));
 
     }
@@ -391,6 +394,7 @@ class WellDirect {
      * @return type
      */
     public function onControllerShoppingConfirmBefore($event = null) {
+
     	$request = $event->getRequest();
     	
 		// 入力中受注ID
@@ -403,43 +407,48 @@ class WellDirect {
 		} else {
 			$Order = $this->app['eccube.repository.order']->findOneBy(array('pre_order_id' => $this->app['eccube.service.cart']->getPreOrderId()));
 		}
-    	
-		$flg_pdf_file_save = false;
-		//ファイル名
-        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
-		$pdf_files = $request->files->get('shopping');
-		$objPdffile = $pdf_files['pdffile'];
 
-		//未選択時は処理しない
-		if ( !is_null($objPdffile) ) {
-			$orgFileName = $objPdffile->getClientOriginalName();
+		//フォームオブジェクト取得
+        $form = $this->app['eccube.service.shopping']->getShippingForm($Order);
 
-			if ( strpos($orgFileName, '.pdf') === false ) {
-				throw new UnsupportedMediaTypeHttpException();
+		if ($form->isValid()) {
+			$flg_pdf_file_save = false;
+			//ファイル名
+	        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
+			$pdf_files = $request->files->get('shopping');
+			$objPdffile = $pdf_files['pdffile'];
+
+			//未選択時は処理しない
+			if ( !is_null($objPdffile) ) {
+				$orgFileName = $objPdffile->getClientOriginalName();
+
+				if ( strpos($orgFileName, '.pdf') === false ) {
+					throw new UnsupportedMediaTypeHttpException();
+				}
+				//カスタム注文IDもセットする
+				$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
+
+				//受注ステータス
+				//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);
+				//ファイル名セット
+				$Order->setPdfFileName($pdf_file_name);
+
+				//入稿データ登録済みフラグ
+				$Order->setPdfUploadFlg(0);
+				//IDセット
+
+		        // DB更新
+		        $this->app['orm.em']->persist($Order);
+		        $this->app['orm.em']->flush($Order);
+
+				//一時ファイル名取得
+				$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
+
+				//一時領域にコピー
+				@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $pdf_file_name);
+				//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
+
 			}
-			//カスタム注文IDもセットする
-			$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
-
-			//受注ステータス
-			//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);
-			//ファイル名セット
-			$Order->setPdfFileName($pdf_file_name);
-
-			//入稿データ登録済みフラグ
-			$Order->setPdfUploadFlg(0);
-			//IDセット
-
-	        // DB更新
-	        $this->app['orm.em']->persist($Order);
-	        $this->app['orm.em']->flush($Order);
-
-			//一時ファイル名取得
-			$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
-
-			//一時領域にコピー
-			@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $pdf_file_name);
-			//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
-
 		}
     }
 

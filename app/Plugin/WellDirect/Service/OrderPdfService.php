@@ -433,7 +433,7 @@ class OrderPdfService extends AbstractFPDIService
     	//金額
     	$this->lfText(176, 96, number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
     	//合計
-    	$this->lfText(176, 243.5, '\\ ' . number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
+    	$this->lfText(176, 243.5, '￥ ' . number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
 
         // フォント情報の復元
         $this->restoreFont();
