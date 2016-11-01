@@ -52,7 +52,7 @@ class OrderType extends AbstractType
         $app = $this->app;
         $config = $app['config'];
         $BaseInfo = $app['eccube.repository.base_info']->get();
-
+        
         $builder
             ->add('name', 'name', array(
                 'required' => false,
@@ -198,8 +198,7 @@ class OrderType extends AbstractType
                 'empty_value' => '選択してください',
                 'empty_data' => null,
                 'query_builder' => function($er) {
-                    return $er->createQueryBuilder('o')
-                        ->orderBy('o.rank', 'ASC');
+                    return $er->createQueryBuilder('o')->orderBy('o.rank', 'ASC');
                 },
                 'constraints' => array(
                     new Assert\NotBlank(),
@@ -272,7 +271,7 @@ class OrderType extends AbstractType
 
                 $event->setData($data);
             }
-
+            
         });
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
@@ -282,6 +281,60 @@ class OrderType extends AbstractType
                 $form['charge']->addError(new FormError('商品が追加されていません。'));
             }
         });
+// A => 入金日で選択できる受注ステータスのリストを切り替える
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+
+            $form = $event->getForm();
+
+            //受注ステータス絞込
+            $order = $event->getData();
+            $payment_date = $order->getPaymentDate();
+            
+            if ( is_null($payment_date) ) {
+	            $form->add('OrderStatus', 'entity', array(
+	                'class' => 'Eccube\Entity\Master\OrderStatus',
+	                'property' => 'name',
+	                'empty_value' => '選択してください',
+	                'empty_data' => null,
+	                'query_builder' => function($er) {
+	                    return $er
+	                    	->createQueryBuilder('o')
+	                    		->where('o.id <> 20 and o.id <> 21 and o.id <> 5')
+	                    		->orderBy('o.rank', 'ASC');
+	                },
+	            ));
+            } else {
+            	//受注ステータスが印刷中を超えたらキャンセル不可にする
+            	if ( $order->getOrderStatus()->getId() == 20 ||
+            		 $order->getOrderStatus()->getId() == 21 ||
+            		 $order->getOrderStatus()->getId() == 5 ) {
+		            $form->add('OrderStatus', 'entity', array(
+		                'class' => 'Eccube\Entity\Master\OrderStatus',
+		                'property' => 'name',
+		                'empty_value' => '選択してください',
+		                'empty_data' => null,
+		                'query_builder' => function($er) {
+		                    return $er
+		                    	->createQueryBuilder('o')
+		                    		->where('o.id <> 3')
+		                    		->orderBy('o.rank', 'ASC');
+		                },
+		            ));
+            	} else {
+		            $form->add('OrderStatus', 'entity', array(
+		                'class' => 'Eccube\Entity\Master\OrderStatus',
+		                'property' => 'name',
+		                'empty_value' => '選択してください',
+		                'empty_data' => null,
+		                'query_builder' => function($er) {
+		                    return $er->createQueryBuilder('o')->orderBy('o.rank', 'ASC');
+		                },
+		            ));
+            	}
+            }
+
+        });
+// A => 入金日で選択できる受注ステータスのリストを切り替える
     }
 
     /**
@@ -291,6 +344,7 @@ class OrderType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Eccube\Entity\Order',
+            'order' => null,
         ));
     }
 

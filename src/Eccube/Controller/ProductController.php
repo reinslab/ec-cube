@@ -230,6 +230,31 @@ class ProductController
         );
         $app['eccube.event.dispatcher']->dispatch(EccubeEvents::FRONT_PRODUCT_DETAIL_INITIALIZE, $event);
 
+// A => 商品規格
+        /** @var $qb \Doctrine\ORM\QueryBuilder */
+        $flg_product_type = $app['eccube.service.product']->getProductType($Product);
+        $product_class_id = $app['eccube.service.product']->getProductClassId($Product);
+
+        $arrRes = array();
+        foreach ($Product->getProductClasses() as $ProductClass) {
+	        $objClassCategory = $ProductClass->getClassCategory1();
+	        $tmp = array();
+	        $tmp['product_id'] = $ProductClass->getProduct()->getId();
+	        $tmp['product_class_id'] = $ProductClass->getId();
+	        if ( $objClassCategory != null ) {
+		        $tmp['class_name'] = $objClassCategory->getName();
+		        $tmp['class_category_id'] = $objClassCategory->getId();
+	        } else {
+		        $tmp['class_name'] = '';
+		        $tmp['class_category_id'] = '';
+	        }
+	        $tmp['price01'] = $ProductClass->getPrice01IncTax();
+	        $tmp['price02'] = $ProductClass->getPrice02IncTax();
+	        $tmp['product_type_id'] = $ProductClass->getProductType()->getId();
+	        $arrRes[] = $tmp;
+        }
+// A => 商品規格
+
         /* @var $form \Symfony\Component\Form\FormInterface */
         $form = $builder->getForm();
 
@@ -312,6 +337,11 @@ class ProductController
             'form' => $form->createView(),
             'Product' => $Product,
             'is_favorite' => $is_favorite,
+// A => 商品規格テーブル
+            'ProductClass1' => $arrRes,
+            'flg_product_type' => $flg_product_type,
+            'product_class_id' => $product_class_id
+// A => 商品規格テーブル
         ));
     }
 

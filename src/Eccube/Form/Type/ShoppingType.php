@@ -31,6 +31,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ShoppingType extends AbstractType
 {
+    public $app;
+
+    public function __construct(\Silex\Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * {@inheritdoc}
@@ -41,6 +47,18 @@ class ShoppingType extends AbstractType
         $payments = $options['payments'];
         $payment = $options['payment'];
         $message = $options['message'];
+// A => 受注 TODO
+        $order = $options['order'];
+
+        //印刷商品判定
+        $flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($order);
+
+        $chkArr = array();
+        if ( $flgPrintItem ) {
+        	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));
+        }
+        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'));
+// A => 受注 TODO
 
         $builder
             ->add('payment', 'entity', array(
@@ -53,6 +71,15 @@ class ShoppingType extends AbstractType
                     new Assert\NotBlank(),
                 ),
             ))
+
+            ->add('pdffile', 'file', array(
+                'label' => '入稿データ選択',
+                'mapped' => false,
+                'required' => $flgPrintItem,
+                'constraints' => $chkArr
+                ,
+            ))
+
             ->add('message', 'textarea', array(
                 'required' => false,
                 'data' => $message,
@@ -68,6 +95,7 @@ class ShoppingType extends AbstractType
             'payments' => array(),
             'payment' => null,
             'message' => null,
+            'order' => null,
         ));
     }
 

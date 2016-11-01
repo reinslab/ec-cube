@@ -154,9 +154,40 @@ class MypageController extends AbstractController
         if (!$Order) {
             throw new NotFoundHttpException();
         }
+        
+// A => フォーム生成
+        $builder = $app['form.factory']->createBuilder('mypage_history', null, array('order' => $Order));
+        $form = $builder->getForm();
+// A => フォーム生成
+        
+        
+// A => 再注文ボタンを制御する
+        //再注文ボタン表示フラグ
+        $flg_re_order = false;
+        //受注データ保存後30日以内なら表示する
+        $now = date('Y-m-d');
+        $order_date = $Order->getCreateDate();
+        $order_date = $order_date->format('Y-m-d H:i:s');
+        $diff = abs(strtotime($now) - strtotime($order_date)) / (60 * 60 * 24);
+        if ( $diff <= $app['config']['re_order_limit_day'] ) {
+        	$flg_re_order = true;
+        }
+// A => 再注文ボタンを制御する
+		
+		//印刷商品判定
+		$flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Mypage/history.twig', array(
             'Order' => $Order,
+// A => 再注文ボタンを制御する
+            'flg_re_order' => $flg_re_order,
+// A => 再注文ボタンを制御する
+// A => form
+			'form' => $form->createView(),
+// A => form
+// A => 印刷商品判定フラグ
+            'flgPrintItem' => $flgPrintItem,
+// A => 印刷商品判定フラグ
         ));
     }
 
@@ -218,8 +249,21 @@ class MypageController extends AbstractController
         if ($event->getResponse() !== null) {
             return $event->getResponse();
         }
+        
+// U => 受注ステータスによって遷移先を変更する
+// 入力中   → 確認ページ
+// 購入完了 → カートページ
+		if ( $Order->getOrderStatus()->getId() == $app['config']['order_estimate'] ) {
+			//入力中受注IDをセッションに入れる
+			$app['session']->set('pre_order_id', $id);
+			return $app->redirect($app->url('shopping'));
+		} else {
+			return $app->redirect($app->url('cart'));
+		}
+        //return $app->redirect($app->url('cart'));
 
-        return $app->redirect($app->url('cart'));
+// U => 受注ステータスによって遷移先を変更する
+
     }
 
     /**

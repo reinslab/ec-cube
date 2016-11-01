@@ -108,6 +108,7 @@ class CartController extends AbstractController
     {
         $productClassId = $request->get('product_class_id');
         $quantity = $request->request->has('quantity') ? $request->get('quantity') : 1;
+		
 
         // FRONT_CART_ADD_INITIALIZE
         $event = new EventArgs(
@@ -361,6 +362,9 @@ class CartController extends AbstractController
 
         $app['eccube.service.cart']->lock();
         $app['eccube.service.cart']->save();
+        
+        //セッション内の見積受注IDを削除する(ゴミデータ対策)
+        $app['session']->set('estimate_order_id', '');
 
         // FRONT_CART_BUYSTEP_COMPLETE
         $event = new EventArgs(

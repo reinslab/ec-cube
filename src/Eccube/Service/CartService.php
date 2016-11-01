@@ -82,6 +82,12 @@ class CartService
 
         if ($this->session->has('cart')) {
             $this->cart = $this->session->get('cart');
+// ★ Bug. カート内部がNULLでも処理してしまう
+			$arrCart = $this->cart->getCartItems();
+			if ( $arrCart[0] == null ) {
+	            $this->cart = new \Eccube\Entity\Cart();
+			}
+// ★ Bug. カート内部がNULLでも処理してしまう
         } else {
             $this->cart = new \Eccube\Entity\Cart();
         }

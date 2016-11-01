@@ -191,6 +191,17 @@ class EditController extends AbstractController
                             }
                         }
 
+// A => 入金日保存
+                        //入金日が未設定でかつ入力値がある場合は保存する
+                        if ( is_null($TargetOrder->getPaymentDate()) && $_REQUEST['input_payment_date_start'] != '' ) {
+                        	$input_payment_date = new \DateTime($_REQUEST['input_payment_date_start']);
+                        	$TargetOrder->setPaymentDate($input_payment_date);
+                        	
+                        	//受注ステータスを入金済みにする
+                        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_pre_end']));
+                        }
+// A => 入金日保存
+
                         $app['orm.em']->persist($TargetOrder);
                         $app['orm.em']->flush();
 
@@ -284,6 +295,14 @@ class EditController extends AbstractController
                 $times[$Delivery->getId()][$DeliveryTime->getId()] = $DeliveryTime->getDeliveryTime();
             }
         }
+        
+// TODO:
+		$payment_date = null;
+		if ( $TargetOrder->getPaymentDate() != null ) {
+			$payment_date = $TargetOrder->getPaymentDate()->format('Y-m-d');
+		}
+
+// TODO:
 
         return $app->render('Order/edit.twig', array(
             'form' => $form->createView(),
@@ -291,6 +310,9 @@ class EditController extends AbstractController
             'searchProductModalForm' => $searchProductModalForm->createView(),
             'Order' => $TargetOrder,
             'id' => $id,
+// TODO:
+            'payment_date' => $payment_date,
+// TODO:
             'shippingDeliveryTimes' => $app['serializer']->serialize($times, 'json'),
         ));
     }

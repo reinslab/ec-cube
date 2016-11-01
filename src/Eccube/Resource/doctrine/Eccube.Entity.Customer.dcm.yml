@@ -31,6 +31,9 @@ Eccube\Entity\Customer:
         company_name:
             type: text
             nullable: true
+        section_name:
+            type: text
+            nullable: true
         zip01:
             type: text
             nullable: true
@@ -121,6 +124,9 @@ Eccube\Entity\Customer:
             unsigned: false
             options:
                 default: '0'
+        reins_customer_code:
+            type: text
+            nullable: true
     manyToOne:
         Status:
             targetEntity: Eccube\Entity\Master\CustomerStatus

@@ -37,19 +37,22 @@ use Symfony\Component\Validator\ExecutionContext;
 class AddCartType extends AbstractType
 {
 
+	public $app;
     public $config;
     public $security;
     public $customerFavoriteProductRepository;
     public $Product = null;
 
     public function __construct(
-        $config,
-        \Symfony\Component\Security\Core\SecurityContext $security,
-        \Eccube\Repository\CustomerFavoriteProductRepository $customerFavoriteProductRepository
+    	$app
+//        $config,
+//        \Symfony\Component\Security\Core\SecurityContext $security,
+//        \Eccube\Repository\CustomerFavoriteProductRepository $customerFavoriteProductRepository
     ) {
-        $this->config = $config;
-        $this->security = $security;
-        $this->customerFavoriteProductRepository = $customerFavoriteProductRepository;
+    	$this->app = $app;
+        $this->config = $app['config'];
+        $this->security = $app['security'];
+        $this->customerFavoriteProductRepository = $app['eccube.repository.customer_favorite_product'];
     }
 
     /**
@@ -81,8 +84,22 @@ class AddCartType extends AbstractType
             ));
 
         if ($Product->getStockFind()) {
+// U => 物品販売のみ
+//        	if ( !$Product->hasProductClass() ) {
+			$is_print_product = $this->app['eccube.service.product']->isPrintProduct($Product);
+			$quantity_form_type = 'integer';
+			$expanded = false;
+			if ( $is_print_product ) {
+				$quantity_form_type = 'hidden';
+				$expanded = true;
+			}
+			
+			
             $builder
-                ->add('quantity', 'integer', array(
+// U => 型を動的に変更
+//	                ->add('quantity', 'integer', array(
+                ->add('quantity', $quantity_form_type, array(
+// U => 型を動的に変更
                     'data' => 1,
                     'attr' => array(
                         'min' => 1,
@@ -97,28 +114,43 @@ class AddCartType extends AbstractType
                     ),
                 ))
             ;
+
             if ($Product && $Product->getProductClasses()) {
                 if (!is_null($Product->getClassName1())) {
                     $builder->add('classcategory_id1', 'choice', array(
                         'label' => $Product->getClassName1(),
-                        'choices'   => array('__unselected' => '選択してください') + $Product->getClassCategories1(),
+                        'choices'   => array() + $Product->getClassCategories1(),
+                        'required' => true,
                     ));
                 }
+
                 if (!is_null($Product->getClassName2())) {
                     $builder->add('classcategory_id2', 'choice', array(
                         'label' => $Product->getClassName2(),
-                        'choices' => array('__unselected' => '選択してください'),
+                        'expanded' => $expanded,
+                        'choices' => array(),
+                        'required' => true,
                     ));
                 }
             }
+// U => 物品販売のみ
 
             $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($Product) {
                 $data = $event->getData();
                 $form = $event->getForm();
+
+				$is_print_product = $this->app['eccube.service.product']->isPrintProduct($Product);
+				$expanded = false;
+				if ( $is_print_product ) {
+					$expanded = true;
+				}
+
+
                 if (!is_null($Product->getClassName2())) {
                     if ($data['classcategory_id1']) {
                         $form->add('classcategory_id2', 'choice', array(
                             'label' => $Product->getClassName2(),
+	                        'expanded' => $expanded,
                             'choices' => array('__unselected' => '選択してください') + $Product->getClassCategories2($data['classcategory_id1']),
                         ));
                     }
