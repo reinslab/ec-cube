@@ -2459,6 +2459,7 @@ ul.link-with-bar li:last-child::after {
 .sort-dd {
     padding: 12px;
     text-align: right;
+    margin-right: 125px;
 }
 .sort-dd > li {
     display: inline-block;
