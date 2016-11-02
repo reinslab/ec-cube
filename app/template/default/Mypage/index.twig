@@ -81,6 +81,8 @@ function deleteOrder(url) {
                                 <p id="history_list__detail_button--{{ Order.id }}">
                                 	{% if date(Order.create_date) >= date("-" ~ app.config.re_order_limit_day ~ "days") %}
                                 	<a href="{{ url('mypage_est2order', {'id': Order.id }) }}" class="btn btn-default btn-sm" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false">レジに進む</a>
+                                	{% else %}
+                                	有効期限切れ
                                 	{% endif %}
                                 	<a href="{{ url('mypage_estdownload', { id:Order.id })}}" target="_blank" class="btn btn-default btn-sm">見積書ダウンロード</a>
                                 </p>
