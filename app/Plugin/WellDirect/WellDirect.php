@@ -124,6 +124,8 @@ class WellDirect {
         $app = $this->app;
         
         $builder = $event->getArgument('builder');
+        $request = $event->getRequest();
+        
         $builder->add('section_name', 'text', array(
                 'label' => '部署名',
                 'required' => false,
@@ -133,13 +135,27 @@ class WellDirect {
                     )),
                 ),
     		));
-        $builder->add('entry_checkbox', 'checkbox', array(
-                'label' => '規約に同意する',
-                'required' => true,
-                'constraints' => array(
-                    new Assert\NotBlank(),
-                ),
-    		));
+
+		// モードに応じて入力チェックの内容を変更する
+    	switch ($request->get('mode')) {
+    	case 'confirm':
+	        $builder->add('entry_checkbox', 'checkbox', array(
+	                'label' => '規約に同意する',
+	                'required' => true,
+	                'constraints' => array(
+	                    new Assert\NotBlank(),
+	                ),
+	    		));
+	    		break;
+    	default:
+	        $builder->add('entry_checkbox', 'checkbox', array(
+	                'label' => '規約に同意する',
+	                'required' => false,
+	                'constraints' => array(
+	                ),
+	    		));
+    		break;
+    	}
 
     }
 
