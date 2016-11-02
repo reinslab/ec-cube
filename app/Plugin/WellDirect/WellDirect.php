@@ -333,8 +333,6 @@ class WellDirect {
         $Order   = $event->getArgument('Order');
     	
 		$flg_pdf_file_save = false;
-		//ファイル名
-        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
 
 		$pdf_files = $request->files->get('shopping');
 		$objPdffile = $pdf_files['pdffile'];
@@ -343,10 +341,16 @@ class WellDirect {
 		if ( !is_null($objPdffile) ) {
 
 			$orgFileName = $objPdffile->getClientOriginalName();
+			$orgFileExt  = $objPdffile->getClientOriginalExtension();
 
+			//アップロードファイル名
+	        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
+
+/*
 			if ( strpos($orgFileName, '.pdf') === false ) {
 				throw new UnsupportedMediaTypeHttpException();
 			}
+*/
 			//カスタム注文IDもセットする
 			$Order = $app['eccube.service.shopping']->setCustomOrderId($app, $Order);
 
@@ -412,7 +416,7 @@ class WellDirect {
     public function onControllerShoppingConfirmBefore($event = null) {
 
     	$request = $event->getRequest();
-    	
+
 		// 入力中受注ID
 		$pre_order_id = $this->app['session']->get('estimate_order_id');
 		
@@ -423,31 +427,36 @@ class WellDirect {
 		} else {
 			$Order = $this->app['eccube.repository.order']->findOneBy(array('pre_order_id' => $this->app['eccube.service.cart']->getPreOrderId()));
 		}
-
 		//フォームオブジェクト取得
         $form = $this->app['eccube.service.shopping']->getShippingForm($Order);
 
 		if ($form->isValid()) {
 			$flg_pdf_file_save = false;
+
 			//ファイル名
-	        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
-			$pdf_files = $request->files->get('shopping');
-			$objPdffile = $pdf_files['pdffile'];
+			$upload_files = $request->files->get('shopping');
+			$objUploadfile = $upload_files['pdffile'];
 
 			//未選択時は処理しない
-			if ( !is_null($objPdffile) ) {
-				$orgFileName = $objPdffile->getClientOriginalName();
+			if ( !is_null($objUploadfile) ) {
+				$orgFileName = $objUploadfile->getClientOriginalName();
+				$orgFileExt  = $objUploadfile->getClientOriginalExtension();
 
+				//アップロードファイル名
+		        $upload_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
+
+/*
 				if ( strpos($orgFileName, '.pdf') === false ) {
 					throw new UnsupportedMediaTypeHttpException();
 				}
+*/
 				//カスタム注文IDもセットする
 				$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
 
 				//受注ステータス
 				//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);
 				//ファイル名セット
-				$Order->setPdfFileName($pdf_file_name);
+				$Order->setPdfFileName($upload_file_name);
 
 				//入稿データ登録済みフラグ
 				$Order->setPdfUploadFlg(0);
@@ -461,7 +470,7 @@ class WellDirect {
 				$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
 
 				//一時領域にコピー
-				@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $pdf_file_name);
+				@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $upload_file_name);
 				//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
 
 			}
