@@ -167,7 +167,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         table.children().remove();
 
 		if ( classcat_id1 == '__unselected' ) {
-			//$("#classcategory_id2").html("選択肢なし");
+			$("#classcategory_id2").html("{{ Product.className1 }}が選択されていません。");
 			return;
 		}
 		classcat2 = eccube.classCategories[classcat_id1];
