@@ -19,7 +19,7 @@
                         <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/X-4.png" alt=""/></div>
                         
                         <div class="data-caption">
-                        制作用データには、必ず当サイト<b>指定のテンプレート</b>を使用してください。<br><br>
+                        制作用データには、当サイト<b>指定のテンプレート</b>を使用をお勧めします。<br><br>
                         当サイトの指定テンプレート以外を用いて作成されたデータの品質は、保証いたしません。<br>
                         また、必ず<b>注文する商品のサイズ</b>で作成し、中に入る絵柄をデザインしてください。<br><br>
                         作成された<b>データのサイズはチェックされません</b>ので、商品サイズとテンプレートのサイズが違う場合でも、<br>
@@ -30,8 +30,13 @@
                         <br><br>
                         <a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">→【製品別テンプレート一覧】はコチラ。</a></div>
                         
+                        <div class="data-caption">
+                        使用アプリケーションは、<b>当社対応のバージョン</b>に合っている必要があります。
+                        </div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko3-2.jpg" alt=""/></div>
                         
-                        <div class="data-h3">印刷用データの注意点</div>
+                        
+                        <div class="data-h3">印刷用データ作成時の注意点</div>
                         <div class="data-caption">
                         紙端までデザイン（背景色・写真）がある場合、必ず<b>「塗り足し」</b>を付けてください。<br><br>
                         色と色の境目ぴったりを、少しもずれずに用紙を断裁することは困難です。<br>
@@ -46,6 +51,26 @@
                         <b>意図しない部分まで切れてしまう</b>可能性があります。<br><br>
                         切れて困る文字は、仕上がり線より<b>3mm以上内側</b>に収まるよう配置してください。</div>
                         <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-2.png" alt=""/></div>
+                        
+                        <div class="data-caption">
+                        絵柄は必ずPDFの<b>センターに配置</b>して下さい。<br><br>
+                        絵柄データは必ず、ドキュメント（アートボード）に対してセンター配置してください。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-5.jpg" alt=""/></div>
+                        <div class="data-caption">
+                        特に、<b>冊子の背幅調整時にセンターがズレる</b>事が多いのでご注意ください。<br><br>
+                        </div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-7.jpg" alt=""/></div>
+                        
+                        <div class="data-caption">
+                        <b>オーバープリント</b>（ノセヌキ）の設定は<b>データ上での確認</b>をお願いします。<br><br>
+                        入稿データのオーバープリント設定がそのまま反映されます。<br>
+                        Illustrator / InDesign でデータを作成する際、カラーに関する属性で「塗り（線）にオーバープリント」<br>
+                        にチェックを入れることで、オーバープリントになる機能があります。<br>
+                        この設定をオンにしている場合、<b>予期しない箇所でオーバープリントが反映される</b>場合があるなど、<br>
+                        トラブルの原因となります。<br>
+                        　「墨ノセ」処理を行う場合以外は、オーバープリントのチェックを外した状態で、データを作成してください。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-6.jpg" alt=""/></div>
+                        
                         <div class="data-caption">
                         印刷用データのカラーモードは<b>“CMYK”</b>モードです。<br><br>
                         一般的なデジカメ画像やWeb画像などで使われているRGBモードのデータの場合は、<br>
@@ -61,6 +86,47 @@
                         印刷に使用される画像は、解像度350dpi前後あれば、充分な印刷品質を保つことができます。</div>
                         <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/data-4.png" alt=""/></div>
                         
+                        
+                        <div class="data-h3">PDF/X-4の作成手順（Illustratorの場合）</div>
+                        <div class="data-caption">
+                        絵柄が、PDFデータに対してセンター配置されている必要があります。<br><br>
+                        絵柄がアートボードに対してセンター配置されていない場合は、以下の手順でセンター配置することができます。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-4.jpg" alt=""/></div>
+                        <div class="data-caption">
+                        特色やオーバープリントが無いか確認してください。<br><br>
+                        用途があって特色を使用する場合以外は、スウォッチの「特色」を「プロセスカラー」に変換してください。<br>
+                        「プロセスカラー」に変換されていない場合、透明機能との兼ね合いで不具合が発生する可能性があります<br>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-5.jpg" alt=""/></div>   
+                        また、データ内にオーバープリント設定が入っている場合は、設定通りに出力されてしまいますので、注意してください。<br>
+                        「オーバープリントプレビュー」で、実際の出力表示をプレビュー確認することができます。
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-6.jpg" alt=""/></div>
+                        </div>
+                        <div class="data-caption">
+                        【参考】PDFの書き出しの流れ<br><br></div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-7.jpg" alt=""/>
+                        <img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-8.jpg" alt=""/>
+                        <img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-9.jpg" alt=""/></div>
+                        
+                        <div class="data-h3">PDF/X-4の作成手順（InDesignの場合）</div>
+                        <div class="data-caption">
+                        ドキュメントサイズが、仕上がりサイズと同じになっていることを確認してください。<br><br>
+                        PDFはドキュメントサイズで書き出されます。<br>
+                        裁ち落としは全て15mmにしてください。 ドキュメント内にパーツが正しく配置されているかを確認してください。</div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-10.jpg" alt=""/></div>
+                        <div class="data-caption">
+                        特色やオーバープリントが無いか確認してください。<br><br>
+                        用途があって特色を使用する場合以外は、スウォッチの「特色」を「プロセスカラー」に変換してください。<br>
+                        「プロセスカラー」に変換されていない場合、透明機能との兼ね合いで不具合が発生する可能性があります<br>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-11.jpg" alt=""/></div>   
+                        また、データ内にオーバープリント設定が入っている場合は、設定通りに出力されてしまいますので、注意してください。<br>
+                        「オーバープリントプレビュー」で、実際の出力表示をプレビュー確認することができます。
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-12.jpg" alt=""/></div>
+                        </div>
+                        <div class="data-caption">
+                        【参考】PDFの書き出しの流れ<br><br></div>
+                        <div class="data-img"><img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-13.jpg" alt=""/>
+                        <img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-14.jpg" alt=""/>
+                        <img src="{{ app.config.front_urlpath }}/img/top/nyuuko5-15.jpg" alt=""/></div>
                         
                         </div>
                       </div><!-- /.col -->
