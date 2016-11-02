@@ -148,7 +148,7 @@ class OrderPdfService extends AbstractFPDIService
         }
     
         // 有効期間の設定(1ヶ月は30日計算)
-        $this->issueDate = '有効期限: ' . $this->app['config']['re_order_limit_day'] / 30 . 'ヶ月';
+        $this->issueDate = '有効期限: ' . $this->app['config']['re_order_limit_day'] . '日';
         
         // ダウンロードファイル名の初期化
         $this->downloadFileName = null;
