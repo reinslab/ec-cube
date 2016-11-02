@@ -206,43 +206,86 @@ class WellDirectController extends AbstractController
     	//アップロードファイル情報取得
 		$pdf_files = $request->files->get('mypage_history');
 		$objPdffile = $pdf_files['pdffile'];
+
+		//フォームオブジェクト取得
+        $builder = $app['form.factory']->createBuilder('mypage_history', null, array('order' => $Order));
+        $form = $builder->getForm();
+        $form->handleRequest($request);
 		
-		//アップロードされていたら処理する
-		if ( !is_null($objPdffile) ) {
-		
-			//更新前のファイル名
-			$old_file_name = $Order->getPdfFileName();
-		
-			//拡張子チェック
-			$orgFileName = $objPdffile->getClientOriginalName();
-			if ( strpos($orgFileName, '.pdf') === false ) {
-				throw new UnsupportedMediaTypeHttpException();
-			}
-
-			//ファイル名
-	        $pdf_file_name = date('mdHis') . uniqid('_') . '.pdf';
-
-			//ファイル名セット
-			$Order->setPdfFileName($pdf_file_name);
-			//更新日時
-			$Order->setUpdateDate(new \DateTime());
-
-	        // DB更新
-	        $app['orm.em']->persist($Order);
-	        $app['orm.em']->flush($Order);
-
-			//一時領域に移動
-			$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+		if ( $form->isValid() ) {
+			//アップロードされていたら処理する
+			if ( !is_null($objPdffile) ) {
 			
-			//古いファイル削除
-			@unlink($app['config']['image_save_realdir'] . '/' . $old_file_name);
-		}
-		
-		// 元の画面にリダイレクト
-		$request_uri = $_SERVER['REQUEST_URI'];
-		$next_url = str_replace('/upload', '', $request_uri);
+				//更新前のファイル名
+				$old_file_name = $Order->getPdfFileName();
+			
+				//拡張子チェック
+				$orgFileName = $objPdffile->getClientOriginalName();
+				$orgFileExt  = $objPdffile->getClientOriginalExtension();
 
-        return $app->redirect($next_url);
+	/*
+				if ( strpos($orgFileName, '.pdf') === false ) {
+					throw new UnsupportedMediaTypeHttpException();
+				}
+	*/
+				//ファイル名
+		        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
+
+				//ファイル名セット
+				$Order->setPdfFileName($pdf_file_name);
+				//更新日時
+				$Order->setUpdateDate(new \DateTime());
+
+		        // DB更新
+		        $app['orm.em']->persist($Order);
+		        $app['orm.em']->flush($Order);
+
+				//一時領域に移動
+				$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+				
+				//古いファイル削除
+				@unlink($app['config']['image_save_realdir'] . '/' . $old_file_name);
+			}
+			// 元の画面にリダイレクト
+			$request_uri = $_SERVER['REQUEST_URI'];
+			$next_url = str_replace('/upload', '', $request_uri);
+
+	        return $app->redirect($next_url);
+		}
+        $errors = $form->getErrors(true);
+        $message = '';
+        foreach ($errors as $error) {
+            $message = $error->getMessage();
+        }
+
+// A => 再注文ボタンを制御する
+        //再注文ボタン表示フラグ
+        $flg_re_order = false;
+        //受注データ保存後30日以内なら表示する
+        $now = date('Y-m-d');
+        $order_date = $Order->getCreateDate();
+        $order_date = $order_date->format('Y-m-d H:i:s');
+        $diff = abs(strtotime($now) - strtotime($order_date)) / (60 * 60 * 24);
+        if ( $diff <= $app['config']['re_order_limit_day'] ) {
+        	$flg_re_order = true;
+        }
+// A => 再注文ボタンを制御する
+		
+		//印刷商品判定
+		$flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
+
+        return $app['view']->render('Mypage/history.twig', array(
+            'Order' => $Order,
+// A => 再注文ボタンを制御する
+            'flg_re_order' => $flg_re_order,
+// A => 再注文ボタンを制御する
+// A => form
+			'form' => $form->createView(),
+// A => form
+// A => 印刷商品判定フラグ
+            'flgPrintItem' => $flgPrintItem,
+// A => 印刷商品判定フラグ
+        ));
     	
     }
 }

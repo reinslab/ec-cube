@@ -38,15 +38,21 @@ class MyPageHistoryType extends AbstractType
         $config = $this->app['config'];
         $Order = $options['order'];
         
+        $chkArr = array();
 		$flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($Order);
 		$required = false;
 		if ( $flgPrintItem ) {
 			$required = true;
+	       	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));
 		}
         
-        $chkArr = array();
-       	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));
-        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'));
+		$chkArr[] = new Assert\File(array(
+                        'mimeTypes' => array('application/zip', 'application/pdf'),
+                        'mimeTypesMessage' => 'zip または pdfファイルをアップロードしてください。',
+                        'maxSize' => $this->app['config']['pdf_size'] . 'M',
+                        'maxSizeMessage' => '入稿データは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'
+                    ));
+//        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'));
 
         $builder
             ->add('pdffile', 'file', array(
