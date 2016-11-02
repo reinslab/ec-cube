@@ -286,17 +286,9 @@ class ShoppingController extends AbstractController
             // 完了画面表示
             return $app->redirect($app->url('shopping_complete'));
         }
-        $objOrderDetail = $Order->getOrderDetails();
-        $arrOrderDetail = $objOrderDetail->toArray();
-        $flgPrintItem = false;
-        foreach($arrOrderDetail as $idx => $order_detail) {
-        	$objProduct = $order_detail->getProduct();
-        	//印刷販売か否か
-        	if ( $objProduct->hasProductClass() ) {
-        		$flgPrintItem = true;
-        		break;
-        	}
-        }        
+        
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Shopping/index.twig', array(
             'form' => $form->createView(),
@@ -380,7 +372,8 @@ $app->log("shipping 3");
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+//        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $data = $form->getData();
 
             $shippings = $data['shippings'];
@@ -436,10 +429,14 @@ $app->log("shipping 3");
 
             return $app->redirect($app->url('shopping'));
         }
+        
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Shopping/index.twig', array(
             'form' => $form->createView(),
             'Order' => $Order,
+            'flgPrintItem' => $flgPrintItem
         ));
     }
 
@@ -515,10 +512,14 @@ $app->log("shipping 4");
 
             return $app->redirect($app->url('shopping'));
         }
+        
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Shopping/index.twig', array(
             'form' => $form->createView(),
             'Order' => $Order,
+            'flgPrintItem' => $flgPrintItem
         ));
     }
 
@@ -553,7 +554,8 @@ $app->log("shipping 5");
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+//        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $data = $form->getData();
             $message = $data['message'];
             $Order->setMessage($message);
@@ -563,10 +565,14 @@ $app->log("shipping 5");
             // お届け先設定一覧へリダイレクト
             return $app->redirect($app->url('shopping_shipping', array('id' => $id)));
         }
+        
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 
         return $app->render('Shopping/index.twig', array(
             'form' => $form->createView(),
             'Order' => $Order,
+            'flgPrintItem' => $flgPrintItem
         ));
     }
 

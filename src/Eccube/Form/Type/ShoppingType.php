@@ -59,10 +59,10 @@ class ShoppingType extends AbstractType
         }
 //        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'));
 		$chkArr[] = new Assert\File(array(
-                        'mimeTypes' => array('application/pdf'),
-                        'mimeTypesMessage' => 'pdfファイルをアップロードしてください。',
+                        'mimeTypes' => array('application/zip', 'application/pdf'),
+                        'mimeTypesMessage' => 'zip または pdfファイルをアップロードしてください。',
                         'maxSize' => $this->app['config']['pdf_size'] . 'M',
-                        'maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'
+                        'maxSizeMessage' => '入稿データは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'
                     ));
 
 // A => 受注 TODO
