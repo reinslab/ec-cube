@@ -398,6 +398,9 @@ class WellDirect {
 
 			//入稿データ登録済みフラグ
 			$Order->setPdfUploadFlg(1);
+			
+			//カスタム注文IDをセットしておく（念のため処理）
+			$Order = $app['eccube.service.shopping']->setCustomOrderId($app, $Order);
 
 	        // DB更新
 	        $app['orm.em']->persist($Order);
