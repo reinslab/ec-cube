@@ -529,7 +529,17 @@ $app->log("shipping 4");
     public function shippingChange(Application $app, Request $request, $id)
     {
 $app->log("shipping 5");
-        $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
+
+		// 入力中受注ID
+		$pre_order_id = $app['session']->get('estimate_order_id');
+
+		if ( $pre_order_id == '' ) {
+	        $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
+	    } else {
+        	$Order = $app['eccube.repository.order']->findOneBy(array('id' => $pre_order_id));
+        }
+        //$Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
+
         if (!$Order) {
             $app->addError('front.shopping.order.error');
             return $app->redirect($app->url('shopping_error'));
@@ -612,7 +622,15 @@ $app->log("shipping 5");
             }
 
 $app->log("shipping 6");
-            $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
+			// 入力中受注ID
+			$pre_order_id = $app['session']->get('estimate_order_id');
+
+			if ( $pre_order_id == '' ) {
+		        $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
+		    } else {
+	        	$Order = $app['eccube.repository.order']->findOneBy(array('id' => $pre_order_id));
+	        }
+            //$Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
             if (!$Order) {
                 $app->addError('front.shopping.order.error');
 
