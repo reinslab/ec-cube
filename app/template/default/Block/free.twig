@@ -32,12 +32,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 </div> -->
 
 <div class="col-sm-12 txt_bnr_area">
-<div class="col-sm-12 col-xs-6" style="padding-bottom:20px">
+<div class="col-sm-12 col-xs-4" style="padding-bottom:10px">
+<a href="{{ url('help_guide') }} ">
+<img src="{{ app.config.front_urlpath }}/img/top/side-banner1.jpg" width="100%">
+</a>
+</div>
+<div class="col-sm-12 col-xs-4" style="padding-bottom:10px">
 <a href="{{ url(app.config.user_data_route, {"route": "creation"} )}} ">
 <img src="{{ app.config.front_urlpath }}/img/top/side-banner2.jpg" width="100%">
 </a>
 </div>
-<div class="col-sm-12 col-xs-6" style="padding-bottom:20px">
+<div class="col-sm-12 col-xs-4" style="padding-bottom:20px">
 <a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">
 <img src="{{ app.config.front_urlpath }}/img/top/side-banner3.jpg" width="100%">
 </a>
