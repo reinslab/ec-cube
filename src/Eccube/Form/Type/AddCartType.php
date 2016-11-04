@@ -83,6 +83,10 @@ class AddCartType extends AbstractType
                 ),
             ));
 
+// A => hidden項目追加
+            $builder->add('hdn_price1_from', 'hidden');
+            $builder->add('hdn_price1_to', 'hidden');
+// A => hidden項目追加
         if ($Product->getStockFind()) {
 // U => 物品販売のみ
 //        	if ( !$Product->hasProductClass() ) {
