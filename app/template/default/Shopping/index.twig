@@ -257,12 +257,16 @@ $(function() {
                                 {{ form_errors(form.shippings[idx].delivery) }}
                             </div>
 
+{# U => #854 既製商品：入力可 印刷商品：入力不可 #}
+							{% if flgPrintItem == false %}
                             <div id="shopping_confirm_box__shipping_delivery_date_time--{{ idx }}" class="form-inline form-group">
                                 <label>お届け日</label>
                                 {{ form_widget(form.shippings[idx].shippingDeliveryDate) }}<br class="sp">
                                 <label>お届け時間</label>
                                 {{ form_widget(form.shippings[idx].deliveryTime) }}
                             </div>
+                            {% endif %}
+{# U => #854 既製商品：入力可 印刷商品：入力不可 #}
                             {% if is_granted('ROLE_USER') %}
                             <p id="shopping_confirm_box__edit_button--{{ idx }}" class="btn_edit"><a href="{{ url('shopping_shipping_change', {'id': shipping.id}) }}" class="btn btn-default btn-sm btn-shipping">変更</a></p>
                             {% else %}

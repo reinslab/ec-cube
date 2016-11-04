@@ -83,6 +83,10 @@ class AddCartType extends AbstractType
                 ),
             ));
 
+// A => hidden項目追加
+            $builder->add('hdn_price1_from', 'hidden');
+            $builder->add('hdn_price1_to', 'hidden');
+// A => hidden項目追加
         if ($Product->getStockFind()) {
 // U => 物品販売のみ
 //        	if ( !$Product->hasProductClass() ) {
@@ -119,7 +123,7 @@ class AddCartType extends AbstractType
                 if (!is_null($Product->getClassName1())) {
                     $builder->add('classcategory_id1', 'choice', array(
                         'label' => $Product->getClassName1(),
-                        'choices'   => array() + $Product->getClassCategories1(),
+                        'choices'   => array('__unselected' => '選択してください') + $Product->getClassCategories1(),
                         'required' => true,
                     ));
                 }
@@ -128,7 +132,7 @@ class AddCartType extends AbstractType
                     $builder->add('classcategory_id2', 'choice', array(
                         'label' => $Product->getClassName2(),
                         'expanded' => $expanded,
-                        'choices' => array(),
+                        'choices' => array('__unselected' => '選択してください'),
                         'required' => true,
                     ));
                 }

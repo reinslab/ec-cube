@@ -167,7 +167,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         table.children().remove();
 
 		if ( classcat_id1 == '__unselected' ) {
-			//$("#classcategory_id2").html("選択肢なし");
+			$("#classcategory_id2").html("{{ Product.className1 }}が選択されていません。");
 			return;
 		}
 		classcat2 = eccube.classCategories[classcat_id1];
@@ -215,9 +215,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 if ( id == "" ) {
                 	continue;
                 }
+                var param_price01 = -1;
+                if ( price01 != "" ) {
+	                param_price01 = price01.replace(",", "");
+                }
+                var param_price02 = price02.replace(",", "");
+                
                 // trタグ生成
 		        var td = $('<tr>')
-		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ')" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
+		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ');setCate2Value(' + param_price01 + ',' + param_price02 + ');" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
 		        	.append('<td style="width:100px;padding:5px;">' + name + '</td>')
 		        	.append('<td style="width:100px;padding:5px;">' + price02 + '円</td>');
 
@@ -233,6 +239,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	        
 	        //金額表示切り替え
 	        $("span.price01_default").html("&yen; " + price01_start + " ～ &yen; " + price01_end);
+
+	        document.getElementById("hdn_price1_from").value = price01_start;
+	        document.getElementById("hdn_price1_to").value = price01_end;
+
         }
         
         //販売価格表示切り替え
@@ -249,6 +259,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         // product_class_idセット
         $product_class_id_dynamic.value = product_class_id;
     };
+    
+    var setCate2Value = function(price01, price02) {
+
+		if ( price01 > -1 ) {
+			var comma_price01 = String(price01).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+	    	$("span.price01_default").html("&yen; " + comma_price01);
+    	} else {
+    		var price01_start = document.getElementById("hdn_price1_from").value;
+    		var price01_end = document.getElementById("hdn_price1_to").value;
+			$("span.price01_default").html("&yen; " + price01_start + " ～ &yen; " + price01_end);
+    	}
+
+		var comma_price02 = String(price02).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+    	$("span.price02_default").html("&yen; " + comma_price02);
+    }
 
     {% if form.classcategory_id2 is defined %}
     	{% if flg_product_type == app.config.product_type_print %}
@@ -403,6 +428,8 @@ $(function(){
                     <!-- ▲関連カテゴリ▲ -->
 
                     <form action="?" method="post" id="form1" name="form1">
+                    	<input type="hidden" id="hdn_price1_from" name="hdn_price1_from" value="" />
+                    	<input type="hidden" id="hdn_price1_to" name="hdn_price1_to" value="" />
                         <!--▼買い物かご-->
                         <div id="detail_cart_box" class="cart_area">
                             {% if Product.stock_find %}

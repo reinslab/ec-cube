@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     <h2 class="heading02">入稿データ</h2>
                     <div>
                     ファイルを選択してください。
-                        {{ form_widget(form.pdffile, {'attr': {'accept': 'application/pdf'}}) }}
+                        {{ form_widget(form.pdffile, {'attr': {'accept': 'application/pdf,application/zip'}}) }}
                         {{ form_errors(form.pdffile) }}
                     </div>
 {# A <= データ入稿 #}

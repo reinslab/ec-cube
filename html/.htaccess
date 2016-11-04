@@ -1,4 +1,4 @@
-php_value post_max_size 20M
+php_value post_max_size 30M
 php_value upload_max_filesize 20M
 php_value max_input_vars 10000
 
@@ -16,3 +16,10 @@ allow from all
     RewriteCond %{REQUEST_FILENAME} !^(.*)\.(gif|png|jpg|css|ico|js)$ [NC]
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
+
+<ifModule mod_headers.c>
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options SAMEORIGIN
+</ifModule>
+

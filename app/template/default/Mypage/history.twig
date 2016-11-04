@@ -185,8 +185,10 @@ console.log(document.form1.pdf_upload);
                         </p>
                         <p id="shipping_list__delivery--{{ Shipping.id }}">
                             配送方法：　{{ Shipping.shipping_delivery_name }}{{ Shipping.delivery_fee ? '（＋' ~ Shipping.delivery_fee.fee|price ~ '）' : '' }}<br>
+                {% if flgPrintItem == false %}
                             お届け日：　{{ Shipping.shipping_delivery_date|date_format|default('指定なし') }}<br>
                             お届け時間：　{{ Shipping.shipping_delivery_time|default('指定なし') }}
+                {% endif %}
                         </p>
                     </div>
                     {% if loop.last == false%}<hr>{% endif %}
@@ -209,9 +211,9 @@ console.log(document.form1.pdf_upload);
                     	<p>【データ再入稿】</p>
                     	ファイル選択後、更新ボタンを押してください。
                     	<div>
-	                        {{ form_widget(form.pdffile, {'attr': {'accept': 'application/pdf'}}) }}
-	                        {{ form_errors(form.pdffile) }}
+	                        {{ form_widget(form.pdffile, {'attr': {'accept': 'application/pdf,application/zip'}}) }}
                     		<a href="javascript:;" onclick="confirmUpload('{{ url('history_upload', { id:Order.id })}}')" class="btn btn-default btn-sm">更新</a>
+	                        {{ form_errors(form.pdffile) }}
                         </div>
                         {{ form_widget(form._token) }}
                         </form>

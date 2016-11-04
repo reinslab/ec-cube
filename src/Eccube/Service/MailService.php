@@ -216,12 +216,36 @@ class MailService
     public function sendOrderMail(\Eccube\Entity\Order $Order)
     {
 
-        $MailTemplate = $this->app['eccube.repository.mail_template']->find(1);
+// A => 支払方法でテンプレートを切り分け
+        //支払方法
+        $objPayment = $Order->getPayment();
+        $payment_id = $objPayment->getId();
+        $template_id = 1;
+        switch($payment_id) {
+        case $this->app['config']['payment_type_creditcard']: //クレジットカード
+	        $template_id = 1;
+        	break;
+        case $this->app['config']['payment_type_convenience']: //コンビニ決済
+	        $template_id = 1;
+        	break;
+        case $this->app['config']['payment_type_bank']: //銀行振込
+	        $template_id = 1;
+        	break;
+        	
+        }
+// A => 支払方法でテンプレートを切り分け
+
+        //$MailTemplate = $this->app['eccube.repository.mail_template']->find(1);
+        $MailTemplate = $this->app['eccube.repository.mail_template']->find($template_id);
+
+        //印刷商品判定
+        $flgPrintItem = $this->app['eccube.service.product']->isPrintProductByOrder($Order);
 
         $body = $this->app->renderView($MailTemplate->getFileName(), array(
             'header' => $MailTemplate->getHeader(),
             'footer' => $MailTemplate->getFooter(),
             'Order' => $Order,
+            'flgPrintItem' => $flgPrintItem,
         ));
 
         $message = \Swift_Message::newInstance()

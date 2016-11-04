@@ -19,12 +19,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #}
-<div class="col-sm-12 txt_bnr_area">
+<!-- <div class="col-sm-12 txt_bnr_area">
     <div class="txt_bnr">
         全国一律<br><strong>配送料無料！</strong>
-    </div>
-<div class="txt_bnr">
-        時間がなくても大丈夫！<br><strong>即日印刷可能</strong>
     </div>
 <div class="txt_bnr">
        最新デジタル印刷機の<br><strong>高い印刷品質</strong>
@@ -32,7 +29,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <div class="txt_bnr">
         小ロットから大ロットまで<br><strong>安定の印刷体制</strong>
     </div>
-<div class="txt_bnr">
-        全国一律<br><strong>配送料無料！</strong>
-    </div>
+</div> -->
+
+<div class="col-sm-12 txt_bnr_area">
+<div class="col-sm-12 col-xs-4" style="padding-bottom:10px">
+<a href="{{ url('help_guide') }} ">
+<img src="{{ app.config.front_urlpath }}/img/top/side-banner1.jpg" width="100%">
+</a>
 </div>
+<div class="col-sm-12 col-xs-4" style="padding-bottom:10px">
+<a href="{{ url(app.config.user_data_route, {"route": "creation"} )}} ">
+<img src="{{ app.config.front_urlpath }}/img/top/side-banner2.jpg" width="100%">
+</a>
+</div>
+<div class="col-sm-12 col-xs-4" style="padding-bottom:20px">
+<a href="{{ url(app.config.user_data_route, {"route": "template"} )}} ">
+<img src="{{ app.config.front_urlpath }}/img/top/side-banner3.jpg" width="100%">
+</a>
+</div>
+</div>
+<br clear=both>
