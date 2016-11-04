@@ -191,6 +191,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 var price01 = classcat2[key].price01;
                 var price02 = classcat2[key].price02;
                 var product_class_id = classcat2[key].product_class_id;
+                var product_code = classcat2[key].product_code;
 
 				// 通常価格
                 if ( typeof price01 !== 'undefined' ) {
@@ -220,10 +221,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	                param_price01 = price01.replace(",", "");
                 }
                 var param_price02 = price02.replace(",", "");
+                var param_product_code = product_code;
+				if ( param_product_code == "" ) {
+					param_product_code = null;
+				}
+
                 
                 // trタグ生成
 		        var td = $('<tr>')
-		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ');setCate2Value(' + param_price01 + ',' + param_price02 + ');" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
+		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ');setCate2Value(' + param_price01 + ',' + param_price02 + ',\'' + product_code + '\');" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
 		        	.append('<td style="width:100px;padding:5px;">' + name + '</td>')
 		        	.append('<td style="width:100px;padding:5px;">' + price02 + '円</td>');
 
@@ -242,7 +248,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	        document.getElementById("hdn_price1_from").value = price01_start;
 	        document.getElementById("hdn_price1_to").value = price01_end;
-
         }
         
         //販売価格表示切り替え
@@ -260,8 +265,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         $product_class_id_dynamic.value = product_class_id;
     };
     
-    var setCate2Value = function(price01, price02) {
+    var setCate2Value = function(price01, price02, product_code) {
 
+		// 通常価格
 		if ( price01 > -1 ) {
 			var comma_price01 = String(price01).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 	    	$("span.price01_default").html("&yen; " + comma_price01);
@@ -271,8 +277,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			$("span.price01_default").html("&yen; " + price01_start + " ～ &yen; " + price01_end);
     	}
 
+		// 販売価格
 		var comma_price02 = String(price02).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
     	$("span.price02_default").html("&yen; " + comma_price02);
+    	
+    	// 商品コード
+    	if ( product_code == null ) {
+    		product_code = "";
+    	}
+    	$("span#item_code_default").html(product_code);
     }
 
     {% if form.classcategory_id2 is defined %}
