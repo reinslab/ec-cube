@@ -124,7 +124,8 @@ class TransportCSVexportB2Controller
                                         break;
                                     // カナ
                                     case 'kana01':
-                                        $data = mb_convert_kana($data . $Shipping->offsetGet('kana02'), "kvrn");;
+                                        //$data = mb_convert_kana($data . $Shipping->offsetGet('kana02'), "kvrn");        // customized by wellco
+                                        $data = mb_convert_kana($data . $Shipping->offsetGet('kana02'), "kvrn","UTF-8");  // customized by wellco
                                         break;
                                     // 郵便番号
                                     case 'zip01':
@@ -202,10 +203,11 @@ class TransportCSVexportB2Controller
                                         $data = mb_convert_kana($codes[1], "kvrn");
                                         }
                                         break; 
-                                    case 'product_name02':
-                                        if (array_key_exists(1, $items)) {
-                                            $data = $items[1];
-                                        }
+                                    case 'product_name02':                              // 品名２ = 注文ID
+                                        //if (array_key_exists(1, $items)) {            // customized by wellco
+                                        //    $data = $items[1];                        // customized by wellco
+                                        //}                                             // customized by wellco
+                                        $data = $Order->offsetGet('custom_order_id');   // customized by wellco
                                         break; 
                                 }
                             }
