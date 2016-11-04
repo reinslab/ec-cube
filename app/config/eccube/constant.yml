@@ -10,3 +10,4 @@ product_type_article: 1
 payment_type_creditcard: 5
 payment_type_convenience: 6
 payment_type_bank: 3
+mailtemplate_printstart: 2

@@ -71,18 +71,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     $('#dropmenu ul a').click(function(event) {
       event.preventDefault();
       var href = $(this).attr('href');
-      var isChecked = false;
-      $('input[id^=check-]').each(function() {
-        var check = $(this).prop('checked');
-        if (check) {
-          isChecked = true;
-        }
-      });
-      if (!isChecked) {
-        alert("チェックボックスが選択されていません");
-        return false;
+      if ( href != "javascript:;" ) {
+	      var isChecked = false;
+	      $('input[id^=check-]').each(function() {
+	        var check = $(this).prop('checked');
+	        if (check) {
+	          isChecked = true;
+	        }
+	      });
+	      if (!isChecked) {
+	        alert("チェックボックスが選択されていません");
+	        return false;
+	      }
+	      $('#dropdown-form').attr('action', href).submit();
       }
-      $('#dropdown-form').attr('action', href).submit();
     });
 
     // フォーム値を確認し、アコーディオンを制御
@@ -107,6 +109,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         }
     })($, formPropStateSubscriber);
 });
+
+function sendPrintStartMail(url) {
+	var href = url;
+	var isChecked = false;
+	$('input[id^=check-]').each(function() {
+	var check = $(this).prop('checked');
+	if (check) {
+		isChecked = true;
+	}
+	});
+	if (!isChecked) {
+		alert("チェックボックスが選択されていません");
+		return false;
+	} else {
+		if ( window.confirm("印刷開始案内メールを送信します。宜しいですか？") ) {
+			$('#dropdown-form').attr('action', href).submit();
+		}
+	}
+}
 </script>
 {% endblock javascript %}
 
@@ -305,6 +326,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ url('admin_order_mail_all') }}">メール一括通知</a></li>
                                         <li><a href="{{ url('admin_order_pdf_download') }}">入稿データ一括ダウンロード</a></li>
+                                        <li><a href="javascript:;" onclick='sendPrintStartMail("{{ url('admin_order_print_mail') }}")'>印刷開始通知</a></li>
                                     </ul>
                                 </li>
                             </ul>
