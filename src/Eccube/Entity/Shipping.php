@@ -196,6 +196,13 @@ class Shipping extends \Eccube\Entity\AbstractEntity
      */
     private $DeliveryFee;
 
+// A => 発送個数
+    /**
+     * @var integer
+     */
+    private $shipping_delivery_count;
+// A => 発送個数
+
     /**
      * Constructor
      */
@@ -1029,4 +1036,33 @@ class Shipping extends \Eccube\Entity\AbstractEntity
 
         return $this->DeliveryFee;
     }
+
+
+// A => 発送個数
+    /**
+     * Set Country
+     *
+     * @param \Eccube\Entity\Master\Country $country
+     * @return Shipping
+     */
+    public function setShippingDeliveryCount($deliveryCount = 1)
+    {
+        $this->shipping_delivery_count = $deliveryCount;
+
+        return $this;
+    }
+
+    /**
+     * Get Country
+     *
+     * @return \Eccube\Entity\Master\Country 
+     */
+    public function getShippingDeliveryCount()
+    {
+    	if ( $this->shipping_delivery_count == '' ) {
+    		return 1;
+    	}
+        return $this->shipping_delivery_count;
+    }
+// A => 発送個数
 }

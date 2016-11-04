@@ -141,6 +141,15 @@ class ShippingType extends AbstractType
                 'format' => 'yyyy-MM-dd',
                 'required' => false,
             ))
+// A => 発送個数
+            ->add('shipping_delivery_count', 'text', array(
+                'label' => '発送個数',
+                'required' => false,
+                'constraints' => array(
+                	new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
+                ),
+            ))
+// A => 発送個数
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($BaseInfo) {
                 if ($BaseInfo->getOptionMultipleShipping() == Constant::ENABLED) {
                     $form = $event->getForm();

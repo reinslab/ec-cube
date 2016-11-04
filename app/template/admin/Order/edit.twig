@@ -718,6 +718,14 @@ $(document).ready(function() {
                                     {{ form_errors(shippingForm.shipping_delivery_date) }}
                                 </div>
                             </div>
+                            {# A => 発送個数 #}
+                            <div id="shipment_item_detail__shipping_delivery_count--{{ loop.index }}" class="form-group">
+                                {{ form_label(shippingForm.shipping_delivery_count) }}
+                                <div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(shippingForm.shipping_delivery_count) }}
+                                    {{ form_errors(shippingForm.shipping_delivery_count) }}
+                                </div>
+                            </div>
                             <div class="extra-form">
                                 {% for f in form.getIterator %}
                                     {% if f.vars.name matches '[^plg*]' %}
