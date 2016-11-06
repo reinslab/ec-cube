@@ -109,6 +109,13 @@ Eccube\Entity\Shipping:
             unsigned: false
             options:
                 default: '0'
+        shipping_delivery_count:
+            type: smallint
+            nullable: true
+            unsigned: false
+            options:
+                default: '1'
+            column: delivery_count
     oneToMany:
         ShipmentItems:
             targetEntity: Eccube\Entity\ShipmentItem

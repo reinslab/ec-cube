@@ -484,6 +484,7 @@ class EditController extends AbstractController
                 /* @var $builder \Symfony\Component\Form\FormBuilderInterface */
                 $builder = $app['form.factory']->createNamedBuilder('', 'add_cart', null, array(
                     'product' => $Product,
+                    'is_admin' => true
                 ));
                 $addCartForm = $builder->getForm();
                 $forms[$Product->getId()] = $addCartForm->createView();

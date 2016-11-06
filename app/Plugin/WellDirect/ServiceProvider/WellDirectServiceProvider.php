@@ -34,6 +34,9 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         // 入稿データダウンロード
         $app->match('/' . $app["config"]["admin_route"] . '/order/download/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pdfDownload')->value('id', null)->assert('id', '\d+|')->bind('admin_order_pdf_download');
 
+        // 印刷通知
+        $app->match('/' . $app["config"]["admin_route"] . '/order/printmail/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::printMail')->value('id', null)->assert('id', '\d+|')->bind('admin_order_print_mail');
+
 
 
 

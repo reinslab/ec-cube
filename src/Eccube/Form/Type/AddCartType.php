@@ -64,6 +64,9 @@ class AddCartType extends AbstractType
         $Product = $options['product'];
         $this->Product = $Product;
         $ProductClasses = $Product->getProductClasses();
+        
+        //管理画面フラグ
+        $is_admin = $options['is_admin'];
 
         $builder
             ->add('mode', 'hidden', array(
@@ -98,6 +101,10 @@ class AddCartType extends AbstractType
 				$expanded = true;
 			}
 			
+			//管理画面の場合はラジオボタンは無し
+			if ( $is_admin ) {
+				$expanded = false;
+			}
 			
             $builder
 // U => 型を動的に変更
@@ -171,6 +178,9 @@ class AddCartType extends AbstractType
         $resolver->setRequired('product');
         $resolver->setDefaults(array(
             'id_add_product_id' => true,
+// A => 管理画面フラグ
+            'is_admin' => false,
+// A => 管理画面フラグ
             'constraints' => array(
                 new Assert\Callback(array($this, 'validate')),
             ),
