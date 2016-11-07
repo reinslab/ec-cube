@@ -280,6 +280,62 @@ h1.header_logo{
 #classcategory_id2 td{
 	border-bottom: 1px solid #CCC;
 }
+.pricelist-caption {
+	padding-right: 30px;
+	padding-bottom: 50px;
+	padding-left: 30px;
+	font-size: 1.25em;
+	line-height: 140%;
+}
+
+
+.pricelist-box {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border: 1px solid #F0F0F0;
+	margin-bottom: 15px;
+}
+.pricelist-link-pdf a {
+	display: block;
+	width: 100%;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	text-align: center;
+	background-image: -webkit-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(233,233,233,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(233,233,233,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(233,233,233,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(255,255,255,1.00) 0%,rgba(233,233,233,1.00) 100%);
+	border: 1px solid #F3F3F3;
+	border-radius: 5px;
+}
+.pricelist-link-pdf a:hover {
+	background-image: -webkit-linear-gradient(270deg,rgba(233,233,233,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(233,233,233,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(233,233,233,1.00) 0%,rgba(255,255,255,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(233,233,233,1.00) 0%,rgba(255,255,255,1.00) 100%);
+}
+.pricelist-link-item a {
+	display: block;
+	width: 100%;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	text-align: center;
+	background-image: -webkit-linear-gradient(270deg,rgba(247,246,242,1.00) 0%,rgba(208,202,176,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(247,246,242,1.00) 0%,rgba(208,202,176,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(247,246,242,1.00) 0%,rgba(208,202,176,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(247,246,242,1.00) 0%,rgba(208,202,176,1.00) 100%);
+	border: 1px solid #F3F3F3;
+	border-radius: 5px;
+}
+.pricelist-link-item a:hover {
+	background-image: -webkit-linear-gradient(270deg,rgba(208,202,176,1.00) 0%,rgba(247,246,242,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(208,202,176,1.00) 0%,rgba(247,246,242,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(208,202,176,1.00) 0%,rgba(247,246,242,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(208,202,176,1.00) 0%,rgba(247,246,242,1.00) 100%);
+}
+
 
 @media only screen and (max-width: 767px) {
 .item_gallery li{
@@ -390,4 +446,8 @@ h1.header_logo{
     text-align: right;
     margin-right: 5px;
 }
+
+
+
+
 }
