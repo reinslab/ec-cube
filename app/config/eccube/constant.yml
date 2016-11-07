@@ -4,7 +4,7 @@ order_data_check_end: 12
 order_print_now: 20
 order_print_end: 21
 pdf_size: 20
-re_order_limit_day: 30
+re_order_limit_day: 0
 product_type_print: 2
 product_type_article: 1
 payment_type_creditcard: 5
