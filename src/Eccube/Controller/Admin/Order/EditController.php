@@ -197,8 +197,12 @@ class EditController extends AbstractController
                         	$input_payment_date = new \DateTime($_REQUEST['input_payment_date_start']);
                         	$TargetOrder->setPaymentDate($input_payment_date);
                         	
-                        	//受注ステータスを入金済みにする
-                        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_pre_end']));
+                        	//受注スタータスが入稿データ確認中以前 かつ 発送済みじゃない場合のみステータス更新
+                        	if ( $TargetOrder->getOrderStatus()->getId() < $app['config']['order_data_check_now'] &&
+                        		 $TargetOrder->getOrderStatus()->getId() != $app['config']['order_deliv'] ) {
+	                        	//受注ステータスを入金済みにする
+	                        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_pre_end']));
+                        	}
                         }
 // A => 入金日保存
 
