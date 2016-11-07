@@ -134,8 +134,8 @@ class WellDirectAdminController extends AbstractController
                 throw new NotFoundHttpException();
             }
             
-            //ステータスが入稿データ確認済み以外の場合はスキップする
-            if ( $TargetOrder->getOrderStatus()->getId() != $app['config']['order_data_check_end'] ) {
+            //印刷開始案内メール送信状況が送信済みの場合はスキップする
+            if ( $TargetOrder->getPrintStartMailStatus() == 1 ) {
             	continue;
             }
 
@@ -169,10 +169,11 @@ class WellDirectAdminController extends AbstractController
             $app['orm.em']->persist($MailHistory);
             $app['orm.em']->flush($MailHistory);
             
-            //受注ステータス更新
-            $OrderStatus = $app['eccube.repository.order_status']->find($app['config']['order_print_now']);
-            $orderRepository = $app['orm.em']->getRepository('Eccube\Entity\Order');
-            $orderRepository->changeStatus($oid, $OrderStatus);
+            //印刷開始案内メール送信状況更新
+            $TargetOrder->setPrintStartMailStatus(1);
+            $TargetOrder->setUpdateDate(new \DateTime());
+            $app['orm.em']->persist($TargetOrder);
+            $app['orm.em']->flush($TargetOrder);
 
     	}
     	

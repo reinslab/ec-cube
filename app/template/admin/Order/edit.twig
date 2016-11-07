@@ -278,6 +278,7 @@ $(document).ready(function() {
                                 {# TODO: U => 入金日を入力可能にする#}
                                 <p id="number_info_box__commit_date"><svg class="cb cb-clock"> <use xlink:href="#cb-clock" /></svg>発送日：{{ Order.commit_date ? Order.commit_date|date("Y/m/d H:i:s") : '' }}</p>
                                 <p id="number_info_box__update_date"><svg class="cb cb-clock"> <use xlink:href="#cb-clock" /></svg>更新日：{{ Order.update_date ? Order.update_date|date("Y/m/d H:i:s") : '' }}</p>
+                                {% if Order.print_start_mail_status == 1 %}<p style="color:red;">※印刷開始メール送信済み</p>{% endif %}
                             </div>
                         </div>
                     </div><!-- /.box-body -->

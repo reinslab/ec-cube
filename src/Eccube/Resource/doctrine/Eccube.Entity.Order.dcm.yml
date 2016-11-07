@@ -175,6 +175,11 @@ Eccube\Entity\Order:
         custom_order_id:
             type: text
             nullable: true
+        print_start_mail_status:
+            type: smallint
+            nullable: true
+            options:
+                default: '0'
     manyToOne:
         Customer:
             targetEntity: Eccube\Entity\Customer

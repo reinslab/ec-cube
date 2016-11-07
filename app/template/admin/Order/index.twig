@@ -356,7 +356,7 @@ function sendPrintStartMail(url) {
                                         <td id="result_list_main__id_check--{{ Order.id }}" class="text-center"><input type="checkbox" id="check-{{ Order.id }}" data-id="{{ Order.id }}" name="ids{{ Order.id }}"></td>
                                         <td id="result_list_main__order_date--{{ Order.id }}">{{ Order.order_date|date_format }}</td>
                                         <td id="result_list_main__id--{{ Order.id }}"><a href="{{ url('admin_order_edit', { id : Order.id }) }}">{{ Order.custom_order_id }}</a></td>
-                                        <td id="result_list_main__name--{{ Order.id }}">{{ Order.name01 }} {{ Order.name02 }}</td>
+                                        <td id="result_list_main__name--{{ Order.id }}">{{ Order.name01 }} {{ Order.name02 }}{% if Order.print_start_mail_status == 1 %}<br /><span style="font-size:7pt;">[印刷開始メール送信済み]</span>{% endif %}</td>
                                         <td id="result_list_main__payment_method--{{ Order.id }}">{{ Order.payment_method }}</td>
                                         <td id="result_list_main__payment_date--{{ Order.id }}">{{ Order.payment_date|date_format }}</td>
                                         <td id="result_list_main__payment_total--{{ Order.id }}" class="text-right">{{ Order.payment_total|number_format }}</td>
