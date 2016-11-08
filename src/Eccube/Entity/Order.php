@@ -427,12 +427,12 @@ class Order extends \Eccube\Entity\AbstractEntity
     private $custom_order_id;
 
     // ★ A => 追加カラム
-// A => 入力項目追加(伝票番号)
+// A => 入力項目追加(印刷開始案内メール送信状況)
     /**
-     * 伝票番号
+     * 印刷開始案内メール送信状況
      * @var int
      */
-    private $denpyo_number;
+    private $print_start_mail_status;
 
     /**
      * 発送個数
@@ -1748,9 +1748,9 @@ class Order extends \Eccube\Entity\AbstractEntity
      * @param  int $denpyo_number
      * @return Order
      */
-    public function setDenpyoNumber($denpyo_number)
+    public function setPrintStartMailStatus($print_start_mail_status)
     {
-        $this->denpyo_number = $denpyo_number;
+        $this->print_start_mail_status = $print_start_mail_status;
 
         return $this;
     }
@@ -1760,9 +1760,9 @@ class Order extends \Eccube\Entity\AbstractEntity
      *
      * @return string
      */
-    public function getDenpyoNumber()
+    public function getPrintStartMailStatus()
     {
-        return $this->denpyo_number;
+        return $this->print_start_mail_status;
     }
 
     /**
