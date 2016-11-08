@@ -139,10 +139,14 @@ class WellDirectAdminController extends AbstractController
             	continue;
             }
 
+	        //印刷商品判定
+	        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($TargetOrder);
+
 	        $body = $app->renderView($MailTemplate->getFileName(), array(
 	            'header' => $MailTemplate->getHeader(),
 	            'footer' => $MailTemplate->getFooter(),
-	            'Order' => $TargetOrder
+	            'Order' => $TargetOrder,
+	            'flgPrintItem' => $flgPrintItem,
 	        ));
 
 			$subject = '[' . $BaseInfo->getShopName() . '] ' . $MailTemplate->getSubject();
