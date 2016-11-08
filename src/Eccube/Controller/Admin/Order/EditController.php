@@ -190,24 +190,37 @@ class EditController extends AbstractController
                                 }
                             }
                         }
-
+                        
 // A => 入金日保存
-                        //入金日が未設定でかつ入力値がある場合は保存する
-                        if ( is_null($TargetOrder->getPaymentDate()) && $_REQUEST['input_payment_date_start'] != '' ) {
-                        	$input_payment_date = new \DateTime($_REQUEST['input_payment_date_start']);
-                        	$TargetOrder->setPaymentDate($input_payment_date);
+                        // 入金日が未設定の場合
+                        if ( is_null($TargetOrder->getPaymentDate()) ) {
+
+                        	if ( $_REQUEST['input_payment_date_start'] != '' ) {
                         	
-                        	//受注スタータスが入稿データ確認中以前 かつ 発送済みじゃない場合のみステータス更新
-                        	if ( $TargetOrder->getOrderStatus()->getId() < $app['config']['order_data_check_now'] &&
-                        		 $TargetOrder->getOrderStatus()->getId() != $app['config']['order_deliv'] ) {
-	                        	//受注ステータスを入金済みにする
-	                        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_pre_end']));
+                        		//入金日の入力値
+	                        	$input_payment_date = new \DateTime($_REQUEST['input_payment_date_start']);
+	                        	$TargetOrder->setPaymentDate($input_payment_date);
+
+	                        	//受注スタータスが入稿データ確認中以前 かつ 発送済みじゃない場合のみステータス更新
+	                        	if ( $TargetOrder->getOrderStatus()->getId() < $app['config']['order_data_check_now'] &&
+	                        		 $TargetOrder->getOrderStatus()->getId() != $app['config']['order_deliv'] ) {
+		                        	//受注ステータスを入金済みにする
+		                        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_pre_end']));
+	                        	}
+
+                        	} else {
+		                        //ステータスが入金済みで、入金日が未設定の場合は、処理日付をセットする
+		                        if ( $TargetOrder->getOrderStatus()->getId() == $app['config']['order_pre_end'] ) {
+		                        	$TargetOrder->setPaymentDate(new \DateTime());
+		                        }
                         	}
+
+	                        $app['orm.em']->persist($TargetOrder);
+	                        $app['orm.em']->flush();
                         }
+                        
 // A => 入金日保存
 
-                        $app['orm.em']->persist($TargetOrder);
-                        $app['orm.em']->flush();
 
                         $Customer = $TargetOrder->getCustomer();
                         if ($Customer) {
