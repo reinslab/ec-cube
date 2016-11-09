@@ -190,6 +190,11 @@ class CsvExportService
             'rank' => 'ASC'
         );
         $this->Csvs = $this->csvRepository->findBy($criteria, $orderBy);
+        
+        // Microsoft 改行コード変換フィルターの生成     Customized by wellco.
+        stream_filter_register("msLineEnding", "\\Eccube\\Service\\MSLineFeedFilter")
+                or die("Failed to register filter");
+
     }
 
     /**
@@ -323,6 +328,7 @@ class CsvExportService
     {
         if (is_null($this->fp) || $this->closed) {
             $this->fp = fopen('php://output', 'w');
+            stream_filter_append($this->fp, MS_LINE_FEED_FILTER);   // customized by wellco
         }
     }
 
