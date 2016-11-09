@@ -1,0 +1,128 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% if ProductOptions|length > 0 %}
+<script src="{{ app.config.front_urlpath }}/../../plugin/ProductOption/jquery.plainmodal.min.js"></script>
+{% endif %}
+<script>
+{% if ProductOptions|length > 0 %}
+$(function() {
+    {% for ProductOption in ProductOptions %}
+    {% set Option = ProductOption.Option %}
+        {% if Option.description_flg == 1 %}
+            modal{{ Option.id }} = $('#option_description_{{ Option.id }}').plainModal();
+            $('#option_description_link_{{ Option.id }}').click(function() { modal{{ Option.id }}.plainModal('open'); return false;});
+        {% endif %}
+    {% endfor %}      
+});
+
+function func_submit(optionId, setValue) {
+    var $sele_option = $("[name=productoption" + optionId + "]");
+    if($sele_option && $sele_option.length){
+        var kind = $sele_option.attr("type");
+        if(kind == 'radio'){
+            $sele_option.val([setValue]);
+        }else{
+            $sele_option.val(setValue);
+        }			
+    }
+    {% if isActive %}
+    onOptionChange();
+    {% endif %}
+    $('#option_description_' + optionId).plainModal('close');
+}
+{% endif %}
+
+{% if isActive %}
+var optionPrice = {{ optionPrice|json_encode|raw }};
+var optionPoint = {{ optionPoint|json_encode|raw }};
+var taxRules = {{ taxRules|json_encode|raw }};
+var default_class_id = {{ default_class_id }};
+
+function onOptionChange(){
+    var optionPriceTotal = 0;
+    var optionPointTotal = 0;
+    var tax_rate = null;
+    var tax_rule = null;
+    $("[id^=productoption]").each(function(){
+        var id = $(this).prop("id");
+        if(id.match(/^productoption\d+$/)){
+            var kind = $(this).prop("tagName");
+            var value = null;
+            switch(kind){
+                case 'SELECT':
+                    value = $(this).val();
+                    break;
+                case 'TEXTAREA':
+                case 'INPUT':
+                    break;
+                default:
+                    var id = $(this).prop('id');
+                    value = ($("input[name='" + id + "']:checked").val());
+                    break;
+            }
+            if(value != null){
+                optionPriceTotal += optionPrice[value];
+                optionPointTotal += optionPoint[value];
+            }
+        }
+    });
+    var $sele1 = $('form select[name=classcategory_id1]');
+    var $sele2 = $('form select[name=classcategory_id2]');
+
+    var classcat_id1 = $sele1.val() ? $sele1.val() : '__unselected';
+    var classcat_id2 = $sele2.val() ? $sele2.val() : '';
+    classcat2 = eccube.classCategories[classcat_id1]['#' + classcat_id2];
+    if(classcat2){
+        var product_class_id = classcat2.product_class_id;        
+    }else{
+        var product_class_id = default_class_id;
+    }
+
+    var tax_rate = taxRules[product_class_id]['tax_rate'];
+    var tax_rule = taxRules[product_class_id]['tax_rule'];    
+
+    $('#option_price_default').text(number_format(optionPriceTotal));
+    $('#option_price_inctax_default').text(number_format(optionPriceTotal + sfTax(optionPriceTotal, tax_rate, tax_rule)));
+    $('#option_point_default').text(number_format(optionPointTotal));
+}
+
+function number_format(num) {
+    return num.toString().replace(/([0-9]+?)(?=(?:[0-9]{3})+$)/g , '$1,');
+}
+
+function sfTax(price, tax_rate, tax_rule) {
+    real_tax = tax_rate / 100;
+    ret = price * real_tax;
+    tax_rule = parseInt(tax_rule);
+    switch (tax_rule) {
+        // 四捨五入
+        case 1:
+            $ret = Math.round(ret);
+            break;
+        // 切り捨て
+        case 2:
+            $ret = Math.floor(ret);
+            break;
+        // 切り上げ
+        case 3:
+            $ret = Math.ceil(ret);
+            break;
+        // デフォルト:切り上げ
+        default:
+            $ret = Math.round(ret);
+            break;
+    }
+    return $ret;
+}
+
+onOptionChange();
+{% endif %}
+</script>

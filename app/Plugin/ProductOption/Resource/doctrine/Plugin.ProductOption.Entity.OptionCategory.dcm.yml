@@ -1,0 +1,69 @@
+Plugin\ProductOption\Entity\OptionCategory:
+    type: entity
+    table: plg_productoption_dtb_optioncategory
+    repositoryClass: Plugin\ProductOption\Repository\OptionCategoryRepository
+    id:
+        id:
+            type: smallint
+            nullable: false
+            unsigned: false
+            id: true
+            column: optioncategory_id
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: text
+            nullable: true
+        option_id:
+            type: integer
+            nullable: false
+        description:
+            type: text
+            nullable: true
+        rank:
+            type: integer
+            nullable: true
+        value:
+            type: integer
+            nullable: true
+        delivery_free_flg:
+            type: smallint
+            nullable: true
+            options:
+                default: '0'
+        option_image:
+            type: text
+            nullable: true
+        disable_flg:
+            type: boolean
+            nullable: true
+        init_flg:
+            type: boolean
+            nullable: true
+        del_flg:
+            type: smallint
+            nullable: false
+            options:
+                default: '0'
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: true
+    manyToOne:
+        Option:
+            targetEntity: Plugin\ProductOption\Entity\Option
+            inversedBy: OptionCategories
+            joinColumn:
+                name: option_id
+                referencedColumnName: option_id
+                nullable: false
+        Creator:
+            targetEntity: Eccube\Entity\Member
+            joinColumn:
+                name: creator_id
+                referencedColumnName: member_id
+                nullable: false
+    lifecycleCallbacks: {  }

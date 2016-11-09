@@ -1,0 +1,18 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% if ProductOptions[Product.id] is defined %}
+    {% for ProductOption in ProductOptions[Product.id] %}
+        {% set value = 'productoption' ~ ProductOption.Option.id %}
+        <br/>{{ form_label(form[value]) }}：
+        <br />{{ form_widget(form[value]) }}
+        {{ form_errors(form[value]) }}
+    {% endfor %}
+{% endif %}

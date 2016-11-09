@@ -272,9 +272,17 @@ class OrderRepository extends EntityRepository
         // multi
         if (isset( $searchData['multi']) && Str::isNotBlank($searchData['multi'])) {
             $multi = preg_match('/^\d+$/', $searchData['multi']) ? $searchData['multi'] : null;
+            //formにセットされていない場合はREQUESTから再セット
+            if ( is_null($multi) ) {
+            	$multi = $_REQUEST['admin_search_order']['multi'];
+            }
+
             $qb
                 ->andWhere('o.id = :multi OR o.name01 LIKE :likemulti OR o.name02 LIKE :likemulti OR ' .
-                           'o.kana01 LIKE :likemulti OR o.kana02 LIKE :likemulti OR o.company_name LIKE :likemulti')
+                           'o.kana01 LIKE :likemulti OR o.kana02 LIKE :likemulti OR o.company_name LIKE :likemulti OR ' .
+                           //A => カスタム注文IDを条件に追加
+                           'o.custom_order_id = :multi')
+                           //A => カスタム注文IDを条件に追加
                 ->setParameter('multi', $multi)
                 ->setParameter('likemulti', '%' . $searchData['multi'] . '%');
         }

@@ -1,0 +1,71 @@
+Plugin\ProductOption\Entity\Option:
+    type: entity
+    table: plg_productoption_dtb_option
+    repositoryClass: Plugin\ProductOption\Repository\OptionRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: option_id
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: text
+            nullable: true
+        manage_name:
+            type: text
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        rank:
+            type: integer
+            nullable: true
+        pricedisp_flg:
+            type: boolean
+            nullable: true
+        description_flg:
+            type: smallint
+            nullable: true
+        is_required:
+            type: boolean
+            nullable: true
+        del_flg:
+            type: smallint
+            nullable: true
+            options:
+                default: '0'
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: true
+    manyToOne:
+        Creator:
+            targetEntity: Eccube\Entity\Member
+            joinColumn:
+                name: creator_id
+                referencedColumnName: member_id
+                nullable: false
+        Type:
+            targetEntity: Plugin\ProductOption\Entity\Master\Type
+            joinColumn:
+                name: type_id
+                referencedColumnName: id
+    oneToMany:
+        OptionCategories:
+            targetEntity: Plugin\ProductOption\Entity\OptionCategory
+            mappedBy: Option
+            orderBy:
+                rank: DESC
+        ProductOptions:
+            targetEntity: Plugin\ProductOption\Entity\ProductOption
+            cascade: ["persist", "remove"]
+            mappedBy: Product
+            orderBy:
+                rank: ASC
+    lifecycleCallbacks: {  }

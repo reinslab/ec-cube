@@ -1,0 +1,275 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['product', 'product_option'] %}
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}商品管理{% endblock %}
+{% block sub_title %}オプション管理{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+    <script>
+        onChangeType();
+        function changeAction(action) {
+            document.form1.action = action;
+        }
+
+        function onChangeType() {
+            val = $("select[id='admin_product_option_Type']").val();
+            if (val == 3 || val == 4) {
+                $("[id='admin_product_option_pricedisp_flg']").attr("disabled", "disabled");
+                $("[id='admin_product_option_pricedisp_flg']").prop("checked", false);
+            } else {
+                $("[id='admin_product_option_pricedisp_flg']").removeAttr("disabled");
+            }
+        }
+
+        $(function () {
+            $('#copy_from_manage').click(function () {
+                var val = $('input[id=admin_product_option_manage_name]').val();
+                $('input[id=admin_product_option_name]').val(val);
+            });
+        });
+
+        $(function () {
+            var oldRanks = [];
+            // 画面の中のrank一覧を保持
+            $("div.tableish > .item_box").each(function () {
+                oldRanks.push(this.dataset.rank);
+            });
+            // rsort
+            oldRanks.sort(function(a, b) {
+                return a - b;
+            }).reverse();
+
+            $("div.tableish").sortable({
+                items: '> .item_box',
+                cursor: 'move',
+                update: function (e, ui) {
+                    $("body").append($('<div class="modal-backdrop in"></div>'));
+                    updateRank();
+                }
+            });
+
+            var updateRank = function () {
+                // 並び替え後にrankを更新
+                var newRanks = {};
+                var i = 0;
+                $("div.tableish > .item_box").each(function () {
+                    newRanks[this.dataset.optionId] = oldRanks[i];
+                    i++;
+                });
+
+                $.ajax({
+                url: '{{ url('admin_product_option_rank_move') }}',
+                    type: 'POST',
+                    data: newRanks,
+                }).done(function (data) {
+                    console.log(data);
+                    $(".modal-backdrop").remove();
+                }).fail(function () {
+                    console.log('fail');
+                    $(".modal-backdrop").remove();
+                });
+            };
+        });
+
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+<form role="form" name="form1" id="form1" method="post" action="" novalidate>
+    {{ form_widget(form._token) }}
+
+    <div class="row" id="aside_wrap">
+        <div class="col-md-9">
+
+            <div class="box form-horizontal">
+                <div class="box-header">
+                    <h3 class="box-title">オプション管理</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">
+                            オプション管理名
+                        </label>
+                        <div class="col-sm-9 col-lg-10">
+                            {{ form_errors(form.manage_name) }}
+                            {{ form_widget(form.manage_name) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">オプション表示タイトル</label>
+                        <div class="col-sm-9 col-lg-10">
+                            {{ form_errors(form.name) }}
+                            {{ form_widget(form.name) }}
+                            <a class="btn-normal" href="javascript:;" id="copy_from_manage"><span>管理名をコピー</span></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">説明文</label>
+                        <div class="col-sm-9 col-lg-10">
+                            {{ form_errors(form.description) }}
+                            {{ form_widget(form.description) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">タイプ</label>
+                        <div class="col-sm-9 col-lg-10 padT07">
+                            {{ form_errors(form.Type) }}
+                            {{ form_widget(form.Type, { attr : { onChange : 'onChangeType()' } }) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">オプション説明</label>
+                        <div class="col-sm-9 col-lg-10 padT07">
+                            {{ form_errors(form.description_flg) }}
+                            {{ form_widget(form.description_flg) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label"></label>
+                        <div class="col-sm-9 col-lg-10 padT07">
+                            {{ form_errors(form.pricedisp_flg) }}
+                            {{ form_widget(form.pricedisp_flg) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label"></label>
+                        <div class="col-sm-9 col-lg-10 padT07">
+                            {{ form_widget(form.is_required) }}
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+
+            <div class="box accordion">
+                <div class="box-header toggle active">
+                    <h3 class="box-title">登録済オプション<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+                </div>
+
+                <div class="accpanel" style="display: block;">
+                        <div class="sortable_list">
+                            <div class="tableish">
+                            {% if Options|length > 0 %}                                
+                                {% for Option in Options %}
+                                    {% set type = Option.Type.id %}
+                                    <div class="item_box tr" data-option-id="{{ Option.id }}" data-rank="{{ Option.rank }}">
+                                        <div class="icon_sortable td">
+                                            <svg class="cb cb-ellipsis-v"><use xlink:href="#cb-ellipsis-v" /></svg>
+                                        </div>
+
+                                        <div class="item_pattern td">
+                                            {% if type != 3  and type != 4 %}
+                                            <a href="{{ url('admin_product_option_category', {option_id : Option.id }) }}">
+                                            {% endif %}
+                                                [ID:{{ Option.id }}]&nbsp;{{ Option.manage_name }}
+                                            {% if type != 3  and type != 4 %}
+                                            </a>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="icon_edit td">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                                    <svg class="cb cb-ellipsis-h"><use xlink:href="#cb-ellipsis-h" /></svg>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li>
+                                                        {% if type != 3 and type != 4 %}
+                                                            <a href="{{ url('admin_product_option_category', {option_id : Option.id }) }}">選択肢登録</a>
+                                                        {% endif %}
+                                                    </li>
+                                                    <li>
+                                                        {% if TargetOption.id !=  Option.id %}
+                                                            <a href="{{ url('admin_product_option_edit', {id : Option.id }) }}">編集</a>
+                                                        {% else %}
+                                                            <a>編集中</a>
+                                                        {% endif %}
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="{{ url('admin_product_option_delete', { 'id': Option.id}) }}" {{ csrf_token_for_anchor() }} data-method="delete" data-message="このオプションを削除してもよろしいですか？">削除</a>
+                                                    </li>
+
+                                                    {% if loop.first == false %}
+                                                        {% set up_action = url('admin_product_option_up', {id: Option.id}) %}
+                                                        <li>
+                                                            <a href="?" onclick="changeAction('{{ up_action }}'); document.form1.submit(); return false;">
+                                                                上へ
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+
+                                                    {% if loop.last == false %}
+                                                        {% set down_action = url('admin_product_option_down', {id: Option.id}) %}
+                                                        <li>
+                                                            <a href="?" onclick="changeAction('{{ down_action }}'); document.form1.submit(); return false;">
+                                                                下へ
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div><!-- /.dropdown -->
+                                        </div><!-- /.icon_edit -->
+                                    </div><!-- /.item_box -->
+                                {% endfor %}
+
+                            {% else %}
+                                <div class="box-body no-padding">
+                                    <div class="data-empty">
+                                        <svg class="cb cb-inbox"><use xlink:href="#cb-inbox" /></svg>
+                                        <p>データはありません</p>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            {% endif %}
+
+                        </div><!-- /.tableish -->
+                    </div><!-- /.sortable_list -->
+                </div><!-- /.accpanel -->
+            </div><!-- /.box -->
+        </div><!-- /.col-md-9 -->
+
+
+        <div id="aside_column" class="col-md-3">
+            <div class="col_inner">
+                <div class="box no-header">
+                    <div class="box-body">
+
+                        <div class="row text-center" style="margin-bottom: 20px;">
+                            <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                <button class="btn btn-primary btn-block btn-lg" onclick="document.form1.submit();">この内容で登録</button>
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                <a class="btn btn-default btn-block btn-lg" href="{{ url('admin_product_option_new') }}">新規登録画面</a>
+                            </div>
+                        </div>
+
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col_inner -->
+        </div><!-- /#aside_column -->
+
+    </div><!-- /#aside_wrap -->
+
+
+</form>
+
+{% endblock %}

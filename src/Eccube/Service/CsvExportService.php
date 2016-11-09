@@ -190,6 +190,11 @@ class CsvExportService
             'rank' => 'ASC'
         );
         $this->Csvs = $this->csvRepository->findBy($criteria, $orderBy);
+        
+        // Microsoft 改行コード変換フィルターの生成     Customized by wellco.
+        stream_filter_register("msLineFeedFilter", "\\Eccube\\Service\\MSLineFeedFilter")
+                or die("Failed to register filter");
+
     }
 
     /**
@@ -323,6 +328,7 @@ class CsvExportService
     {
         if (is_null($this->fp) || $this->closed) {
             $this->fp = fopen('php://output', 'w');
+            stream_filter_append($this->fp, "msLineFeedFilter");   // customized by wellco
         }
     }
 
@@ -443,5 +449,23 @@ class CsvExportService
                 $Conditions = $em->getRepository(get_class($Conditions))->find($Conditions->getId());
             }
         }
+    }
+}
+/**
+ * Description of CsvStreamFilter
+ * customized by wellco
+ * @author Hiroyuki Tsunoya
+ */
+class MSLineFeedFilter extends \php_user_filter 
+{
+    public function filter($in, $out, &$consumed, $closing) {
+        while ($bucket = stream_bucket_make_writeable($in)) {
+            $bucket->data = preg_replace("/\n$/", "", $bucket->data);
+            $bucket->data = preg_replace("/\r$/", "", $bucket->data);
+            $bucket->data = $bucket->data . "\r\n";
+            $consumed += $bucket->datalen;
+            stream_bucket_append($out, $bucket);
+        }
+        return PSFS_PASS_ON;
     }
 }
