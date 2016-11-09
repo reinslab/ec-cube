@@ -1,0 +1,19 @@
+Plugin\ProductOption\Entity\Master\Type:
+    type: entity
+    table: plg_productoption_mtb_type
+    repositoryClass: Plugin\ProductOption\Repository\Master\TypeRepository
+    id:
+        id:
+            type: smallint
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        name:
+            type: text
+            nullable: true
+        rank:
+            type: smallint
+            nullable: false
+            unsigned: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,19 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<dd>
+    <p>
+    {% if plgShipmentItems[no] is defined %}
+        {% for label in plgShipmentItems[no] %}
+            {% if loop.index0 != 0%}<br />{% endif %}{{ label }}
+        {% endfor %}
+    {% endif %}
+    </p>
+</dd>

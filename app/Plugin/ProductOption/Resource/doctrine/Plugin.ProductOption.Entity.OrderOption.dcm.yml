@@ -1,0 +1,33 @@
+Plugin\ProductOption\Entity\OrderOption:
+    type: entity
+    table: plg_productoption_dtb_order_option
+    repositoryClass: Plugin\ProductOption\Repository\OrderOptionRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: order_option_id
+            generator:
+                strategy: AUTO
+    fields:
+        serial:
+            type: text
+            nullable: true
+        order_id:
+            type: integer
+            nullable: true
+    manyToOne:
+        Order:
+            targetEntity: Eccube\Entity\Order
+            joinColumn:
+                name: order_id
+                referencedColumnName: order_id
+                nullable: false
+    oneToMany:
+        OrderOptionItems:
+            targetEntity: Plugin\ProductOption\Entity\OrderOptionItem
+            mappedBy: OrderOption
+            cascade: ["persist"]
+    lifecycleCallbacks: {  }

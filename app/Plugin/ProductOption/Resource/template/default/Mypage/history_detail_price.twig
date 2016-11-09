@@ -1,0 +1,15 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% set option_price = 0 %}
+{% if plgOrderDetails['price'][OrderDetail.id] is defined %}
+    {% set option_price = plgOrderDetails['price'][OrderDetail.id] %}
+{% endif %}
+{% if OrderDetail.product and OrderDetail.price_inc_tax != OrderDetail.productClass.price02IncTax + option_price %}

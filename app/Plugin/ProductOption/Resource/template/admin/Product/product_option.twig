@@ -1,0 +1,130 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['product', 'product_master'] %}
+
+{% block title %}商品管理{% endblock %}
+{% block sub_title %}商品登録(オプション){% endblock %}
+
+{% form_theme optionForm 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+    <script>
+        $(function () {
+            // 登録チェックボックス
+            $('#add-all').click(function () {
+                var addall = $('#add-all').prop('checked');
+                if (addall) {
+                    $('input[id$=_add]').prop('checked', true);
+                } else {
+                    $('input[id$=_add]').prop('checked', false);
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    商品名 : <h3 class="box-title">{{ Product.name }}</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body" style="padding-bottom: 30px;">
+                    <div>
+
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+        </div><!-- /.col -->
+    </div>
+
+
+    {% if Options is not null %}
+        <form id="product-class-form" class="form-inline" method="post" action="{{ url('admin_product_product_option_edit', { id : Product.id}) }}">
+            {{ form_widget(optionForm._token) }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        {% if Options|length > 0 %}
+                            <div class="box-header">
+
+                            </div><!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <div class="table_list">
+                                    <div class="table-responsive with-border table-menu">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">登録<input id="add-all" type="checkbox" value="0"></th>
+                                                    <th>オプション管理名</th>
+                                                    <th>オプション表示名</th>
+                                                    <th>タイプ</th>
+                                                    <th>説明画面</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for productOption in optionForm.product_options %}
+                                                    {{ form_widget(productOption.option_id) }}
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            {{ form_widget(productOption.add) }}
+                                                        </td>
+                                                        <td>
+                                                            {{ productOption.vars.value.Option.manage_name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ productOption.vars.value.Option.name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ productOption.vars.value.Option.type }}
+                                                        </td>
+                                                        <td>
+                                                            {% if productOption.vars.value.Option.description_flg == 1 %}○{% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body --> 
+                        {% else %}
+                            <div class="box-header">
+                                <h3 class="box-title">検索条件に該当するデータがありませんでした。</h3>
+                            </div><!-- /.box-header -->
+                        {% endif %}
+                    </div><!-- /.box --> 
+                </div><!-- /.col --> 
+            </div>
+
+            {% if Options|length > 0 %}
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" name="mode" value="edit">登録</button>
+                        <p style="margin-top: 10px;">
+                            <a href="{{ url('admin_product_product_option_rank', { id : Product.id }) }}" class="btn btn-info btn-block btn-lg">並び替え</a><br />
+                            <a href="{{ url('admin_product') }}">商品マスターページに戻る</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,22 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<div id="add_productoption_list"
+     style="display: none;"
+    data-prototype="
+        {% filter escape %}
+            <div style="display: none">
+                {% set optionPrototype = plgForm.AddProductOptions.vars.prototype %}
+                {{ form_widget(optionPrototype.option_id) }}
+                {{ form_widget(optionPrototype.value) }}
+            </div>
+        {% endfilter %}"
+     >
+</div>
