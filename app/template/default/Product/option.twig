@@ -32,8 +32,8 @@ textarea.form-control {
                 {% if ProductOption.Option.description_flg == 1 %}
                     &nbsp;<a href="?" id="option_description_link_{{ ProductOption.Option.id }}">詳細説明</a>
                 {% endif %}
-            </li>
-            <li>
+            <!-- /li>
+            <li --><br />
                 {{ form_widget(form[value] ,{ attr : { onChange : 'onOptionChange()' }} ) }}
                 {{ form_errors(form[value]) }}
             </li>
