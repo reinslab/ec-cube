@@ -63,6 +63,9 @@ class WellDirectController extends AbstractController
         // 見積情報作成
         $app['eccube.service.shopping']->estimatePurchase($Order);
 
+		//商品オプション保存
+        $Order = $app['eccube.productoption.service.shopping']->customOrder($Order);
+
         // DB更新
         $app['orm.em']->persist($Order);
         $app['orm.em']->flush($Order);

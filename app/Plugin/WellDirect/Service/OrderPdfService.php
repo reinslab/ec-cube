@@ -352,12 +352,13 @@ class OrderPdfService extends AbstractFPDIService
         // 商品オプション取得
         // =========================================
 		$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
+		$plgOrderOption = null;
+		$arrLabels = array();
 		$serial = null;
 		if ( !is_null($plgOrderDetail) ) {
 			$plgOrderOption = $plgOrderDetail->getOrderOption();
-			$serial = $plgOrderDetail->getSerial();
+			$arrLabels = $plgOrderOption->getLabel();
 		}
-
         // =========================================
         // 購入者情報部
         // =========================================
@@ -431,6 +432,14 @@ class OrderPdfService extends AbstractFPDIService
         	$product_class_name2 = $order_detail->getClassCategoryName2();
         	$this->lfText(30, 96,  $class_name1 . '：' . $product_class_name1 , 9, '');
         	$this->lfText(30, 100, $class_name2 . '：' . $product_class_name2 , 9, '');
+        	//商品オプション
+        	$base_y = 104;
+        	foreach($arrLabels as $idx => $label) {
+        		//区切り文字を全角にする
+        		$label = str_replace(':', '：', $label);
+	        	$this->lfText(30, $base_y,  $label , 9, '');
+	        	$base_y = $base_y + 4;
+        	}
         }
 
 		//明細(全パターン共通)
