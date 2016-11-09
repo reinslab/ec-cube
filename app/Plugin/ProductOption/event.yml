@@ -1,0 +1,59 @@
+Admin/Product/index.twig:
+    - [onRenderAdminProduct, NORMAL]
+Admin/Order/edit.twig:
+    - [onRenderAdminOrderEdit, NORMAL]
+Admin/Order/search_product.twig:
+    - [onRenderAdminOrderSearchProduct, NORMAL]
+Admin/Order/mail_confirm.twig:
+    - [onRenderAdminOrderMailConfirm, NORMAL]
+Admin/Order/mail_all_confirm.twig:
+    - [onRenderAdminOrderMailAllConfirm, NORMAL]
+Product/detail.twig:
+    - [onRenderProductDetail, NORMAL]
+Cart/index.twig:
+    - [onRenderCart, NORMAL]
+    - [onRenderCartPoint, LAST]
+Shopping/index.twig:
+    - [onRenderShopping, NORMAL]
+    - [onRenderShoppingPoint, LAST]
+Shopping/shipping_multiple.twig:
+    - [onRenderShoppingMultiple, NORMAL]
+Mypage/index.twig:
+    - [onRenderMypage, NORMAL]
+Mypage/history.twig:
+    - [onRenderMypageHistory, NORMAL]
+    
+front.product.detail.initialize:
+    - [addCart, NORMAL]
+front.shopping.index.initialize:
+    - [customOrder, NORMAL]
+front.shopping.shipping.multiple.initialize:
+    - [multipleShippingEdit, NORMAL]
+front.shopping.confirm.processing:
+    - [completeShopping, FIRST]
+    - [completeShoppingPoint, LAST]
+front.shopping.confirm.complete:
+    - [completeSendOrderMail, NORMAL]
+front.shopping.complete.initialize:
+    - [completeShopping, NORMAL]
+service.shopping.notify.complete:
+    - [onServiceShoppingNotifyComplete, LAST]
+front.mypage.mypage.order.initialize:
+    - [mypageOrder, NORMAL]
+admin.order.edit.index.complete:
+    - [registOrder, NORMAL]
+admin.order.mail.index.complete:
+    - [copmleteSendAdminOrderMail, NORMAL]
+eccube.event.route.admin_order_export_order.controller:
+    - [exportOrder, NORMAL]
+eccube.event.route.admin_order_export_shipping.controller:
+    - [exportShipping, NORMAL]
+mail.order:
+    - [onSendOrderMail, NORMAL]
+mail.admin.order:
+    - [onSendAdminOrderMail, NORMAL]
+
+eccube.event.render.admin_order_new.before:
+    - [changePrice, NORMAL]
+eccube.event.render.admin_order_edit.before:
+    - [changePrice, NORMAL]

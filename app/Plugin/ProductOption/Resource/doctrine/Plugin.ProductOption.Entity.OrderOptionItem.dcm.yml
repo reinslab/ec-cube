@@ -1,0 +1,53 @@
+Plugin\ProductOption\Entity\OrderOptionItem:
+    type: entity
+    table: plg_productoption_dtb_order_option_item
+    repositoryClass: Plugin\ProductOption\Repository\OrderOptionItemRepository
+    id:
+        order_option_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+        option_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+        optioncategory_id:
+            type: integer
+            nullabele: true
+            unsigned: false
+        value:
+            type: text
+            nullable: true
+        option_name:
+            type: text
+            nullable: true            
+        option_category_name:
+            type: text
+            nullable: true
+        price:
+            type: integer
+            nullable: true
+            
+    manyToOne:
+        OrderOption:
+            targetEntity: Plugin\ProductOption\Entity\OrderOption
+            joinColumn:
+                name: order_option_id
+                referencedColumnName: order_option_id
+                nullable: false
+        Option:
+            targetEntity: Plugin\ProductOption\Entity\Option
+            joinColumn:
+                name: option_id
+                referencedColumnName: option_id
+                nullable: false
+        OptionCategory:
+            targetEntity: Plugin\ProductOption\Entity\OptionCategory
+            joinColumn:
+                name: optioncategory_id
+                referencedColumnName: optioncategory_id
+                nullable: true
+    lifecycleCallbacks: {  }

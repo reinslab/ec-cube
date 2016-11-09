@@ -1,0 +1,39 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+        var list = $('#add_productoption_list');
+        var Widget = list.attr('data-prototype');
+        var newWidget = null;
+        var idx = 0;
+        var optionIds = {{ optionIds }};
+        var option_id = null;
+        
+        for (key in optionIds){
+            option_id = optionIds[key];
+            var $sele_option = $row.find('[name=productoption'+ option_id +']');
+            if($sele_option && $sele_option.length){
+                var id = $sele_option.prop("id");
+                if(id.match(/^productoption\d[\d_]*\d$/)){
+                    var type = $sele_option.attr('type');
+                    if(type == 'radio'){
+                        value = $row.find("input[name='productoption" + option_id + "']:checked").val();
+                    }else{
+                        value = $sele_option.val();
+                    }
+                    newWidget = Widget.replace(/__name__/g, idx);
+                    $newWidget = $(newWidget);
+                    $newWidget.find('#plg_productoption_order_AddProductOptions_' + idx + '_option_id').val( option_id );
+                    $newWidget.find('#plg_productoption_order_AddProductOptions_' + idx + '_value').val(value);
+                    list.append($newWidget);
+                    idx++;
+                }
+            }
+        }
+

@@ -1,0 +1,31 @@
+Plugin\ProductOption\Entity\ShipmentItem:
+    type: entity
+    table: plg_productoption_dtb_shipment_item
+    repositoryClass: Plugin\ProductOption\Repository\ShipmentItemRepository
+    id:
+        item_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+        order_option_id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+    fields:
+
+    manyToOne:
+        ShipmentItem:
+            targetEntity: Eccube\Entity\ShipmentItem
+            joinColumn:
+                name: item_id
+                referencedColumnName: item_id
+                nullable: false
+        OrderOption:
+            targetEntity: Plugin\ProductOption\Entity\OrderOption
+            joinColumn:
+                name: order_option_id
+                referencedColumnName: order_option_id
+                nullable: false
+    lifecycleCallbacks: {  }

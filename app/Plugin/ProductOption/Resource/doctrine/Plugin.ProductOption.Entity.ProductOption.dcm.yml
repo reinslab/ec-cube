@@ -1,0 +1,41 @@
+Plugin\ProductOption\Entity\ProductOption:
+    type: entity
+    table: plg_productoption_dtb_product_option
+    repositoryClass: Plugin\ProductOption\Repository\ProductOptionRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: product_option_id
+            generator:
+                strategy: AUTO
+    fields:
+        product_id:
+            type: integer
+            nullable: false
+            unsigned: false
+        option_id:
+            type: integer
+            nullable: false
+            unsigned: false
+        rank:
+            type: integer
+            nullable: true
+    manyToOne:
+        Product:
+            targetEntity: Eccube\Entity\Product
+            inversedBy: ProductOption
+            joinColumn:
+                name: product_id
+                referencedColumnName: product_id
+                nullable: false
+        Option:
+            targetEntity: Plugin\ProductOption\Entity\Option
+            inversedBy: ProductOption
+            joinColumn:
+                name: option_id
+                referencedColumnName: option_id
+                nullable: false
+    lifecycleCallbacks: {  }

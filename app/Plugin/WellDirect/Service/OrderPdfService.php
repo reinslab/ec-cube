@@ -348,7 +348,15 @@ class OrderPdfService extends AbstractFPDIService
         // フォント情報のバックアップ
         $this->backupFont();
         
-        
+        // =========================================
+        // 商品オプション取得
+        // =========================================
+		$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
+		$serial = null;
+		if ( !is_null($plgOrderDetail) ) {
+			$plgOrderOption = $plgOrderDetail->getOrderOption();
+			$serial = $plgOrderDetail->getSerial();
+		}
 
         // =========================================
         // 購入者情報部

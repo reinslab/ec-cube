@@ -1,0 +1,42 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+<style>
+.form-control {
+  width: 100%;
+}
+
+textarea.form-control {
+  height: 7em;
+}
+
+@media only screen and (min-width: 768px) {
+  .form-control {
+    width: 350px;
+  }
+}
+</style>
+
+{% if ProductOptions is defined %}
+    <ul class="classcategory_list">
+        {% for ProductOption in ProductOptions %}
+            {% set value = 'productoption' ~ ProductOption.Option.id %}
+            <li>{{ form_label(form[value]) }}
+                {% if ProductOption.Option.description_flg == 1 %}
+                    &nbsp;<a href="?" id="option_description_link_{{ ProductOption.Option.id }}">詳細説明</a>
+                {% endif %}
+            </li>
+            <li>
+                {{ form_widget(form[value] ,{ attr : { onChange : 'onOptionChange()' }} ) }}
+                {{ form_errors(form[value]) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

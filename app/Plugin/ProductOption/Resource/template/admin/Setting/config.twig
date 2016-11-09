@@ -1,0 +1,131 @@
+{#
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+#}
+
+{% extends 'default_frame.twig' %}
+{% set menus = ['setting', 'admin_setting_productoption'] %}
+{% block title %}基本情報設定{% endblock %}
+{% block sub_title %}商品オプションプラグイン設定{% endblock %}
+
+{% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+<script>
+var setModeAndSubmit = function(mode, keyname, keyid) {
+    document.form1.mode.value = mode;
+    if(keyname !== undefined && keyname !== "" && keyid !== undefined && keyid !== "") {
+        document.form1[keyname].value = keyid;
+    }
+    document.form1.submit();
+};
+</script>
+{% endblock javascript %}
+
+{% block main %}
+            <form role="form" name="form1" id="form1" method="post" action="" >
+            <input type="hidden" name="mode" value="regist">
+            {{ form_widget(form._token) }}
+            <div class="row" id="aside_wrap">
+                <div class="col-md-9">
+                    <div class="box form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                {{ form_label(form.tpl_option) }}
+                                <div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.tpl_option, { attr : { 'rows' : 15, style : 'font-size:12px' } }) }}
+                                    {{ form_errors(form.tpl_option) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-9 col-lg-10">
+                                    <a href="?" onClick="setModeAndSubmit('init1','',''); return false;" class="btn btn-info btn-block btn-lg">初期状態に戻す</a><br />
+                                    商品詳細ページのオプション選択表示部のデザイン編集を行われる際にご使用ください。<br />
+                                    <span style="color:#F00;">※「id="option_description_link_{{ '{{' }} ProductOption.Option.id {{ '}}' }}"」<br />
+                                    についてはポップアップ表示処理で必要な記述ですので削除・変更されないようにお願いいたします。</span><br />
+                                    商品詳細ページ中に&nbsp;&lt;!-- option --&gt;&nbsp;を記述するとその位置に上記のHTMLが挿入されます。<br />
+                                    買い物かごの&lt;form&gt;～&lt;/form&gt;の間であれば有効です。
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.tpl_option_description) }}
+                                <div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.tpl_option_description, { attr : { 'rows' : 15, style : 'font-size:12px' } }) }}
+                                    {{ form_errors(form.tpl_option_description) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-9 col-lg-10">
+                                    <a href="?" onClick="setModeAndSubmit('init2','',''); return false;" class="btn btn-info btn-block btn-lg">初期状態に戻す</a><br />
+                                    商品詳細ページのオプション説明ポップアップ画面のデザイン調整を行われる際に設定されてください。<br />
+                                    <span style="color:#F00;">※「id="option_description_{{ '{{' }} Option.id {{ '}}' }}" class="option_description"」<br />
+                                    についてはポップアップ表示処理で必要な記述ですので削除・変更されないようにお願いいたします。
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.tpl_option_price) }}
+                                <div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.tpl_option_price, { attr : { 'rows' : 15, style : 'font-size:12px' } }) }}
+                                    {{ form_errors(form.tpl_option_price) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-9 col-lg-10">
+                                    <a href="?" onClick="setModeAndSubmit('init3','',''); return false;" class="btn btn-info btn-block btn-lg">初期状態に戻す</a><br />
+                                    商品詳細ページ上でのオプション価格の合計表示部のデザイン調整を行われる際に設定されてください。<br />
+                                    <span style="color:#F00;">※「id="option_price_default"」「id="option_price_inctax_default"」<br />
+                                    については動的処理を行う際に必要になりますので削除・変更されないようにお願いいたします。</span><br />
+                                    商品詳細ページ中に&nbsp;&lt;!-- option_price --&gt;&nbsp;を記述するとその位置に上記のHTMLが挿入されます。<br />
+                                    </span>
+                                </div>
+                            </div>
+                            {% if enablePoint %}
+                            <div class="form-group">
+                                {{ form_label(form.tpl_option_point) }}
+                                <div class="col-sm-9 col-lg-10">
+                                    {{ form_widget(form.tpl_option_point, { attr : { 'rows' : 15, style : 'font-size:12px' } }) }}
+                                    {{ form_errors(form.tpl_option_point) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-9 col-lg-10">
+                                    <a href="?" onClick="setModeAndSubmit('init4','',''); return false;" class="btn btn-info btn-block btn-lg">初期状態に戻す</a><br />
+                                    商品詳細ページ上でのオプションポイントの合計表示部のデザイン調整を行われる際に設定されてください。<br />
+                                    <span style="color:#F00;">「id="option_point_default"」<br />
+                                    については動的処理を行う際に必要になりますので削除・変更されないようにお願いいたします。</span><br />
+                                    商品詳細ページ中に&nbsp;&lt;!-- option_point --&gt;&nbsp;を記述するとその位置に上記のHTMLが挿入されます。<br />
+                                    </span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="col_inner" id="aside_column">
+                        <div class="box no-header">
+                            <div class="box-body">
+                                <div class="row text-center">
+                                    <div class="col-sm-6 col-sm-offset-3 col-md-12 col-md-offset-0">
+                                        <button class="btn btn-primary btn-block btn-lg" onclick="document.form1.submit();">登録</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+{% endblock %}
