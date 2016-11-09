@@ -349,16 +349,18 @@ class OrderPdfService extends AbstractFPDIService
         $this->backupFont();
         
         // =========================================
-        // 商品オプション取得
+        // 商品オプション取得(商品オプションプラグインが有効な場合のみ)
         // =========================================
-		$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
-		$plgOrderOption = null;
 		$arrLabels = array();
-		$serial = null;
-		if ( !is_null($plgOrderDetail) ) {
-			$plgOrderOption = $plgOrderDetail->getOrderOption();
-			$arrLabels = $plgOrderOption->getLabel();
-		}
+        if ( array_key_exists('eccube.productoption.repository.order_detail', $this->app) && is_object($this->app['eccube.productoption.repository.order_detail']) ) {
+			$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
+			$plgOrderOption = null;
+			$serial = null;
+			if ( !is_null($plgOrderDetail) ) {
+				$plgOrderOption = $plgOrderDetail->getOrderOption();
+				$arrLabels = $plgOrderOption->getLabel();
+			}
+        }
         // =========================================
         // 購入者情報部
         // =========================================

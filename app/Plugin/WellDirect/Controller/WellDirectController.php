@@ -63,8 +63,10 @@ class WellDirectController extends AbstractController
         // 見積情報作成
         $app['eccube.service.shopping']->estimatePurchase($Order);
 
-		//商品オプション保存
-        $Order = $app['eccube.productoption.service.shopping']->customOrder($Order);
+		//商品オプション保存(商品オプションプラグインが有効な場合のみ)
+		if ( array_key_exists('eccube.productoption.service.shopping', $app) && is_object($app['eccube.productoption.service.shopping']) ) {
+	        $Order = $app['eccube.productoption.service.shopping']->customOrder($Order);
+		}
 
         // DB更新
         $app['orm.em']->persist($Order);
