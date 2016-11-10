@@ -1,2 +1,4 @@
 eccube.event.render.admin_order.before:
     - [onRenderAdminOrderBefore, NORMAL]
+eccube.event.render.admin_order_page.before:
+    - [onRenderAdminOrderBefore, NORMAL]
