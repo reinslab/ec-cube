@@ -245,6 +245,10 @@ class TransportCSVexportB2Controller
                                     }
                                 }
                                 break;
+                            // 発行枚数
+                            case 'cnt':                                                     // customized by wellco
+                                $data = $Shipping->offsetGet('shipping_delivery_count');    // customized by wellco
+                                break;                                                      // customized by wellco
                         }
                         // ご請求先顧客コード
                         if (is_null($data) && $Csv->getFieldName() == 'cstmr_code' && isset($this->subData['billing_code'])) {
