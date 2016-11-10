@@ -352,7 +352,7 @@ class OrderPdfService extends AbstractFPDIService
         // 商品オプション取得(商品オプションプラグインが有効な場合のみ)
         // =========================================
 		$arrLabels = array();
-        if ( array_key_exists('eccube.productoption.repository.order_detail', $this->app) && is_object($this->app['eccube.productoption.repository.order_detail']) ) {
+        if ( is_object($this->app['eccube.productoption.repository.order_detail']) ) {
 			$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
 			$plgOrderOption = null;
 			$serial = null;
