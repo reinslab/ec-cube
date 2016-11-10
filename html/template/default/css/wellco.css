@@ -20,18 +20,21 @@ h1.header_logo{
 }
 .category-nav{
 	text-align: left !important;
-	background-color:crimson;
 	border-style: none !important;
+	background-image: -webkit-linear-gradient(270deg,rgba(167,203,163,1.00) 0%,rgba(11,110,0,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(167,203,163,1.00) 0%,rgba(11,110,0,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(167,203,163,1.00) 0%,rgba(11,110,0,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(167,203,163,1.00) 0%,rgba(11,110,0,1.00) 100%);
 }
 .category-nav li a:hover{
 	background-color: #FFFFFF;
-	color: #crimson;
+
 }
 .category-nav li.mainmenu>a{
 	color: #FFFFFF;
 }
 .category-nav li.mainmenu>a:hover{
-    color: #B90003;
+	color: #025F04;
 }
 .top-img{
     width: 1120px;
