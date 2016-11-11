@@ -466,7 +466,7 @@ $(function(){
 		                                </tr>
 		                                {% for item in ProductClass1 %}
 		                                <tr>
-		                                <td style="padding:5px;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }})" /></td>
+		                                <td style="padding:5px;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }});setCate2Value('{{ item.price01 }}','{{item.price02}}','{{item.product_code}}');" /></td>
 		                                <td style="width:100px;padding:5px;">{{ item.class_name }}</td>
 		                                <td style="width:100px;padding:5px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
 		                                </tr>
