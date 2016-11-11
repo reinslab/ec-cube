@@ -364,6 +364,22 @@ h1.header_logo{
 	color: #FF5656;
 	font-weight: bold;
 }
+.sehaba {
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border: 4px double #C7C7C7;
+	border-collapse: collapse;
+}
+.sehaba td {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border: 1px solid #BFBFBF;
+}
+
+
 
 
 
