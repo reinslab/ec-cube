@@ -40,6 +40,11 @@ h1.header_logo{
     width: 1120px;
     margin: 0 auto;
 }
+
+#calendar{
+	float: left;
+	width: 100%;
+}
 #item_list2{
 	float: left;
 	width: 100%;
