@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>{{ BaseInfo.shop_name }}{% if subtitle is defined and subtitle is not empty %} / {{ subtitle }}{% elseif title is defined and title is not empty %} / {{ title }}{% endif %}</title>
+<title>{% if subtitle is defined and subtitle is not empty %}{{ subtitle }} / {% elseif title is defined and title is not empty %}{{ title }} / {% endif %}{{ BaseInfo.shop_name }}</title>
 {% if PageLayout.author is not empty %}
     <meta name="author" content="{{ PageLayout.author }}">
 {% endif %}

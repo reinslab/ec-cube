@@ -21,19 +21,20 @@ h1.header_logo{
 .category-nav{
 	text-align: left !important;
 	border-style: none !important;
-	background-image: -webkit-linear-gradient(270deg,rgba(71,210,194,1.00) 0%,rgba(0,193,171,1.00) 100%);
-	background-image: -moz-linear-gradient(270deg,rgba(71,210,194,1.00) 0%,rgba(0,193,171,1.00) 100%);
-	background-image: -o-linear-gradient(270deg,rgba(71,210,194,1.00) 0%,rgba(0,193,171,1.00) 100%);
-	background-image: linear-gradient(180deg,rgba(71,210,194,1.00) 0%,rgba(0,193,171,1.00) 100%);
+	background-image: -webkit-linear-gradient(270deg,rgba(223,6,21,1.00) 0%,rgba(176,31,36,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(223,6,21,1.00) 0%,rgba(176,31,36,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(223,6,21,1.00) 0%,rgba(176,31,36,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(223,6,21,1.00) 0%,rgba(176,31,36,1.00) 100%);
 }
 .category-nav li a:hover{
 	background-color: #FFFFFF;
+
 }
 .category-nav li.mainmenu>a{
 	color: #FFFFFF;
 }
 .category-nav li.mainmenu>a:hover{
-	color: #025F04;
+	color: #B40000;
 }
 .top-img{
     width: 1120px;

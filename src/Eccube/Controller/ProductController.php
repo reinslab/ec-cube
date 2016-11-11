@@ -241,6 +241,7 @@ class ProductController
 	        $tmp = array();
 	        $tmp['product_id'] = $ProductClass->getProduct()->getId();
 	        $tmp['product_class_id'] = $ProductClass->getId();
+	        $tmp['product_code'] = $ProductClass->getCode();
 	        if ( $objClassCategory != null ) {
 		        $tmp['class_name'] = $objClassCategory->getName();
 		        $tmp['class_category_id'] = $objClassCategory->getId();
