@@ -10,6 +10,7 @@
 -------------------------------- */
 h1.header_logo a{
 	opacity: 0;
+    font-size: 10px;
 }
 h1.header_logo{
 	background-image: url(../img/top/logo.png);
