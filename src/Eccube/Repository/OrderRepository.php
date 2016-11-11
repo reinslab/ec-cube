@@ -269,14 +269,17 @@ class OrderRepository extends EntityRepository
                 ->andWhere('o.id >= :order_id_start')
                 ->setParameter('order_id_start', $searchData['order_id_start']);
         }
+
         // multi
         if (isset( $searchData['multi']) && Str::isNotBlank($searchData['multi'])) {
-            $multi = preg_match('/^\d+$/', $searchData['multi']) ? $searchData['multi'] : null;
+        	// U => Bug.数字しか取得しない
+            //$multi = preg_match('/^\d+$/', $searchData['multi']) ? $searchData['multi'] : null;
+            $multi = $searchData['multi'];
+        	// U => Bug.数字しか取得しない
             //formにセットされていない場合はREQUESTから再セット
             if ( is_null($multi) ) {
             	$multi = $_REQUEST['admin_search_order']['multi'];
             }
-
             $qb
                 ->andWhere('o.id = :multi OR o.name01 LIKE :likemulti OR o.name02 LIKE :likemulti OR ' .
                            'o.kana01 LIKE :likemulti OR o.kana02 LIKE :likemulti OR o.company_name LIKE :likemulti OR ' .
