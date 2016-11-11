@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+/* --------------------------------
+	Holiday calendar style
+-------------------------------- */
+#calendar {
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+.calendar_title {
+    font-weight: bold;
+	padding-left: 10px;
+}
+#calendar .holiday {
+    background: #ff6347;
+    color: #ffffff;
+}
+#calendar .holiday_red {
+    background: #ff0000;
+    color: #ffffff;
+}
+#calendar thead {
+    border: 1px solid #CCCCCC;
+}
+
+#calendar th {
+    border: 1px solid #CCCCCC;
+    background-color: #000;
+    color: #fff;
+}
+
+#calendar td {
+    text-align: center;
+    border: 1px solid #CCCCCC;
+    background: #FFFFFF;
+    color: #554130;
+    width: 50px;
+}
+#calendar th#saturday {
+    color: #6495ed;
+}
+#calendar th#sunday {
+    color: #ff6347;
+}
+#calendar table {
+    margin-top: 10px;
+    padding: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
