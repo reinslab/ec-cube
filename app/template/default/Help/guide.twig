@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <div class="guide-h2">入稿データの扱いについて</div>
                         <div class="image-center col-md-10 col-md-offset-1">
                         <div class="guide-caption">
-                        お客様から入稿していただくデータの形式は<strong>「PDF/X-4」</strong>で統一しております。それ以外の形式ではお受けできません。<br>
+                        お客様から入稿していただくデータの形式は現在、<strong>「PDF/X-1a」</strong>と<strong>「PDF/X-4」</strong>としております。それ以外の形式ではお受けできません。<br>
                         注文時にアップロードできるファイルの形式も、<strong>「PDFファイル」</strong>か、それらをまとめ、圧縮した<strong>「ZIPファイル」</strong>のみとなっております。<br>
                         冊子のように<strong>表紙と本文でPDFデータが別となる場合</strong>、また<strong>複数商品をカートに入れて同時に発注する場合</strong>などは、<br>
                         それぞれの<strong>PDFファイルをZIPファイルにまとめて</strong>アップロードして下さい。<br><br>
@@ -70,7 +70,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         ②購入する内容の確認画面に移り、商品や購入個数に間違いがないか確認します。　この状態で<b>「カートを保存する」</b>のボタンを押すことで、マイページより見積書のPDFをダウンロードすることができます。</div></div>
                         <div class="image-center col-md-6"><img src="{{ app.config.front_urlpath }}/img/top/flow3.jpg" width="260" height="260">
                         <div class="guide-caption caption-indent">
-                        ③<b>「レジに進む」</b>ボタンを押すと、注文内容の最終確認画面となります。ここで配送先を変更したり、支払い方法を選択することができます。また印刷製品の場合、印刷に必要な<em>入稿データ</em>をここからアップロードします。<em>入稿データ</em>の作成方法については、<a href="#">【データ作成ガイド】</a>をご覧ください。</div></div>
+                        ③<b>「レジに進む」</b>ボタンを押すと、注文内容の最終確認画面となります。ここで配送先を変更したり、支払い方法を選択することができます。また印刷製品の場合、印刷に必要な<em>入稿データ</em>をここからアップロードします。<em>入稿データ</em>の作成方法については、<a href="{{ url(app.config.user_data_route, {"route": "creation"} )}} ">【データ作成ガイド】</a>をご覧ください。</div></div>
                         <div class="image-center col-md-6"><img src="{{ app.config.front_urlpath }}/img/top/flow4.jpg" width="260" height="260">
                         <div class="guide-caption caption-indent">
                         ④<b>「注文する」</b>ボタンを押すと注文情報がシステムに送信され購入が確定します。購入した内容の詳細や、支払い方法で銀行振込を選択した際に必要になる、入金の方法や入金先口座について記載したリターンメールがとどきますのでご確認ください。</div></div>
