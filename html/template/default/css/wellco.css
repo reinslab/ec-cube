@@ -404,7 +404,7 @@ h1.header_logo{
 	border-bottom-style: none;
 }
 #calendar{
-	padding-top: 0px !important;
+	margin-top: 0px !important;
 	}
 
 @media only screen and (max-width: 767px) {
