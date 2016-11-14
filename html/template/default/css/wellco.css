@@ -403,7 +403,9 @@ h1.header_logo{
 .newslist{
 	border-bottom-style: none;
 }
-
+#calendar{
+	padding-top: 0px !important;
+	}
 
 @media only screen and (max-width: 767px) {
 .item_gallery li{
