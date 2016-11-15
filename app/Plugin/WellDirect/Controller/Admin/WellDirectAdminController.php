@@ -170,7 +170,7 @@ $app->log("ret = " . $ret);
 */
         return $app
             ->sendFile($zip_filepath)
-            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filepath);
+            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filename);
     }
 
 	public function remove_directory($dir) {
