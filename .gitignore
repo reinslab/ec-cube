@@ -13,6 +13,7 @@ composer.phar
 /app/template/*
 !/app/template/admin
 !/app/template/default
+/html/install.php
 /html/plugin/*
 !/html/plugin/.gitkeep
 /html/install/temp/*
