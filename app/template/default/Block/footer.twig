@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <div class="container-fluid inner">
     <ul>
         <!--li><a href="{{ url('help_about') }}">当サイトについて</a></li-->
+<li><a href="{{ url('help_agreement') }}" target="_blank">利用規約</a></li>
         <li><a href="{{ url('help_privacy') }}">個人情報に関する取扱いについて</a></li>
         <li><a href="{{ url('help_tradelaw') }}">特定商取引法に基づく表記</a></li>
         <li><a href="{{ url('contact') }}">お問い合わせ</a></li>
@@ -30,7 +31,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         <p class="logo"><a href="{{ url('homepage') }}"><img src="{{ app.config.front_urlpath }}/img/top/logo.png"></a></p>
 <!--<p class="logo"><a href="{{ url('homepage') }}">{{ BaseInfo.shop_name }}</a></p>-->
         <p class="copyright">
-            <small>copyright (c) 2015-2016 {{ BaseInfo.shop_name }} all rights reserved.</small>
+            <small>copyright (c) 2016 {{ BaseInfo.shop_name }} all rights reserved.</small>
         </p>
     </div>
 </div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-87340330-1', 'auto');
+  ga('send', 'pageview');
+</script>

@@ -13,7 +13,8 @@
                         <div class="guide-caption">
                         各ページ数の時に、冊子の背幅がどれだけになるかの一覧です。<br>
                         データ作成の際には、注文されるページ数に合わせて、冊子の表紙データ内の背幅を調整し、正しいサイズで制作したデータを入稿してください。</div>
-<br>
+
+<div class="guide-caption">
  <table class="sehaba col-md-5 col-xs-11">
   <col span="2">
   <tr bgcolor="#FFFAB6">
@@ -184,8 +185,49 @@
     <td align="right">40.70mm</td>
   </tr>
 </table>
-                   
-                
+</div>
+<br clear=both>
+<br>
+<br>
+                   <div class="guide-h2">冊子の入稿データ作成時の注意点</div>
+                <div class="guide-caption">
+■表紙は、<b>指定のテンプレートを使用(背幅部分は編集が必要)</b>してください。<br>
+　本文は、<b>ページ数分だけテンプレートを複製して</b>ご使用ください。<br>
+<br>
+■本文データのファイル名には、必ず<b>ページ番号を記載</b>してください。　<br>
+<br>
+■ページ番号は、<b>本文1ページ目をp1として、表紙ページ（4ページ分）を含めない数</b>になります。<br>
+　<b>以下の条件</b>に気をつけてデータ作成・入稿をおこなってください。<br>
+<br>
+　テンプレート名は以下のようになっております。<br>
+　　・表紙オモテ:「h■-h■_A4_hyousi_○○○.ai」　※■には表1〜4に合わせて表紙番号を入れてください。<br>
+　　・本文　「p●●●_A4（サイズ名）_honbun_○○○.ai」<br>
+　　※●には、本文1ページ目＝p001・・・として数えた「ページ番号」をページファイルごとにつけてください。<br>
+　　※○には、「半角英数」で共通の名前をつけてください。　<br><br>
+<img src="{{ app.config.front_urlpath }}/img/top/sassi-guide1.png">
+</div>
+<div class="guide-caption">
+■入稿は、<b>指定形式のPDFデータで</b>お願いします。<br>
+　入稿形式は「PDF/X-4もしくはPDF/X-1a形式のPDFデータのみ」となります。<br>
+　IllustratorやIndesign、Officeなどアプリケーションデータでの入稿は受付けておりません。<br><br>
+<img src="{{ app.config.front_urlpath }}/img/top/sassi-guide2.png"><br>
+　【Illustraotorでデータ作成される場合】<br>
+　　テンプレートにデザインを配置した状態でPDFを書き出してください。<br>
+<br>
+　【Indesign／Photoshopでデータ作成される場合】<br>
+　　仕上りサイズで作成した各ページに、トンボを付けた状態でPDFを書き出してください。
+</div>
+<div class="guide-caption">
+■書き出した<b>PDFは、zipファイルにまとめて</b>入稿ください。<br>
+書き出したPDFデータはひとつのフォルダにまとめてzip圧縮し、ご入稿ください。<br><br>
+アップロードできる<b>ファイルサイズの上限は、300MB</b>となっております。<br>
+データサイズが300MBを超えている場合は、<b>サイト上で受注することができません</b>ので、<br>
+<a href="{{ url('contact') }}">お問い合わせフォーム</a>より別途、ご相談下さい。<br><br>
+<img src="{{ app.config.front_urlpath }}/img/top/sassi-guide3.png">
+
+
+</div>
+         
                       </div><!-- /.col -->
                     </div><!-- /.row -->
 
