@@ -28,6 +28,7 @@ use Eccube\Application;
 use Eccube\Entity\MailHistory;
 use Eccube\Common\Constant;
 use Eccube\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception as HttpException;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,6 +50,7 @@ class WellDirectAdminController extends AbstractController
     {
     
     	$arrOids = array();
+        $file = new Filesystem();
     	
     	//ダウンロード対象の受注番号
     	if ( is_numeric($id) ) {
@@ -75,7 +77,7 @@ class WellDirectAdminController extends AbstractController
     	
     	// ディレクトリが無ければ作成
     	if (!is_dir($pdf_download_dir) ) {
-    		@mkdir($pdf_download_dir, 0777, true);
+    		$file->mkdir($pdf_download_dir);
     	}
     	
     	// ファイルをコピーする
@@ -96,30 +98,27 @@ class WellDirectAdminController extends AbstractController
             $custom_order_id = $TargetOrder->getCustomOrderId();
             
             //一時ディレクトリにファイルコピ
-            @copy($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
+            $file->copy($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
     	}
     	
-    	//フォルダごと圧縮(Linux環境限定)
-    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
-    	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
-    	
-    	// 圧縮
-    	exec($command, $out, $ret);
-    	
-    	//ZIPファイル移動
-    	@copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
-    	
-    	// 一時ディレクトリ削除
-    	$this->remove_directory($pdf_download_dir);
-$app->log("pdf_download_dir = " . $pdf_download_dir);
-$app->log("zip_filename = " . $zip_filepath);
-$app->log("command = " . $command);
-if ( is_array($out) ) {
-	foreach($out as $abc) {
-$app->log($abc);
-	}
-}
-$app->log("ret = " . $ret);
+    	//Linuxの場合のみ
+    	if ( PHP_OS == 'Linux' ) {
+	    	//フォルダごと圧縮(Linux環境限定)
+	    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
+	    	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
+	    	
+	    	// 圧縮
+	    	exec($command, $out, $ret);
+	    	
+	    	//ZIPファイル移動
+	    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
+	    	
+	    	// 一時ディレクトリ削除
+	    	$this->remove_directory($pdf_download_dir);
+    	} else {
+    		//Windowsの場合は空ファイルを作成する
+    		$file->touch($zip_filepath);
+    	}
    	
 /*    	【ZipArchiveはメモリ消費が激しいので使用中止】
         $zip = new \ZipArchive();
