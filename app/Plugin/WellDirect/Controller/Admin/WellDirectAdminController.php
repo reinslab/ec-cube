@@ -110,6 +110,7 @@ class WellDirectAdminController extends AbstractController
     	//$this->remove_directory($pdf_download_dir);
 $app->log("pdf_download_dir = " . $pdf_download_dir);
 $app->log("zip_filename = " . $zip_filepath);
+$app->log("command = " . $command);
    	
 /*    	【ZipArchiveはメモリ消費が激しいので使用中止】
         $zip = new \ZipArchive();
