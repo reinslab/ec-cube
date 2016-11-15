@@ -100,14 +100,17 @@ class WellDirectAdminController extends AbstractController
     	}
     	
     	//フォルダごと圧縮(Linux環境限定)
-    	$command = "cd " . $app['config']['image_temp_realdir'] . ";zip " . $zip_filename . " ./" . $nowTime . "/*";
+    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
     	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
     	
     	// 圧縮
     	exec($command, $out, $ret);
     	
+    	//ZIPファイル移動
+    	@copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
+    	
     	// 一時ディレクトリ削除
-    	//$this->remove_directory($pdf_download_dir);
+    	$this->remove_directory($pdf_download_dir);
 $app->log("pdf_download_dir = " . $pdf_download_dir);
 $app->log("zip_filename = " . $zip_filepath);
 $app->log("command = " . $command);
