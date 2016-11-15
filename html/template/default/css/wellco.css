@@ -10,7 +10,7 @@
 -------------------------------- */
 h1.header_logo a{
 	opacity: 0;
-    font-size: 10px;
+    font-size: 24px;
 }
 h1.header_logo{
 	background-image: url(../img/top/logo.png);
@@ -57,6 +57,10 @@ h1.header_logo{
 	border: 1px solid #E3E3E3;
 	margin-bottom: 15px;
 	float: left;
+	background-image: -webkit-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(249,249,249,1.00) 100%);
+	background-image: -moz-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(249,249,249,1.00) 100%);
+	background-image: -o-linear-gradient(270deg,rgba(255,255,255,1.00) 0%,rgba(249,249,249,1.00) 100%);
+	background-image: linear-gradient(180deg,rgba(255,255,255,1.00) 0%,rgba(249,249,249,1.00) 100%);
 }
 #item_list2 .item_photo{
 	float: left;
@@ -376,7 +380,7 @@ h1.header_logo{
 	padding-left: 5px;
 	border: 4px double #C7C7C7;
 	border-collapse: collapse;
-	margin-left: 8%;
+	margin-left: 5%;
 }
 .sehaba td {
 	padding-top: 10px;
@@ -386,9 +390,19 @@ h1.header_logo{
 	border: 1px solid #BFBFBF;
 }
 
-
-
-
+#news_area{
+	background-color: #FFFFFF;
+	/*border: 1px solid #F3F3F3;*/
+}
+#news_area .heading01{
+	padding-top: 0px;
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-bottom: 0px;
+}
+.newslist{
+	border-bottom-style: none;
+}
 
 @media only screen and (max-width: 767px) {
 .item_gallery li{
@@ -457,12 +471,17 @@ h1.header_logo{
 .search_inner{
 	float: left;
 	width: 100%;
-	padding-bottom: 50px;
+	padding-bottom: 15px;
+	margin-bottom: 35px;
+	padding-top: 15px;
+	background-color: #F5F5F5;
+	border-radius: 5px;
 }
 .search_inner .input_search{
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
+	background-color: #FFFFFF;
 }
 }
 @media only screen and (min-width: 852px) {
@@ -484,13 +503,31 @@ h1.header_logo{
 #cart_area{
 	padding-top: 10px;
 }
+.theme_side_right #main,.news_contents{
+	width: 78%;
+	}
 #main_middle{
 	width: 100%;
-    padding-bottom: 20px !important;
+    /*padding-bottom: 20px !important;*/
 }
+#main_middle .row{
+	margin-left:0px !important;
+	}
+#main_middle .col-sm-12{
+	padding-left:0px !important;
+	}
+#side_right{
+	width: 22%;
+	}
+#side_right .col-sm-12{
+	padding-left:16px !important;
+	padding-right:0px !important;
+	}
+	
+	
 .slick-dots{
 	position: relative;
-	margin-top: -80px;
+	margin-top: -30px;
 }
 /*ログイン名表示*/
 #welcome{
