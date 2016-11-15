@@ -99,8 +99,8 @@ class WellDirectAdminController extends AbstractController
     	}
     	
     	//フォルダごと圧縮(Linux環境限定)
-    	$command = "cd " . $app['config']['image_temp_realdir'] . ";zip " . $zip_filename . " ./" . $nowTime . "/*";
-    	//$command = "zip " . $zip_filename . " ./" . $app['config']['image_temp_realdir'] . "/" . $nowTime . "/*";
+    	//$command = "cd " . $app['config']['image_temp_realdir'] . ";zip " . $zip_filename . " ./" . $nowTime . "/*";
+    	$command = "zip " . $zip_filename . " ./" . $app['config']['image_temp_realdir'] . "/" . $nowTime . "/*";
     	
     	// 圧縮
     	exec($command);
