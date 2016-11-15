@@ -71,6 +71,7 @@ class WellDirectAdminController extends AbstractController
 
 		// ダウンロードファイル名
         $zip_filename = 'order_uploadfile_' . $nowTime . '.zip';
+        $zip_filepath = $app['config']['image_temp_realdir'] . '/' . $zip_filename;
     	
     	// ディレクトリが無ければ作成
     	if (!is_dir($pdf_download_dir) ) {
@@ -100,7 +101,7 @@ class WellDirectAdminController extends AbstractController
     	
     	//フォルダごと圧縮(Linux環境限定)
     	//$command = "cd " . $app['config']['image_temp_realdir'] . ";zip " . $zip_filename . " ./" . $nowTime . "/*";
-    	$command = "zip " . $zip_filename . " ./" . $app['config']['image_temp_realdir'] . "/" . $nowTime . "/*";
+    	$command = "zip " . $zip_filepath . " ./" . $pdf_download_dir . "/*";
     	
     	// 圧縮
     	exec($command);
@@ -108,7 +109,7 @@ class WellDirectAdminController extends AbstractController
     	// 一時ディレクトリ削除
     	//$this->remove_directory($pdf_download_dir);
 $app->log("pdf_download_dir = " . $pdf_download_dir);
-$app->log("zip_filename = " . $zip_filename);
+$app->log("zip_filename = " . $zip_filepath);
    	
 /*    	【ZipArchiveはメモリ消費が激しいので使用中止】
         $zip = new \ZipArchive();
@@ -162,7 +163,7 @@ $app->log("zip_filename = " . $zip_filename);
 */
         return $app
             ->sendFile($zip_filepath)
-            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filename);
+            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filepath);
     }
 
 	public function remove_directory($dir) {
