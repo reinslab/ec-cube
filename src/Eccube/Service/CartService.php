@@ -249,18 +249,12 @@ class CartService
                 ->getRepository('Eccube\Entity\ProductClass')
                 ->find($ProductClass);
             if (!$ProductClass) {
-            	#900 Exceptionでのエラー通知回避
-	            $this->addError('cart.product.delete');
-	            return $this;
-//                throw new CartException('cart.product.delete');
+                throw new CartException('cart.product.delete');
             }
         }
         if ($ProductClass->getProduct()->getStatus()->getId() !== Disp::DISPLAY_SHOW) {
             $this->removeProduct($ProductClass->getId());
-           	#900 Exceptionでのエラー通知回避
-            $this->addError('cart.product.not.status');
-            return $this;
-            //throw new CartException('cart.product.not.status');
+            throw new CartException('cart.product.not.status');
         }
 
         $productName = $ProductClass->getProduct()->getName();
@@ -277,10 +271,8 @@ class CartService
         if (count($deliveries) == 0) {
             // 商品種別が存在しなければエラー
             $this->removeProduct($ProductClass->getId());
-           	#900 Exceptionでのエラー通知回避
             $this->addError('cart.product.not.producttype', $productName);
-            return $this;
-            //throw new CartException('cart.product.not.producttype');
+            throw new CartException('cart.product.not.producttype');
         }
 
         $this->setCanAddProductType($ProductClass->getProductType());
@@ -288,19 +280,12 @@ class CartService
         if ($this->BaseInfo->getOptionMultipleShipping() != Constant::ENABLED) {
             if (!$this->canAddProduct($ProductClass->getId())) {
                 // 複数配送対応でなければ商品種別が異なればエラー
-            	#900 Exceptionでのエラー通知回避
-	            $this->addError('cart.product.type.kind');
-	            return $this;
-                //throw new CartException('cart.product.type.kind');
+                throw new CartException('cart.product.type.kind');
             }
         } else {
             // 複数配送の場合、同一支払方法がなければエラー
             if (!$this->canAddProductPayment($ProductClass->getProductType())) {
-                // 複数配送対応でなければ商品種別が異なればエラー
-            	#900 Exceptionでのエラー通知回避
-	            $this->addError('cart.product.payment.kind');
-	            return $this;
-                //throw new CartException('cart.product.payment.kind');
+                throw new CartException('cart.product.payment.kind');
             }
 
         }

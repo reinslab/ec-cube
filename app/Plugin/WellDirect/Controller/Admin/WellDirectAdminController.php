@@ -28,7 +28,6 @@ use Eccube\Application;
 use Eccube\Entity\MailHistory;
 use Eccube\Common\Constant;
 use Eccube\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception as HttpException;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +49,6 @@ class WellDirectAdminController extends AbstractController
     {
     
     	$arrOids = array();
-        $file = new Filesystem();
     	
     	//ダウンロード対象の受注番号
     	if ( is_numeric($id) ) {
@@ -64,83 +62,15 @@ class WellDirectAdminController extends AbstractController
     			}
     		}
     	}
-    	
-        $now = new \DateTime();
-        $nowTime = $now->format('YmdHis');
-    	
-    	// PDFダウンロード一時ディレクトリ作成
-    	$pdf_download_dir = $app['config']['image_temp_realdir'] . '/' . $nowTime;
-
-		// ダウンロードファイル名
-        $zip_filename = 'order_uploadfile_' . $nowTime . '.zip';
-        $zip_filepath = $app['config']['image_temp_realdir'] . '/' . $zip_filename;
-    	
-    	// ディレクトリが無ければ作成
-    	if (!is_dir($pdf_download_dir) ) {
-    		$file->mkdir($pdf_download_dir);
-    	}
-    	
-    	// ファイルをコピーする
-    	foreach($arrOids as $oid) {
-    		//受注データ取得
-            $TargetOrder = $app['eccube.repository.order']->find($oid);
-            if (is_null($TargetOrder)) {
-                throw new NotFoundHttpException();
-            }
-
-            //PDFファイルが無い場合はスキップする
-            if ( $TargetOrder->getPdfFileName() == '' ) {
-            	continue;
-            }
-            
-
-			//カスタム注文ID
-            $custom_order_id = $TargetOrder->getCustomOrderId();
-            
-            //一時ディレクトリにファイルコピ
-            $file->copy($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
-    	}
-    	
-    	//Linuxの場合のみ
-    	if ( PHP_OS == 'Linux' ) {
-	    	//フォルダごと圧縮(Linux環境限定)
-	    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
-	    	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
-	    	
-	    	// 圧縮
-	    	exec($command, $out, $ret);
-	    	
-	    	//ZIPファイル移動
-	    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
-	    	
-	    	// 一時ディレクトリ削除
-	    	$this->remove_directory($pdf_download_dir);
-    	} else {
-    		//Windowsの場合は空ファイルを作成する
-    		$file->touch($zip_filepath);
-    	}
-   	
-/*    	【ZipArchiveはメモリ消費が激しいので使用中止】
         $zip = new \ZipArchive();
         $now = new \DateTime();
 
-		//メモリの上限を一時的に増やす
-		ini_set('memory_limit', '3096M');
-		
         $zip_filename = 'order_uploadfile_' . $now->format('YmdHis') . '.zip';
         $zip_filepath = $app['config']['image_temp_realdir'] . '/' . $zip_filename;
         $result = $zip->open($zip_filepath, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE);
     
     	//PDFダウンロード
-    	$index = 0;
     	foreach($arrOids as $oid) {
-    		//配列サイズを超えたら終了
-    		if ( count($arrOids) <= $index ) {
-    			break;
-    		}
-    		$oid = $arrOids[$index];
-    		$index++;
-    		
             $TargetOrder = $app['eccube.repository.order']->find($oid);
             if (is_null($TargetOrder)) {
                 throw new NotFoundHttpException();
@@ -152,49 +82,22 @@ class WellDirectAdminController extends AbstractController
             }
             
             $custom_order_id = $TargetOrder->getCustomOrderId();
-            
-            ob_start();
             $zip->addFromString($custom_order_id . '_' . $TargetOrder->getPdfFileName(), file_get_contents($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName()));
-            while(ob_get_level() > 0) {
-            	ob_end_clean();
-            }
-
-			//１ファイル毎に５分ずつ拡張する
-			set_time_limit(300);
             
             //受注ステータス更新
             $OrderStatus = $app['eccube.repository.order_status']->find($app['config']['order_data_check_now']);
             $orderRepository = $app['orm.em']->getRepository('Eccube\Entity\Order');
+            $orderRepository->changeStatus($oid, $OrderStatus);
     	}
     	
     	//クローズ
     	$zip->close();
-*/
+
         return $app
             ->sendFile($zip_filepath)
             ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filename);
     }
 
-	public function remove_directory($dir) {
-
-		// 一時ディレクトリ削除
-		if ($handle = opendir("$dir")) {
-			while (false !== ($item = readdir($handle))) {
-				if ($item != "." && $item != "..") {
-					if (is_dir("$dir/$item")) {
-						$this->remove_directory("$dir/$item");
-					} else {
-						unlink("$dir/$item");
-						//echo " removing $dir/$item<br>\n";
-					}
-				}
-			}
-			closedir($handle);
-			rmdir($dir);
-			//echo "removing $dir<br>\n";
-		}
-	}
-	
     /**
      * 印刷開始通知
      *
