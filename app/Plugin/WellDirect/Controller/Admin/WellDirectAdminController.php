@@ -65,6 +65,9 @@ class WellDirectAdminController extends AbstractController
         $zip = new \ZipArchive();
         $now = new \DateTime();
 
+		//メモリの一時的に上限を増やす
+		ini_set('memory_limit', '1024M');
+		
         $zip_filename = 'order_uploadfile_' . $now->format('YmdHis') . '.zip';
         $zip_filepath = $app['config']['image_temp_realdir'] . '/' . $zip_filename;
         $result = $zip->open($zip_filepath, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE);
