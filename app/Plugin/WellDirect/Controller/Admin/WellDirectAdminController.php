@@ -105,8 +105,8 @@ class WellDirectAdminController extends AbstractController
     	//exec($command);
     	
     	// 一時ディレクトリ削除
-    	$this->remove_directory($pdf_download_dir);
-
+    	//$this->remove_directory($pdf_download_dir);
+$app->log("pdf_download_dir = " . $pdf_download_dir);
    	
 /*    	【ZipArchiveはメモリ消費が激しいので使用中止】
         $zip = new \ZipArchive();
@@ -173,13 +173,13 @@ class WellDirectAdminController extends AbstractController
 						$this->remove_directory("$dir/$item");
 					} else {
 						unlink("$dir/$item");
-						echo " removing $dir/$item<br>\n";
+						//echo " removing $dir/$item<br>\n";
 					}
 				}
 			}
 			closedir($handle);
 			rmdir($dir);
-			echo "removing $dir<br>\n";
+			//echo "removing $dir<br>\n";
 		}
 	}
 	
