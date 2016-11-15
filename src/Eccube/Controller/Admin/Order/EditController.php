@@ -191,6 +191,7 @@ class EditController extends AbstractController
                             }
                         }
                         
+
 // A => 入金日保存
                         // 入金日が未設定の場合
                         if ( is_null($TargetOrder->getPaymentDate()) ) {
@@ -218,9 +219,17 @@ class EditController extends AbstractController
 	                        $app['orm.em']->persist($TargetOrder);
 	                        $app['orm.em']->flush();
                         }
-                        
 // A => 入金日保存
 
+// A => 配送日保存
+						// ステータスが配送済みで配送日が設定されていなければ自動設定する
+						if ( is_null($TargetOrder->getCommitDate()) && $TargetOrder->getOrderStatus()->getId() == $app['config']['order_deliv'] ) {
+							$TargetOrder->setCommitDate(new \DateTime());
+	                        $app['orm.em']->persist($TargetOrder);
+	                        $app['orm.em']->flush();
+						}
+// A => 配送日保存
+                        
 
                         $Customer = $TargetOrder->getCustomer();
                         if ($Customer) {
