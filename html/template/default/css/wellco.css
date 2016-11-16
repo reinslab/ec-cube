@@ -549,11 +549,10 @@ h1.header_logo{
 	}
 #detail_cart_box .errormsg{
 	padding-top: 5px;
-	padding-bottom: 5px;
 	background-color: #DD080C;
 	color: #FFFFFF;
 	font-weight: bold;
 	padding-left: 5px;
-	margin-top: 4px;
+	margin-top: 4px !important;
 	width: 70%;
 	}
