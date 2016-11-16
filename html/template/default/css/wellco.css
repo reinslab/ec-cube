@@ -538,6 +538,11 @@ h1.header_logo{
 }
 
 
-
-
 }
+#shopping-form .errormsg{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #DD080C;
+	color: #FFFFFF;
+	font-weight: bold;
+	}
