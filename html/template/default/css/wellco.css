@@ -555,3 +555,6 @@ h1.header_logo{
 	padding-left: 5px;
 	width: 70%;
 	}
+#item_list .item_price{
+    color: #DE5D50;
+}
