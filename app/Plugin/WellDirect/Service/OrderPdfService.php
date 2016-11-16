@@ -79,6 +79,12 @@ class OrderPdfService extends AbstractFPDIService
 
     /** 発行日 @var unknown */
     private $issueDate = "";
+    
+    /** 行数 */
+    private $line_number = 0;
+    
+    /** Y座標(明細部) */
+    private $coordinates_y = 96;
 
     /**
      * Font情報のバックアップ
@@ -162,24 +168,112 @@ class OrderPdfService extends AbstractFPDIService
 		$objOrderDetail = $this->order_data->getOrderDetails();
 		$order_count  = $objOrderDetail->count();
 		$arrOrderDetail = $objOrderDetail->toArray();
-
-		for($i=0; $i<$order_count; $i++) {
-			
-            // PDFにページを追加する
-            $this->addPdfPage();
-            
-            // ページ番号設定
-            $this->lfText(180, 10, ($i+1) . '/' . $order_count, 7, '');
 		
-            // タイトルを描画する
-            $this->renderTitle('御 見 積 書');
+		$next_page = true;
+		$page_count = 1;
+		$total_price = 0;
+		$flg_total_price = false; //合計金額印字フラグ
+		foreach ($arrOrderDetail as $index => $order_detail) {
+		
+			// 次ページフラグがONの場合のみ
+			if ( $next_page ) {
+		        // PDFにページを追加する
+		        $this->addPdfPage();
+		        
+		        // ページ番号設定
+		        //$this->lfText(180, 10, $this->getPage(), 7, '');
+			
+		        // タイトルを描画する
+		        $this->renderTitle('御 見 積 書');
 
-            // 店舗情報を描画する
-            $this->renderShopData();
+		        // =========================================
+		        // 購入者情報部
+		        // =========================================
+		        // 郵便番号
+		        //$text = '〒 '.$order->getZip01() . ' - ' . $order->getZip02();
+		        //$this->lfText(23, 43, $text, 10);
 
-            // 注文情報を描画する
-            $this->renderOrderData($this->order_data, $arrOrderDetail[$i]);
-        }
+		        // 購入者都道府県+住所1
+		        //$text = $order->getPref() . $order->getAddr01();
+		        //$this->lfText(27, 47, $text, 10);
+		        //$this->lfText(27, 51, $order->getAddr02(), 10); //購入者住所2
+
+				// 購入企業名
+				$text = $this->order_data->getCompanyName();
+		        $this->lfText(18, 40, $text, 11);
+				
+		        // 購入者氏名
+		        $text = $this->order_data->getName01() . '　' . $this->order_data->getName02() . '　様';
+		        $this->lfText(18, 47, $text, 11);
+
+		        // =========================================
+		        // 固定文章
+		        // =========================================
+		        $this->SetFont(self::FONT_SJIS, '', 8);
+		        $this->lfText(18, 54, ' 毎度格別のお引き立てを賜り、厚く御礼申し上げます。', 8);
+		        $this->lfText(18, 58, '下記のとおり御見積もりいたしました。', 8);
+		        $this->lfText(18, 62, ' ご検討のうえ、ご用命賜りますようお願い致します。', 8);
+
+		        // =========================================
+		        // 右上表示
+		        // =========================================
+		        //見積番号
+		        $this->lfText(165, 25, 'No. ' . $this->order_data->getCustomOrderId(), 6);
+		        //見積作成日
+		        $this->lfText(162, 28, $this->order_data->getCreateDate()->format('Y年m月d日'), 8);
+		        //キャッチフレーズ
+		        $this->lfText(151, 32, '"私たちはお客様に安心品質を', 7, 'I');
+		        $this->lfText(158, 35, 'お届けします"', 7, 'I');
+
+		        // =========================================
+		        // お買上げ明細ヘッダ
+		        // =========================================
+		        //品名(固定)
+		        $this->lfText(18, 77, '御見積明細', 10, '');
+		        
+		        //項目名
+		        $this->lfText(55, 86.5, '項　　目', 9, '');
+		        $this->lfText(120, 86.5, '数　量', 9, '');
+		        $this->lfText(146, 86.5, '単　価', 9, '');
+		        $this->lfText(172, 86.5, '金　額', 9, '');
+				
+		        // 店舗情報を描画する
+		        $this->renderShopData();
+
+				// 改ページフラグをOFFにする
+		        $next_page = false;
+
+				// 合計金額初期化
+				$total_price = 0;
+				$flg_total_price = false;
+			}
+
+	        // 注文情報を描画する
+	        $this->renderOrderData($this->order_data, $order_detail);
+	        
+	        // 金額加算
+	        $total_price += $order_detail->getPrice() * $order_detail->getQuantity();
+		        
+	        // 行数が一定を超えたら改ページ
+	        if ( $this->coordinates_y > 200 ) {
+	        	$next_page = true;
+	        	$page_count++;
+	        	$this->coordinates_y = 96;
+	        	
+	        	$flg_total_price = true;
+	        }
+	        
+	        // 最終ページの場合
+			if ( $index == (count($arrOrderDetail) - 1) ) {
+	        	$flg_total_price = true;
+			}
+
+			// 合計金額印字フラグがONの場合に印字する
+			if ( $flg_total_price ) {
+	        	//合計金額セット
+		    	$this->lfText(173, 243.5, '￥ ' . number_format($total_price), 9, '');
+			}
+		}
 
         return true;
     }
@@ -209,6 +303,7 @@ class OrderPdfService extends AbstractFPDIService
      * フッターに発行日を出力する
      */
     public function Footer() {
+        $this->Cell(0, 0, $this->getPage(), 0, 0, 'C');
         $this->Cell(0, 0, $this->issueDate, 0, 0, 'R');
     }
     /**
@@ -362,100 +457,75 @@ class OrderPdfService extends AbstractFPDIService
 			}
         }
         // =========================================
-        // 購入者情報部
-        // =========================================
-        // 郵便番号
-        //$text = '〒 '.$order->getZip01() . ' - ' . $order->getZip02();
-        //$this->lfText(23, 43, $text, 10);
-
-        // 購入者都道府県+住所1
-        //$text = $order->getPref() . $order->getAddr01();
-        //$this->lfText(27, 47, $text, 10);
-        //$this->lfText(27, 51, $order->getAddr02(), 10); //購入者住所2
-
-		// 購入企業名
-		$text = $order->getCompanyName();
-        $this->lfText(18, 40, $text, 11);
-		
-        // 購入者氏名
-        $text = $order->getName01() . '　' . $order->getName02() . '　様';
-        $this->lfText(18, 47, $text, 11);
-
-        // =========================================
-        // 固定文章
-        // =========================================
-        $this->SetFont(self::FONT_SJIS, '', 8);
-        $this->lfText(18, 54, ' 毎度格別のお引き立てを賜り、厚く御礼申し上げます。', 8);
-        $this->lfText(18, 58, '下記のとおり御見積もりいたしました。', 8);
-        $this->lfText(18, 62, ' ご検討のうえ、ご用命賜りますようお願い致します。', 8);
-
-        // =========================================
-        // 右上表示
-        // =========================================
-        //見積番号
-        $this->lfText(165, 25, 'No. ' . $order->getCustomOrderId(), 6);
-        //見積作成日
-        $this->lfText(162, 28, $order->getCreateDate()->format('Y年m月d日'), 8);
-        //キャッチフレーズ
-        $this->lfText(151, 32, '"私たちはお客様に安心品質を', 7, 'I');
-        $this->lfText(158, 35, 'お届けします"', 7, 'I');
-
-        // =========================================
         // お買い上げ明細部
         // =========================================
-        //品名
-        $product_name = $order_detail->getProductName();
-        $this->lfText(18, 77, '品名：' . $product_name, 10, '');
         
-        //項目名
-        $this->lfText(55, 86.5, '項　　目', 9, '');
-        $this->lfText(120, 86.5, '数　量', 9, '');
-        $this->lfText(146, 86.5, '単　価', 9, '');
-        $this->lfText(172, 86.5, '金　額', 9, '');
+        //商品名
+        $product_name = $order_detail->getProductName();
+       	$this->lfText(25, $this->coordinates_y, $product_name, 9, '');
+
+		//明細(全パターン共通)
+    	//数量
+    	$this->lfText(130, $this->coordinates_y, number_format($order_detail->getQuantity()), 9, '');
+    	//単価
+    	$this->lfText(152, $this->coordinates_y, number_format($order_detail->getPrice()), 9, '');
+    	//金額
+    	$this->lfText(176, $this->coordinates_y, number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
+
+       	$this->coordinates_y += 4;
         
         //明細(商品情報)
         $class_name1 = $order_detail->getClassName1();
         $class_name2 = $order_detail->getClassName2();
         
         //規格有無で表示を分岐
-        if ( $class_name1 == '' && $class_name2 == '' ) {
-        	//実物販売は商品名を出力
-        	$this->lfText(30, 96, $product_name, 9, '');
-        } else 
         if ( $class_name1 != '' && $class_name2 == '' ) {
         	$product_class_name1 = $order_detail->getClassCategoryName1();
         	//印刷物(規格2なし)の場合は規格を出力
-        	$this->lfText(30, 96, $class_name1 . '：' . $product_class_name1 , 9, '');
+        	$this->lfText(30, $this->coordinates_y, $class_name1 . '：' . $product_class_name1 , 9, '');
+	       	$this->coordinates_y += 4;
         	
-        } else 
-        {
+        } else {
         	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
         	$product_class_name1 = $order_detail->getClassCategoryName1();
         	$product_class_name2 = $order_detail->getClassCategoryName2();
-        	$this->lfText(30, 96,  $class_name1 . '：' . $product_class_name1 , 9, '');
-        	$this->lfText(30, 100, $class_name2 . '：' . $product_class_name2 , 9, '');
-        	//商品オプション
-        	$base_y = 104;
-        	foreach($arrLabels as $idx => $label) {
-        		//区切り文字を全角にする
-        		$label = str_replace(':', '：', $label);
-	        	$this->lfText(30, $base_y,  $label , 9, '');
-	        	$base_y = $base_y + 4;
-        	}
+        	$this->lfText(30, $this->coordinates_y,  $class_name1 . '：' . $product_class_name1 , 9, '');
+	       	$this->coordinates_y += 4;
+        	$this->lfText(30, $this->coordinates_y, $class_name2 . '：' . $product_class_name2 , 9, '');
+	       	$this->coordinates_y += 4;
         }
-
-		//明細(全パターン共通)
-    	//数量
-    	$this->lfText(130, 96, number_format($order_detail->getQuantity()), 9, '');
-    	//単価
-    	$this->lfText(152, 96, number_format($order_detail->getPrice()), 9, '');
-    	//金額
-    	$this->lfText(176, 96, number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
-    	//合計
-    	$this->lfText(176, 243.5, '￥ ' . number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
+        
+    	//商品オプション
+    	foreach($arrLabels as $idx => $label) {
+    		//区切り文字を全角にする
+    		$label = str_replace(':', '：', $label);
+    		if ( mb_strlen($label, 'utf-8') > 40 ) {
+    			$length = ceil(mb_strlen($label, 'utf-8') / 40);
+    			$arrTmp = array();
+    			$start = 0;
+    			for($i=0; $i<=$length; $i++) {
+    				$arrTmp[] = mb_substr($label, $start, 40, 'utf-8');
+    				$start += 40;
+    			}
+    			foreach($arrTmp as $tmp) {
+    				if ( $tmp == '' ) {
+    					continue;
+    				}
+		        	$this->lfText(30, $this->coordinates_y,  $tmp . '[' . $this->coordinates_y . ']', 9, '');
+			       	$this->coordinates_y += 4;
+    			}
+    			//$label = mb_strcut($label, 0, 50, 'utf-8') . '...';
+    		} else {
+	        	$this->lfText(30, $this->coordinates_y,  $label . '[' . $this->coordinates_y . ']' , 9, '');
+		       	$this->coordinates_y += 4;
+    		}
+    	}
 
         // フォント情報の復元
         $this->restoreFont();
+
+		// 間隔調整
+	    $this->coordinates_y += 10;
     }
 
     /**
