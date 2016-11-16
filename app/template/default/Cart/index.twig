@@ -147,7 +147,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         <ul id="cart_item_list__quantity_edit">
                                             <li>
 {# U => 商品種別で表示制御 #}
-                                                {% if Product.hasProductClass %}
+                                                {% if flgPrintItem == true %}
 	                                                {% if CartItem.quantity > 1 %}
 	                                                    <a id="cart_item_list__down" href="{{ url('cart_down', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false" style="border:none;"></a>
 	                                                {% else %}
@@ -164,7 +164,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                             </li>
                                             <li>
 {# U => 商品種別で表示制御 #}
-                                                {% if Product.hasProductClass %}
+                                                {% if flgPrintItem == true %}
 	                                                <a id="cart_item_list__up" href="{{ url('cart_up', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false" style="border:none;"></a>
                                                 {% else %}
 	                                                <a id="cart_item_list__up" href="{{ url('cart_up', {'productClassId': ProductClass.id}) }}" {{ csrf_token_for_anchor() }} data-method="put" data-confirm="false"><svg class="cb cb-plus"><use xlink:href="#cb-plus" /></svg></a>
