@@ -512,12 +512,12 @@ class OrderPdfService extends AbstractFPDIService
     				if ( $tmp == '' ) {
     					continue;
     				}
-		        	$this->lfText(30, $this->coordinates_y,  $tmp . '[' . $this->coordinates_y . ']', 9, '');
+		        	$this->lfText(30, $this->coordinates_y,  $tmp, 9, '');
 			       	$this->coordinates_y += 4;
     			}
     			//$label = mb_strcut($label, 0, 50, 'utf-8') . '...';
     		} else {
-	        	$this->lfText(30, $this->coordinates_y,  $label . '[' . $this->coordinates_y . ']' , 9, '');
+	        	$this->lfText(30, $this->coordinates_y,  $label, 9, '');
 		       	$this->coordinates_y += 4;
     		}
     	}

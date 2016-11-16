@@ -77,6 +77,12 @@ function onOptionChange(){
     var $sele1 = $('form select[name=classcategory_id1]');
     var $sele2 = $('form select[name=classcategory_id2]');
 
+// A => 不具合修正
+    if (typeof $sele2.val() === 'undefined') {
+    	$sele2 = $('form input[name=classcategory_id2]');
+    }
+// A => 不具合修正
+
     var classcat_id1 = $sele1.val() ? $sele1.val() : '__unselected';
     var classcat_id2 = $sele2.val() ? $sele2.val() : '';
     classcat2 = eccube.classCategories[classcat_id1]['#' + classcat_id2];
