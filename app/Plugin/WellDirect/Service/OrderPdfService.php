@@ -485,7 +485,8 @@ class OrderPdfService extends AbstractFPDIService
         	$this->lfText(30, $this->coordinates_y, $class_name1 . '：' . $product_class_name1 , 9, '');
 	       	$this->coordinates_y += 4;
         	
-        } else {
+        } else
+        if ( $class_name1 != '' && $class_name2 != '' ) {
         	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
         	$product_class_name1 = $order_detail->getClassCategoryName1();
         	$product_class_name2 = $order_detail->getClassCategoryName2();
