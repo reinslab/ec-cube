@@ -479,21 +479,21 @@ class OrderPdfService extends AbstractFPDIService
         $class_name2 = $order_detail->getClassName2();
         
         //規格有無で表示を分岐
-        if ( $class_name1 != '' && $class_name2 == '' ) {
-        	$product_class_name1 = $order_detail->getClassCategoryName1();
-        	//印刷物(規格2なし)の場合は規格を出力
-        	$this->lfText(30, $this->coordinates_y, $class_name1 . '：' . $product_class_name1 , 9, '');
-	       	$this->coordinates_y += 4;
-        	
-        } else
-        if ( $class_name1 != '' && $class_name2 != '' ) {
-        	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
-        	$product_class_name1 = $order_detail->getClassCategoryName1();
-        	$product_class_name2 = $order_detail->getClassCategoryName2();
-        	$this->lfText(30, $this->coordinates_y,  $class_name1 . '：' . $product_class_name1 , 9, '');
-	       	$this->coordinates_y += 4;
-        	$this->lfText(30, $this->coordinates_y, $class_name2 . '：' . $product_class_name2 , 9, '');
-	       	$this->coordinates_y += 4;
+        if ( $class_name1 != '' ) {
+        	if ( $class_name2 == '' ) {
+	        	$product_class_name1 = $order_detail->getClassCategoryName1();
+	        	//印刷物(規格2なし)の場合は規格を出力
+	        	$this->lfText(30, $this->coordinates_y, $class_name1 . '：' . $product_class_name1 , 9, '');
+		       	$this->coordinates_y += 4;
+        	} else {
+	        	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
+	        	$product_class_name1 = $order_detail->getClassCategoryName1();
+	        	$product_class_name2 = $order_detail->getClassCategoryName2();
+	        	$this->lfText(30, $this->coordinates_y,  $class_name1 . '：' . $product_class_name1 , 9, '');
+		       	$this->coordinates_y += 4;
+	        	$this->lfText(30, $this->coordinates_y, $class_name2 . '：' . $product_class_name2 , 9, '');
+		       	$this->coordinates_y += 4;
+        	}
         }
         
     	//商品オプション
