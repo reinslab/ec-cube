@@ -37,3 +37,4 @@ composer.phar
 /nbproject/private/
 .DS_Store
 fabfile.*
+/html/index_dev.php
