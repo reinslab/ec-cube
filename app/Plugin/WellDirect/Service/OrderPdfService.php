@@ -428,14 +428,14 @@ class OrderPdfService extends AbstractFPDIService
 				if ( $class_name2 == '' ) {
 			    	$product_class_name1 = $order_detail->getClassCategoryName1();
 					//規格情報を付加する
-					$product_name_print = "\n" . "　　" . $class_name1 . '：' . $product_class_name1;
+					$product_name_print .= "\n" . "　　" . $class_name1 . '：' . $product_class_name1;
 				} else {
 			    	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
 			    	$product_class_name1 = $order_detail->getClassCategoryName1();
 			    	$product_class_name2 = $order_detail->getClassCategoryName2();
 
 					//規格情報を付加する
-					$product_name_print  = "\n";
+					$product_name_print .= "\n";
 					$product_name_print .= "　　" . $class_name1 . '：' . $product_class_name1 . "\n";
 					$product_name_print .= "　　" . $class_name2 . '：' . $product_class_name2;
 				}
