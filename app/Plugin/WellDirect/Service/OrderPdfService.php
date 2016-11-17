@@ -416,9 +416,8 @@ class OrderPdfService extends AbstractFPDIService
 			}
 
 			//商品名編集
-			$product_name_print = '';
 			$product_name = $order_detail->getProductName();
-
+			$product_name_print = $product_name;
 			
 			//明細(商品情報)
 			$class_name1 = $order_detail->getClassName1();
@@ -429,16 +428,16 @@ class OrderPdfService extends AbstractFPDIService
 				if ( $class_name2 == '' ) {
 			    	$product_class_name1 = $order_detail->getClassCategoryName1();
 					//規格情報を付加する
-					$product_name_print = $product_name . "\n" . "　　" . $class_name1 . '：' . $product_class_name1;
+					$product_name_print = "\n" . "　　" . $class_name1 . '：' . $product_class_name1;
 				} else {
 			    	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
 			    	$product_class_name1 = $order_detail->getClassCategoryName1();
 			    	$product_class_name2 = $order_detail->getClassCategoryName2();
 
 					//規格情報を付加する
-					$product_name_print  = $product_name . "\n";
+					$product_name_print  = "\n";
 					$product_name_print .= "　　" . $class_name1 . '：' . $product_class_name1 . "\n";
-					$product_name_print .= "　　" . $class_name2 . '：' . $product_class_name2 . "\n";
+					$product_name_print .= "　　" . $class_name2 . '：' . $product_class_name2;
 				}
 			}
 
@@ -459,11 +458,11 @@ class OrderPdfService extends AbstractFPDIService
 						if ( $tmp == '' ) {
 							continue;
 						}
-						$product_name_print .= "　　" . $tmp . "\n";
+						$product_name_print .= "\n　　" . $tmp . "\n";
 					}
 					//$label = mb_strcut($label, 0, 50, 'utf-8') . '...';
 				} else {
-					$product_name_print .= "　　" . $label . "\n";
+					$product_name_print .= "\n　　" . $label . "\n";
 				}
 			}
              
