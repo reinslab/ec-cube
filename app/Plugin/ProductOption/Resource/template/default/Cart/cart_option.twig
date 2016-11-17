@@ -8,8 +8,10 @@
 * file that was distributed with this source code.
 #}
 
+Key = {{ key }}
 {% if CartOptions[key] is defined %}
 <dd>
+test
     {% for label in CartOptions[key].label %}
         {% if loop.index0 != 0%}<br />{% endif %}{{ label }}
     {% endfor %}
