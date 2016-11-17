@@ -458,15 +458,16 @@ class OrderPdfService extends AbstractFPDIService
 						if ( $tmp == '' ) {
 							continue;
 						}
-						$product_name_print .= "\n　　" . $tmp . "\n";
+						$product_name_print .= "\n　　" . $tmp;
 					}
 					//$label = mb_strcut($label, 0, 50, 'utf-8') . '...';
 				} else {
-					$product_name_print .= "\n　　" . $label . "\n";
+					$product_name_print .= "\n　　" . $label;
 				}
 			}
              
             //空白調整
+            $product_name_print .= "\n";
             $product_name_print .= "\n";
             $product_name_print .= "\n";
 
