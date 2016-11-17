@@ -36,7 +36,7 @@ class ProductOptionCartService
         if ($this->session->has('cart')) {
             $this->cart = $this->session->get('cart');
         }
-        
+
         if ($this->session->has('cart_option')) {
             $this->cartOption = $this->session->get('cart_option');
         } else {
@@ -48,7 +48,6 @@ class ProductOptionCartService
     
     public function addProductOption($productClassId, $Options, $quantity = 1)
     {
-
         $cartItems = $this->cart->getCartItems();
         $cartItemOptions = $this->cartOption->getCartOptions();
         $quantity_index = array();
@@ -74,7 +73,6 @@ class ProductOptionCartService
         $quantity = $this->setProductQuantity($productClassId, $quantity, $cartNo);
 
         if($quantity <= 0)$add_option = false;
-
 
         //オプション情報を追加
         if($add_option){
@@ -194,6 +192,7 @@ class ProductOptionCartService
     
     public function upProductQuantity($productClassId, $cartNo)
     {
+
         $quantity = $this->getProductQuantityByCartNo($productClassId, $cartNo) + 1;
         $this->changeProductQuantity($productClassId, $cartNo, $quantity);
 
@@ -230,7 +229,13 @@ class ProductOptionCartService
         $cartItems = $this->cart->getCartItems();
         $cartItemOptions = $this->cartOption->getCartOptions();
         $tmp_quantity = 0;
-
+        
+// Bug. 配列内のオブジェクトが異なる場合がある
+		if ( get_class($cartItemOptions[$cartNo]) != 'OptionCartItem') {
+			$cartItemOption = new CartItemOption();
+			$cartItemOptions[$cartNo] = $cartItemOption;
+		}
+// Bug. 配列内のオブジェクトが異なる場合がある
         $set_quantity = $this->getProductQuantity($productClassId, $cartNo);
         $ProductClass = $this->app['eccube.repository.product_class']->find($productClassId);
 
