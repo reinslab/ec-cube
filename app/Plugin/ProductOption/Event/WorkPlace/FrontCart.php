@@ -28,7 +28,7 @@ class FrontCart extends AbstractWorkPlace
         $CartOption = $app['eccube.productoption.service.cart']->getCartOption();
         
         $source = $event->getSource();
-        
+$app->log("CartOption Length = " . count($CartOption));
         if(preg_match('/<.*id="cart_item_list__item_price"/',$source, $result)){
             $search = $result[0];
             $snipet = file_get_contents($app['config']['plugin_realdir']. '/ProductOption/Resource/template/default/Cart/cart_option.twig');
