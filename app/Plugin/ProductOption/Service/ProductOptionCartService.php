@@ -231,10 +231,12 @@ class ProductOptionCartService
         $tmp_quantity = 0;
         
 // Bug. 配列内のオブジェクトが異なる場合がある
+/*
 		if ( get_class($cartItemOptions[$cartNo]) != 'CartItemOption') {
 			$cartItemOption = new CartItemOption();
 			$cartItemOptions[$cartNo] = $cartItemOption;
 		}
+*/
 // Bug. 配列内のオブジェクトが異なる場合がある
         $set_quantity = $this->getProductQuantity($productClassId, $cartNo);
         $ProductClass = $this->app['eccube.repository.product_class']->find($productClassId);
