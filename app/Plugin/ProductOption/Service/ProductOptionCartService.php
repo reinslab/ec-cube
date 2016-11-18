@@ -231,7 +231,7 @@ class ProductOptionCartService
         $tmp_quantity = 0;
         
 // Bug. 配列内のオブジェクトが異なる場合がある
-		if ( get_class($cartItemOptions[$cartNo]) != 'OptionCartItem') {
+		if ( get_class($cartItemOptions[$cartNo]) != 'CartItemOption') {
 			$cartItemOption = new CartItemOption();
 			$cartItemOptions[$cartNo] = $cartItemOption;
 		}
