@@ -12,6 +12,7 @@
 namespace Plugin\ProductOption\ServiceProvider;
 
 use Eccube\Application;
+use Eccube\Common\Constant;
 use Silex\Application as BaseApplication;
 use Silex\ServiceProviderInterface;
 
@@ -142,6 +143,10 @@ class ProductOptionServiceProvider implements ServiceProviderInterface
         $app->put('/cart/up/{productClassId}/{cartNo}', '\Plugin\ProductOption\Controller\CartController::up')->bind('plg_productoption_cart_up')->assert('productClassId', '\d+')->assert('cartNo','\d+');
         $app->put('/cart/down/{productClassId}/{cartNo}', '\Plugin\ProductOption\Controller\CartController::down')->bind('plg_productoption_cart_down')->assert('productClassId', '\d+')->assert('cartNo','\d+');
         $app->put('/cart/remove/{productClassId}/{cartNo}', '\Plugin\ProductOption\Controller\CartController::remove')->bind('plg_productoption_cart_remove')->assert('productClassId', '\d+')->assert('cartNo','\d+');
+        
+        if(version_compare(Constant::VERSION,'3.0.11','>=')){
+            $app->match('/shopping/shipping_multiple', '\Plugin\ProductOption\Controller\ShoppingController::shippingMultiple')->bind('shopping_shipping_multiple');
+        }
         
         // locale message
         $app['translator'] = $app->share($app->extend('translator', function ($translator, \Silex\Application $app) {

@@ -11,6 +11,7 @@
 
 namespace Plugin\ProductOption;
 
+use Eccube\Common\Constant;
 use Eccube\Event\TemplateEvent;
 use Eccube\Event\EventArgs;
 use Plugin\ProductOption\Event\WorkPlace\AdminProduct;
@@ -43,10 +44,20 @@ class ProductOptionEvent
         $helper->createTwig($event);
     }
     
-    public function addCart(EventArgs $event)
+    public function addCartInitialize(EventArgs $event)
     {   
-        $helper = new FrontProductDetail();
-        $helper->execute($event);
+        if(version_compare(Constant::VERSION,'3.0.10','<')){
+            $helper = new FrontProductDetail();
+            $helper->execute($event);
+        }
+    }
+    
+    public function addCartComplete(EventArgs $event)
+    {   
+        if(version_compare(Constant::VERSION,'3.0.9','>')){
+            $helper = new FrontProductDetail();
+            $helper->execute($event);
+        }
     }
 
     public function onRenderCart(TemplateEvent $event)
@@ -133,16 +144,28 @@ class ProductOptionEvent
         $helper->execute($event);
     }
     
-    public function mypageOrder(EventArgs $event)
+    public function mypageOrderInitialize(EventArgs $event)
     {
-        $helper= new FrontMypageHistory();
-        $helper->execute($event);
+        if(version_compare(Constant::VERSION,'3.0.10','<')){
+            $helper= new FrontMypageHistory();
+            $helper->execute($event);
+        }
+    }
+    
+    public function mypageOrderComplete(EventArgs $event)
+    {
+        if(version_compare(Constant::VERSION,'3.0.9','>')){
+            $helper= new FrontMypageHistory();
+            $helper->execute($event);
+        }
     }
     
     public function multipleShippingEdit(EventArgs $event)
     {
-        $helper = new FrontShoppingMultiple();
-        $helper->execute($event);
+        if(version_compare(Constant::VERSION,'3.0.11','<')){
+            $helper = new FrontShoppingMultiple();
+            $helper->execute($event);
+        }
     }
     
     public function completeShopping(EventArgs $event)
@@ -190,6 +213,12 @@ class ProductOptionEvent
     public function copmleteSendAdminOrderMail(EventArgs $event)
     {
         $helper = new AdminOrderMail();
+        $helper->save($event);
+    }
+    
+    public function hookAdminProductCopyComplete(EventArgs $event)
+    {
+        $helper = new AdminProduct();
         $helper->save($event);
     }
     

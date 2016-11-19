@@ -126,25 +126,6 @@ class PluginManager extends AbstractPluginManager
         $this->migrationSchema($app, __DIR__ . '/Migration', $config['code']);
 
         $Plugin = $app['eccube.repository.plugin']->findOneBy(array('code' => 'ProductOption'));
-        if(version_compare($Plugin->getVersion(),'1.2.0','<=')){
-            $file = new Filesystem();
-            try {
-                $file->copy($app['config']['plugin_realdir']. '/ProductOption/Resource/template/default/Product/option_point.twig', $app['config']['template_realdir']. '/Product/option_point.twig', true);
-            } catch (\Exception $e) {
-            }
-        }
-        if(version_compare($Plugin->getVersion(),'1.1.1','<=')){
-            $Options = $app['eccube.productoption.repository.option']->getList();
-            if($Options){
-                $rank = count($Options);
-                foreach($Options as $Option){
-                    $Option->setRank($rank);
-                    $app['orm.em']->persist($Option);
-                    $rank--;
-                }
-                $app['orm.em']->flush();
-            }
-        }
         if(version_compare($Plugin->getVersion(),'1.1.0','<=')){
             $file = new Filesystem();
             try {
@@ -165,6 +146,25 @@ class PluginManager extends AbstractPluginManager
                 $filePath = $templatePath . '/Product/option_description.twig';
                 $fs = new Filesystem();
                 $fs->dumpFile($filePath, $source);
+            }
+        }
+        if(version_compare($Plugin->getVersion(),'1.1.1','<=')){
+            $Options = $app['eccube.productoption.repository.option']->getList();
+            if($Options){
+                $rank = count($Options);
+                foreach($Options as $Option){
+                    $Option->setRank($rank);
+                    $app['orm.em']->persist($Option);
+                    $rank--;
+                }
+                $app['orm.em']->flush();
+            }
+        }
+        if(version_compare($Plugin->getVersion(),'1.2.0','<=')){
+            $file = new Filesystem();
+            try {
+                $file->copy($app['config']['plugin_realdir']. '/ProductOption/Resource/template/default/Product/option_point.twig', $app['config']['template_realdir']. '/Product/option_point.twig', true);
+            } catch (\Exception $e) {
             }
         }
     }

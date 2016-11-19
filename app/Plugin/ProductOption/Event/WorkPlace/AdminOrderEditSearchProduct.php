@@ -34,7 +34,7 @@ class AdminOrderEditSearchProduct extends AbstractWorkPlace
         
         $source = $event->getSource();
         
-        if(preg_match('/<(.*)\s*class="extra-form.*>/',$source, $result)){
+        if(preg_match('/<(.*)\s*class="extra-form.*>\n/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $index = strpos($source, $start_tag);

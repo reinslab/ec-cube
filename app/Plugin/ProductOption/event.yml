@@ -22,9 +22,11 @@ Mypage/index.twig:
     - [onRenderMypage, NORMAL]
 Mypage/history.twig:
     - [onRenderMypageHistory, NORMAL]
-    
+
 front.product.detail.initialize:
-    - [addCart, NORMAL]
+    - [addCartInitialize, NORMAL]
+front.product.detail.complete:
+    - [addCartComplete, NORMAL]
 front.shopping.index.initialize:
     - [customOrder, NORMAL]
 front.shopping.shipping.multiple.initialize:
@@ -39,11 +41,15 @@ front.shopping.complete.initialize:
 service.shopping.notify.complete:
     - [onServiceShoppingNotifyComplete, LAST]
 front.mypage.mypage.order.initialize:
-    - [mypageOrder, NORMAL]
+    - [mypageOrderInitialize, NORMAL]
+front.mypage.mypage.order.complete:
+    - [mypageOrderComplete, NORMAL]
 admin.order.edit.index.complete:
     - [registOrder, NORMAL]
 admin.order.mail.index.complete:
     - [copmleteSendAdminOrderMail, NORMAL]
+admin.product.copy.complete:
+    - [hookAdminProductCopyComplete, NORMAL]
 eccube.event.route.admin_order_export_order.controller:
     - [exportOrder, NORMAL]
 eccube.event.route.admin_order_export_shipping.controller:

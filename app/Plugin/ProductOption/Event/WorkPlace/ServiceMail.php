@@ -31,12 +31,12 @@ class ServiceMail extends AbstractWorkPlace
         
         $Shippings = $Order->getShippings();
         $plgShipmentItems = $app['eccube.productoption.service.util']->getPlgShipmentItems($Shippings);
-        
+
 // A => NSS 
         //ˆóü¤•i”»’è
         $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
 // A => NSS 
-
+        
         $body = $app->renderView('Mail/order.twig', array(
             'header' => $MailTemplate->getHeader(),
             'footer' => $MailTemplate->getFooter(),

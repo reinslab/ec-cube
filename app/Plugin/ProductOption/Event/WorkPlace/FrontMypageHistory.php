@@ -11,6 +11,7 @@
 
 namespace Plugin\ProductOption\Event\WorkPlace;
 
+use Eccube\Common\Constant;
 use Eccube\Event\EventArgs;
 use Eccube\Event\TemplateEvent;
 use Symfony\Component\Form\FormBuilder;
@@ -37,7 +38,7 @@ class FrontMypageHistory extends AbstractWorkPlace
         $plgShipmentItems = $app['eccube.productoption.service.util']->getPlgShipmentItems($Shippings);
 
         $source = $event->getSource();
-        if(preg_match('/<(.*)\s*id="detail_list__classcategory_name.*>/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="detail_list__classcategory_name.*>\n/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -50,7 +51,7 @@ class FrontMypageHistory extends AbstractWorkPlace
             $source = str_replace($search, $replace, $source);
         }
         
-        if(preg_match('/<(.*)\s*id="shipping_list__shipment_class_category.*>/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="shipping_list__shipment_class_category.*>\n/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';
@@ -86,7 +87,9 @@ class FrontMypageHistory extends AbstractWorkPlace
         foreach ($Order->getOrderDetails() as $OrderDetail) {
             try {
                 if ($OrderDetail->getProduct()) {
-                    $app['eccube.service.cart']->addProduct($OrderDetail->getProductClass()->getId(), $OrderDetail->getQuantity())->save();
+                    if(version_compare(Constant::VERSION,'3.0.10','<')){
+                        $app['eccube.service.cart']->addProduct($OrderDetail->getProductClass()->getId(), $OrderDetail->getQuantity())->save();
+                    }
                     $plgOrderDetail = $app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $OrderDetail->getId()));
                     if($plgOrderDetail){
                         $Options = $plgOrderDetail->getOrderOption()->getSerial();
@@ -105,7 +108,9 @@ class FrontMypageHistory extends AbstractWorkPlace
             }
         }
         
-        $app->redirect($app->url('cart'))->send();
-        exit;
+        if(version_compare(Constant::VERSION,'3.0.10','<')){
+            $app->redirect($app->url('cart'))->send();
+            exit;
+        }
     }
 }

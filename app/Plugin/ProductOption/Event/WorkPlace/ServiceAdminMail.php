@@ -31,6 +31,11 @@ class ServiceAdminMail extends AbstractWorkPlace
         
         $Shippings = $Order->getShippings();
         $plgShipmentItems = $app['eccube.productoption.service.util']->getPlgShipmentItems($Shippings);
+
+// A => NSS 
+        //印刷商品判定
+        $flgPrintItem = $app['eccube.service.product']->isPrintProductByOrder($Order);
+// A => NSS 
         
         $body = $app->renderView('Mail/order.twig', array(
             'header' => $formData['header'],
@@ -38,6 +43,9 @@ class ServiceAdminMail extends AbstractWorkPlace
             'Order' => $Order,
             'plgOrderDetails' => $plgOrderDetails,
             'plgShipmentItems' => $plgShipmentItems,
+// A => NSS 印刷商品フラグ
+            'flgPrintItem' => $flgPrintItem,
+// A => NSS 印刷商品フラグ
         ));
         
         $message->setBody($body);

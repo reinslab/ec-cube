@@ -25,9 +25,7 @@ use Eccube\Entity\ProductClass;
 class ProductOptionController extends \Eccube\Controller\AbstractController
 {
 
-    /**
-     * 商品規格が登録されていなければ新規登録、登録されていれば更新画面を表示する
-     */
+
     public function index(Application $app, Request $request, $id)
     {
 
@@ -66,9 +64,7 @@ class ProductOptionController extends \Eccube\Controller\AbstractController
         ));
     }
 
-    /**
-     * 商品規格の登録、更新、削除を行う
-     */
+
     public function edit(Application $app, Request $request, $id)
     {
         $Product = $app['eccube.repository.product']->find($id);

@@ -34,7 +34,7 @@ class FrontMypage extends AbstractWorkPlace
         }
 
         $source = $event->getSource();
-        if(preg_match('/<(.*)\s*id="history_detail_list__category_name.*>/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="history_detail_list__category_name.*>\n/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';

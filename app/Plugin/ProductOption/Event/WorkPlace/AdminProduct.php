@@ -42,4 +42,25 @@ class AdminProduct extends AbstractWorkPlace
 
         $event->setSource($source);
     }
+    
+    public function save(EventArgs $event)
+    {
+        $app = $this->app;
+        
+        $Product = $event->getArgument('Product');
+        $CopyProduct = $event->getArgument('CopyProduct');
+        
+        $oldProductOptions = $app['eccube.productoption.repository.product_option']->getListByProductId($Product->getId());
+
+        foreach ($oldProductOptions as $oldProductOption) {
+            $newProductOption = new \Plugin\ProductOption\Entity\ProductOption();            
+            $newProductOption->setProduct($CopyProduct);
+            $newProductOption->setProductId($CopyProduct->getId());
+            $Option = $oldProductOption->getOption();
+            $newProductOption->setOption($Option);
+            $newProductOption->setOptionId($Option->getId());
+            $newProductOption->setRank($oldProductOption->getRank());
+            $app['eccube.productoption.repository.product_option']->save($newProductOption);
+        }
+    }
 }

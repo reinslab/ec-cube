@@ -195,7 +195,7 @@ class FrontShoppingMultiple extends AbstractWorkPlace
                             'compItemQuantities' => $compItemQuantities,
                             'errors' => $errors,
                         ))->send();
-                        exit;
+                        return;
                     }
                 }
             }
@@ -315,7 +315,7 @@ class FrontShoppingMultiple extends AbstractWorkPlace
             $app['orm.em']->flush();
 
             $app->redirect($app->url('shopping'))->send();
-            exit;
+            return;
         }        
         
         return $event;
