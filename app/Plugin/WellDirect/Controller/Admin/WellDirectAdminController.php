@@ -82,6 +82,7 @@ class WellDirectAdminController extends AbstractController
     	
     	// ファイルをコピーする
     	foreach($arrOids as $oid) {
+
     		//受注データ取得
             $TargetOrder = $app['eccube.repository.order']->find($oid);
             if (is_null($TargetOrder)) {
@@ -93,12 +94,18 @@ class WellDirectAdminController extends AbstractController
             	continue;
             }
             
-
 			//カスタム注文ID
             $custom_order_id = $TargetOrder->getCustomOrderId();
             
             //一時ディレクトリにファイルコピ
             $file->copy($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
+
+            
+            //受注ステータス更新
+        	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_data_check_now']));
+            $app['orm.em']->persist($TargetOrder);
+            $app['orm.em']->flush($TargetOrder);
+
     	}
     	
     	//Linuxの場合のみ
@@ -170,6 +177,7 @@ class WellDirectAdminController extends AbstractController
     	//クローズ
     	$zip->close();
 */
+
         return $app
             ->sendFile($zip_filepath)
             ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filename);
