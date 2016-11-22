@@ -8,5 +8,5 @@ $ mysql -uroot -p eccube3_database < resources/master.sql
 *
 
 **プラグイン**
-* ProductOptionEvent.tar.gz ・・・商品オプションプラグイン（v1.3.2）
+* ProductOptionEvent.zip ・・・商品オプションプラグイン（v1.3.2）
 *
