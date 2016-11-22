@@ -89,7 +89,7 @@ class CartController extends AbstractController
 // A => 印刷製品判定
 		$arrCartItems = $Cart->getCartItems();
 		$flgPrintItem = false;
-		if ( count($arrCartItems) > 0 ) {
+		if ( count($arrCartItems) > 0 && is_object($arrCartItems[0]) ) {
 			$objCartItem = $arrCartItems[0];
 			$class_id = $objCartItem->getClassId();
 			$TargetClass = $app['eccube.repository.product_class']->find($class_id);
@@ -99,7 +99,6 @@ class CartController extends AbstractController
 			}
 		}
 // A => 印刷製品判定
-
         return $app->render(
             'Cart/index.twig',
             array(
