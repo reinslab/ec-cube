@@ -89,13 +89,16 @@ class CartController extends AbstractController
 // A => 印刷製品判定
 		$arrCartItems = $Cart->getCartItems();
 		$flgPrintItem = false;
-		if ( count($arrCartItems) > 0 && is_object($arrCartItems[0]) ) {
-			$objCartItem = $arrCartItems[0];
-			$class_id = $objCartItem->getClassId();
-			$TargetClass = $app['eccube.repository.product_class']->find($class_id);
-			$product_type = $TargetClass->getProductType()->getId();
-			if ( $product_type == $app['config']['product_type_print'] ) {
-				$flgPrintItem = true;
+
+		if ( count($arrCartItems) > 0 ) {
+			foreach($arrCartItems as $idx => $cartItem) {
+				$class_id = $cartItem->getClassId();
+				$TargetClass = $app['eccube.repository.product_class']->find($class_id);
+				$product_type = $TargetClass->getProductType()->getId();
+				if ( $product_type == $app['config']['product_type_print'] ) {
+					$flgPrintItem = true;
+					break;
+				}
 			}
 		}
 // A => 印刷製品判定
