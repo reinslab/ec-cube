@@ -47,6 +47,13 @@ img {
 }
 .cb {
     display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    
+}
+.cb.cb-warning {
     width: 2em;
     height: 2em;
     vertical-align: middle;
