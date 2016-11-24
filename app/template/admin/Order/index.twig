@@ -126,10 +126,8 @@ function pdfDownLoad(url) {
 
 
 		$('#dropdown-form').attr('action', href).submit();
-	    setTimeout(function(){
-			window.name = "owner";
-			window.open('{{ url("admin_order_page_reload") }}', '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no');
-	    },2000);
+		window.name = "owner";
+		window.open('{{ url("admin_order_page_reload") }}', '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no');
 
 	}
 }
