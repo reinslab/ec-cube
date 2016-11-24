@@ -123,24 +123,14 @@ function pdfDownLoad(url) {
 		alert("チェックボックスが選択されていません");
 		return false;
 	} else {
-		
-		var postData = $("[name^='ids']:checked");
 
-	    // Ajax処理
-	    $.ajax({
-	        url: url,
-	        type:'POST',
-	        dataType:'text',
-	        data: postData,
-	        timeout:10000,
-	        success: function(data) {
-	        	//成功したらリロードする
-				var href = "/{{ app.config.admin_route }}/order/page/1?resume=1";
-				$('#dropdown-form').attr('action', href).submit();
-	        },
-	        error: function(XMLHttpRequest, textStatus, errorThrown) {
-	        }
-	    });
+
+		$('#dropdown-form').attr('action', href).submit();
+	    setTimeout(function(){
+			window.name = "owner";
+			window.open('{{ url("admin_order_page_reload") }}', '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no');
+	    },2000);
+
 	}
 }
 

@@ -32,6 +32,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception as HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -82,7 +83,6 @@ class WellDirectAdminController extends AbstractController
     	
     	// ファイルをコピーする
     	foreach($arrOids as $oid) {
-
     		//受注データ取得
             $TargetOrder = $app['eccube.repository.order']->find($oid);
             if (is_null($TargetOrder)) {
@@ -104,9 +104,9 @@ class WellDirectAdminController extends AbstractController
             //受注ステータス更新
         	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_data_check_now']));
             $app['orm.em']->persist($TargetOrder);
-            $app['orm.em']->flush($TargetOrder);
 
     	}
+        $app['orm.em']->flush();
     	
     	//Linuxの場合のみ
     	if ( PHP_OS == 'Linux' ) {
@@ -178,9 +178,11 @@ class WellDirectAdminController extends AbstractController
     	$zip->close();
 */
 
+
         return $app
             ->sendFile($zip_filepath)
             ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $zip_filename);
+
     }
 
 	public function remove_directory($dir) {
@@ -289,6 +291,24 @@ class WellDirectAdminController extends AbstractController
         $app->addSuccess('admin.welldirect.order.printmail.complete', 'admin');
 
         return $app->redirect('/' . $app["config"]["admin_route"] . '/order/page/1?resume=1');
+    }
+
+	
+    /**
+     * リロード処理
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function pageReload(Application $app, Request $request)
+    {
+        $builder = $app['form.factory']
+            ->createBuilder('admin_search_order');
+        $searchForm = $builder->getForm();
+
+        return $app->render('Order/pageReload.twig', array('searchForm' => $searchForm->createView()));
+		
     }
 
 }
