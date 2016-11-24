@@ -38,7 +38,7 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         $app->match('/' . $app["config"]["admin_route"] . '/order/printmail/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::printMail')->value('id', null)->assert('id', '\d+|')->bind('admin_order_print_mail');
 
 		// ダウンロード時のダミー画面
-		$app->match('/' . $app["config"]["admin_route"] . '/order/pageReload', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pageReload')->bind('admin_order_page_reload');
+		$app->match('/' . $app["config"]["admin_route"] . '/order/pageReload', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::pageReload')->value('num', null)->assert('num', '\d+|')->bind('admin_order_page_reload');
 
 
 

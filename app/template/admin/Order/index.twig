@@ -124,10 +124,12 @@ function pdfDownLoad(url) {
 		return false;
 	} else {
 
+		var postData = $("[name^='ids']:checked");
+		var len = postData.length;
 
 		$('#dropdown-form').attr('action', href).submit();
 		window.name = "owner";
-		window.open('{{ url("admin_order_page_reload") }}', '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no');
+		window.open('{{ url("admin_order_page_reload") }}?num=' + len, '', 'width=1,height=1,menubar=no,toolbar=no,scrollbars=no');
 
 	}
 }

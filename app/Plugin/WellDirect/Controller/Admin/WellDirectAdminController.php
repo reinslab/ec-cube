@@ -306,8 +306,9 @@ class WellDirectAdminController extends AbstractController
         $builder = $app['form.factory']
             ->createBuilder('admin_search_order');
         $searchForm = $builder->getForm();
+        $num = $_REQUEST['num'];
 
-        return $app->render('Order/pageReload.twig', array('searchForm' => $searchForm->createView()));
+        return $app->render('Order/pageReload.twig', array('searchForm' => $searchForm->createView(), 'num' => $num));
 		
     }
 
