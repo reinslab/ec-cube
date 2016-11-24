@@ -104,6 +104,13 @@ console.log("sele2");
 
     var tax_rate = taxRules[product_class_id]['tax_rate'];
     var tax_rule = taxRules[product_class_id]['tax_rule'];    
+    
+    #889 金額表示制御カスタマイズ
+    if ( optionPriceTotal == 0 ) {
+    	$('#option_price_box').css('display', 'none');
+    } else {
+    	$('#option_price_box').css('display', 'block');
+    }
 
     $('#option_price_default').text(number_format(optionPriceTotal));
     $('#option_price_inctax_default').text(number_format(optionPriceTotal + sfTax(optionPriceTotal, tax_rate, tax_rule)));
