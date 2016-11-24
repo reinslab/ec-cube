@@ -47,10 +47,13 @@ img {
 }
 .cb {
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 2em;
+    height: 2em;
     vertical-align: middle;
     fill: currentColor;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 4px;
 }
 .cb-images {
     width: 1.125em;
