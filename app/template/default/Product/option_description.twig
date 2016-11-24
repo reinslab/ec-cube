@@ -151,7 +151,7 @@
                                 {% if optionCategory.delivery_free_flg == 1 %}
                                     <p>送料無料</p>
                                 {% endif %}
-                                <button class="btn-info" onclick="func_submit({{ Option.id }},{{ optionCategory.id }}); return false;" >選択する</button>
+                                <button class="btn-info" id="desc_btn_{{ Option.id }}_{{ optionCategory.id }}" >選択する</button>
                             </div>
                         {% endif %}
                     {% endfor %}
