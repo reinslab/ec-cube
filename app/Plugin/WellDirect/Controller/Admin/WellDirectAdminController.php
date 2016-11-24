@@ -292,24 +292,4 @@ class WellDirectAdminController extends AbstractController
 
         return $app->redirect('/' . $app["config"]["admin_route"] . '/order/page/1?resume=1');
     }
-
-	
-    /**
-     * リロード処理
-     *
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function pageReload(Application $app, Request $request)
-    {
-        $builder = $app['form.factory']
-            ->createBuilder('admin_search_order');
-        $searchForm = $builder->getForm();
-        $num = $_REQUEST['num'];
-
-        return $app->render('Order/pageReload.twig', array('searchForm' => $searchForm->createView(), 'num' => $num));
-		
-    }
-
 }
