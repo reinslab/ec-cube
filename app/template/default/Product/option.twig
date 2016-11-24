@@ -28,12 +28,12 @@ textarea.form-control {
     <ul class="classcategory_list">
         {% for ProductOption in ProductOptions %}
             {% set value = 'productoption' ~ ProductOption.Option.id %}
-            <li>{{ form_label(form[value]) }}
+            <li style="padding-bottom:0px;">{{ form_label(form[value]) }}
                 {% if ProductOption.Option.description_flg == 1 %}
                     &nbsp;<a href="?" id="option_description_link_{{ ProductOption.Option.id }}">詳細説明</a>
                 {% endif %}
-            <!-- /li>
-            <li --><br />
+            </li>
+            <li>
                 {{ form_widget(form[value] ,{ attr : { onChange : 'onOptionChange()' }} ) }}
                 {{ form_errors(form[value]) }}
             </li>
