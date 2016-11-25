@@ -89,6 +89,7 @@ class WellDirectAdminController extends AbstractController
                 throw new NotFoundHttpException();
             }
 
+$app->log("PdfFile = " . $TargetOrder->getPdfFileName());
             //PDFファイルが無い場合はスキップする
             if ( $TargetOrder->getPdfFileName() == '' ) {
             	continue;
@@ -117,11 +118,17 @@ class WellDirectAdminController extends AbstractController
 	    	// 圧縮
 	    	exec($command, $out, $ret);
 	    	
-	    	//ZIPファイル移動
-	    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
-	    	
-	    	// 一時ディレクトリ削除
-	    	$this->remove_directory($pdf_download_dir);
+	    	//ファイルの存在チェック
+	    	if ( file_exists($pdf_download_dir . '/' . $zip_filename) ) {
+		    	//ZIPファイル移動
+		    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
+		    	
+		    	// 一時ディレクトリ削除
+		    	$this->remove_directory($pdf_download_dir);
+	    	} else {
+	    		//ファイルがない場合は空を作成
+	    		$file->touch($zip_filepath);
+	    	}
     	} else {
     		//Windowsの場合は空ファイルを作成する
     		$file->touch($zip_filepath);
