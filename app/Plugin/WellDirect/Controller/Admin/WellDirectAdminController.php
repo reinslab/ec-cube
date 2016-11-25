@@ -89,6 +89,7 @@ class WellDirectAdminController extends AbstractController
                 throw new NotFoundHttpException();
             }
 
+$app->log("PdfFile = " . $TargetOrder->getPdfFileName());
             //PDFファイルが無い場合はスキップする
             if ( $TargetOrder->getPdfFileName() == '' ) {
             	continue;
@@ -104,12 +105,15 @@ class WellDirectAdminController extends AbstractController
             //受注ステータス更新
         	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_data_check_now']));
             $app['orm.em']->persist($TargetOrder);
+	        $app['orm.em']->flush($TargetOrder);
 
     	}
-        $app['orm.em']->flush();
     	
     	//Linuxの場合のみ
     	if ( PHP_OS == 'Linux' ) {
+    		//制限時間を無制限に延長する
+    		set_time_limit(0);
+    		
 	    	//フォルダごと圧縮(Linux環境限定)
 	    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
 	    	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
@@ -117,11 +121,17 @@ class WellDirectAdminController extends AbstractController
 	    	// 圧縮
 	    	exec($command, $out, $ret);
 	    	
-	    	//ZIPファイル移動
-	    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
-	    	
-	    	// 一時ディレクトリ削除
-	    	$this->remove_directory($pdf_download_dir);
+	    	//ファイルの存在チェック
+	    	if ( file_exists($pdf_download_dir . '/' . $zip_filename) ) {
+		    	//ZIPファイル移動
+		    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
+		    	
+		    	// 一時ディレクトリ削除
+		    	$this->remove_directory($pdf_download_dir);
+	    	} else {
+	    		//ファイルがない場合は空を作成
+	    		$file->touch($zip_filepath);
+	    	}
     	} else {
     		//Windowsの場合は空ファイルを作成する
     		$file->touch($zip_filepath);
