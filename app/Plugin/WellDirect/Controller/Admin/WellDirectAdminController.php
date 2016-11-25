@@ -111,6 +111,9 @@ $app->log("PdfFile = " . $TargetOrder->getPdfFileName());
     	
     	//Linuxの場合のみ
     	if ( PHP_OS == 'Linux' ) {
+    		//制限時間を５分に延長する
+    		set_time_limit(300);
+    		
 	    	//フォルダごと圧縮(Linux環境限定)
 	    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
 	    	//$command = "zip " . $zip_filepath . " " . $pdf_download_dir . "/*";
