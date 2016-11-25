@@ -8,6 +8,9 @@
 /* --------------------------------
 	Common
 -------------------------------- */
+#main_middle #main{
+	width: 100%;
+}
 h1.header_logo a{
 	opacity: 0;
     font-size: 24px;
