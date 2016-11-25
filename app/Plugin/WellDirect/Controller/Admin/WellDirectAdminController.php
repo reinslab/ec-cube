@@ -105,9 +105,9 @@ $app->log("PdfFile = " . $TargetOrder->getPdfFileName());
             //受注ステータス更新
         	$TargetOrder->setOrderStatus($app['eccube.repository.order_status']->find($app['config']['order_data_check_now']));
             $app['orm.em']->persist($TargetOrder);
+	        $app['orm.em']->flush($TargetOrder);
 
     	}
-        $app['orm.em']->flush();
     	
     	//Linuxの場合のみ
     	if ( PHP_OS == 'Linux' ) {
