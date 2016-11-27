@@ -82,12 +82,6 @@ class CartService
 
         if ($this->session->has('cart')) {
             $this->cart = $this->session->get('cart');
-// ★ Bug. カート内部がNULLでも処理してしまう
-			$arrCart = $this->cart->getCartItems();
-			if ( $arrCart[0] == null ) {
-	            $this->cart = new \Eccube\Entity\Cart();
-			}
-// ★ Bug. カート内部がNULLでも処理してしまう
         } else {
             $this->cart = new \Eccube\Entity\Cart();
         }
@@ -249,12 +243,18 @@ class CartService
                 ->getRepository('Eccube\Entity\ProductClass')
                 ->find($ProductClass);
             if (!$ProductClass) {
-                throw new CartException('cart.product.delete');
+            	#900 Exceptionでのエラー通知回避
+	            $this->addError('cart.product.delete');
+	            return $this;
+//                throw new CartException('cart.product.delete');
             }
         }
         if ($ProductClass->getProduct()->getStatus()->getId() !== Disp::DISPLAY_SHOW) {
             $this->removeProduct($ProductClass->getId());
-            throw new CartException('cart.product.not.status');
+           	#900 Exceptionでのエラー通知回避
+            $this->addError('cart.product.not.status');
+            return $this;
+            //throw new CartException('cart.product.not.status');
         }
 
         $productName = $ProductClass->getProduct()->getName();
@@ -271,8 +271,10 @@ class CartService
         if (count($deliveries) == 0) {
             // 商品種別が存在しなければエラー
             $this->removeProduct($ProductClass->getId());
+           	#900 Exceptionでのエラー通知回避
             $this->addError('cart.product.not.producttype', $productName);
-            throw new CartException('cart.product.not.producttype');
+            return $this;
+            //throw new CartException('cart.product.not.producttype');
         }
 
         $this->setCanAddProductType($ProductClass->getProductType());
@@ -280,12 +282,19 @@ class CartService
         if ($this->BaseInfo->getOptionMultipleShipping() != Constant::ENABLED) {
             if (!$this->canAddProduct($ProductClass->getId())) {
                 // 複数配送対応でなければ商品種別が異なればエラー
-                throw new CartException('cart.product.type.kind');
+            	#900 Exceptionでのエラー通知回避
+	            $this->addError('cart.product.type.kind');
+	            return $this;
+                //throw new CartException('cart.product.type.kind');
             }
         } else {
             // 複数配送の場合、同一支払方法がなければエラー
             if (!$this->canAddProductPayment($ProductClass->getProductType())) {
-                throw new CartException('cart.product.payment.kind');
+                // 複数配送対応でなければ商品種別が異なればエラー
+            	#900 Exceptionでのエラー通知回避
+	            $this->addError('cart.product.payment.kind');
+	            return $this;
+                //throw new CartException('cart.product.payment.kind');
             }
 
         }
@@ -476,7 +485,6 @@ class CartService
 
             $this->getCart()->setPayments($payments);
         }
-
         return $this;
     }
 

@@ -62,16 +62,6 @@ abstract class AbstractWorkPlace
         throw new MethodNotAllowedException();
     }
     
-    /**
-     * 実行拡張処理
-     * @param EventArgs $event
-     * @return mixed
-     */
-    public function execute(EventArgs $event)
-    {
-        throw new MethodNotAllowedException();
-    }
-    
     public function getHtml(Crawler $crawler)
     {
         $html = '';

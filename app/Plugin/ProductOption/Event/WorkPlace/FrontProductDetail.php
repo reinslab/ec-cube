@@ -11,6 +11,7 @@
 
 namespace Plugin\ProductOption\Event\WorkPlace;
 
+use Eccube\Common\Constant;
 use Eccube\Event\EventArgs;
 use Eccube\Event\TemplateEvent;
 use Symfony\Component\Form\FormBuilder;
@@ -159,7 +160,7 @@ class FrontProductDetail extends AbstractWorkPlace
         $event->setParameters($parameters);
     }
     
-    public function execute(EventArgs $event)
+    public function execute(EventArgs $event = null)
     {   
         $app = $this->app;
         $request = $app['request'];
@@ -201,14 +202,18 @@ class FrontProductDetail extends AbstractWorkPlace
                                 }
                             }
                         }
-                        $app['eccube.service.cart']->addProduct($data['product_class_id'], $data['quantity'])->save();
+                        if(version_compare(Constant::VERSION,'3.0.10','<')){
+                            $app['eccube.service.cart']->addProduct($data['product_class_id'], $data['quantity'])->save();
+                        }
                         $app['eccube.productoption.service.cart']->addProductOption($data['product_class_id'], $Options, $data['quantity']);
                     } catch (CartException $e) {
                         $app->addRequestError($e->getMessage());
                     }
 
-                    $app->redirect($app->url('cart'))->send();
-                    exit;
+                    if(version_compare(Constant::VERSION,'3.0.10','<')){
+                        $app->redirect($app->url('cart'))->send();
+                        exit;
+                    }
                 }
             }
         }   

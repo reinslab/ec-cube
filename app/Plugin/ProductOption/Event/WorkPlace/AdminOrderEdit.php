@@ -196,13 +196,13 @@ class AdminOrderEdit extends AbstractWorkPlace
         
         if(preg_match('/\{%\s*for\s*shippingForm\s*in\s*form\.Shippings\s*%\}/',$source, $result)){
             $search = $result[0];
-            $replace = '{% for shipping_idx , shippingForm in form.Shippings %}';
+            $replace = '{% set shipmentitem_idx = -1 %}{% for shipping_idx , shippingForm in form.Shippings %}';
             $source = str_replace($search, $replace, $source);
         }
         
         if(preg_match('/\{%\s*for\s*shipmentItemForm\s*in\s*shippingForm\.ShipmentItems\s*%\}/',$source, $result)){
             $search = $result[0];
-            $replace = '{% for item_idx, shipmentItemForm in shippingForm.ShipmentItems %}';
+            $replace = '{% for item_idx, shipmentItemForm in shippingForm.ShipmentItems %}{% set shipmentitem_idx = shipmentitem_idx + 1%}';
             $source = str_replace($search, $replace, $source);
         }
 
@@ -219,7 +219,7 @@ class AdminOrderEdit extends AbstractWorkPlace
             $source = str_replace($search, $replace, $source);
         }
         
-        if(preg_match('/<(.*)\s*id="shipment_item__class_category_name.*>/',$source, $result)){
+        if(preg_match('/<(.*)\s*id="shipment_item__class_category_name.*>n/',$source, $result)){
             $start_tag = $result[0];
             $tag_name = trim($result[1]);
             $end_tag = '</' . $tag_name . '>';

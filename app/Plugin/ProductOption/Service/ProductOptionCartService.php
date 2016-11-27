@@ -49,6 +49,7 @@ class ProductOptionCartService
     public function addProductOption($productClassId, $Options, $quantity = 1)
     {
 
+        if($this->cart == null)return;
         $cartItems = $this->cart->getCartItems();
         $cartItemOptions = $this->cartOption->getCartOptions();
         $quantity_index = array();
@@ -260,7 +261,9 @@ class ProductOptionCartService
         }
 
         if($quantity > 0 && $cartNo !== null){
-            $cartItemOptions[$cartNo]->setQuantity($quantity);
+            if($cartItemOptions[$cartNo] instanceof \Plugin\ProductOption\Entity\CartItemOption){
+                $cartItemOptions[$cartNo]->setQuantity($quantity);
+            }
         }
         
         foreach($cartItemOptions as $idx => $cartItemOption){

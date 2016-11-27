@@ -51,6 +51,16 @@ img {
     height: 1em;
     vertical-align: middle;
     fill: currentColor;
+    
+}
+.cb.cb-warning {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+    fill: currentColor;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 4px;
 }
 .cb-images {
     width: 1.125em;

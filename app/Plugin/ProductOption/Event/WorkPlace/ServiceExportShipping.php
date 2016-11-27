@@ -105,7 +105,6 @@ class ServiceExportShipping extends AbstractWorkPlace
         $response->headers->set('Content-Type', 'application/octet-stream');
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
         $response->send();
-
         exit;
     }
 }

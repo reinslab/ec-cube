@@ -23,6 +23,15 @@ $(function() {
     {% endfor %}      
 });
 
+$(function() {
+    $("[id^=desc_btn_]").click(function(){
+        var id = $(this).attr('id').replace(/^desc_btn_/ig, '');
+        var ids = id.split('_');
+        
+        func_submit(ids[0],ids[1]);
+    });
+});
+
 function func_submit(optionId, setValue) {
     var $sele_option = $("[name=productoption" + optionId + "]");
     if($sele_option && $sele_option.length){
@@ -76,6 +85,13 @@ function onOptionChange(){
     });
     var $sele1 = $('form select[name=classcategory_id1]');
     var $sele2 = $('form select[name=classcategory_id2]');
+console.log("sele2");
+// A => 不具合修正
+    if (typeof $sele2.val() === 'undefined') {
+    	$sele2 = $('form input[name=classcategory_id2]');
+    }
+// A => 不具合修正
+
 
     var classcat_id1 = $sele1.val() ? $sele1.val() : '__unselected';
     var classcat_id2 = $sele2.val() ? $sele2.val() : '';
@@ -88,6 +104,13 @@ function onOptionChange(){
 
     var tax_rate = taxRules[product_class_id]['tax_rate'];
     var tax_rule = taxRules[product_class_id]['tax_rule'];    
+    
+    //889 金額表示制御カスタマイズ
+    if ( optionPriceTotal == 0 ) {
+    	$('#option_price_box').css('display', 'none');
+    } else {
+    	$('#option_price_box').css('display', 'block');
+    }
 
     $('#option_price_default').text(number_format(optionPriceTotal));
     $('#option_price_inctax_default').text(number_format(optionPriceTotal + sfTax(optionPriceTotal, tax_rate, tax_rule)));

@@ -45,6 +45,8 @@ class WellDirectController extends AbstractController
      */
     public function eststep(Application $app, Request $request)
     {
+
+
         // 未ログインの場合, ログイン画面へリダイレクト.
         if (!$app->isGranted('IS_AUTHENTICATED_FULLY')) {
         	$app->setLoginTargetPath('/cart/eststep');
@@ -79,6 +81,10 @@ class WellDirectController extends AbstractController
         
         // カートセッションクリア
         $app['eccube.service.cart']->clear();
+		// 商品オプションクリア(商品オプションプラグインが有効な場合のみ)
+		if ( is_object($app['eccube.productoption.service.cart']) ) {
+	        $app['eccube.productoption.service.cart']->clear();
+		}
 
 		//マイページにリダイレクト 
         return $app->redirect($app->url('mypage'));

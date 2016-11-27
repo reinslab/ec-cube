@@ -1,114 +1,51 @@
 <?php
 /*
- * Plugin Name : ProductOption
- *
- * Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
- * http://www.bratech.co.jp/
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+* Plugin Name : ProductOption
+*
+* Copyright (C) 2015 BraTech Co., Ltd. All Rights Reserved.
+* http://www.bratech.co.jp/
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
-namespace Plugin\ProductOption\Event\WorkPlace;
+namespace Plugin\ProductOption\Controller;
 
+use Eccube\Application;
 use Eccube\Common\Constant;
+use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
-use Eccube\Event\TemplateEvent;
-use Symfony\Component\Form\FormBuilder;
+use Eccube\Exception\CartException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints as Assert;
 
-
-class FrontShoppingMultiple extends AbstractWorkPlace
+class ShoppingController extends \Eccube\Controller\AbstractController
 {
-    public function createTwig(TemplateEvent $event)
-    {
-        $app = $this->app;
-        
-        $parameters = $event->getParameters();
 
-        $plgShipmentItems = array();
-        $ShipmentItems = array();
-        $compItemQuantities = array();
-        $productClassIds = array();
-        $checkOptions = array();
+    /**
+     * 複数配送処理
+     */
+    public function shippingMultiple(Application $app, Request $request)
+    {
+        $cartService = $app['eccube.service.cart'];
+
+        // カートチェック
+        if (!$cartService->isLocked()) {
+            // カートが存在しない、カートがロックされていない時はエラー
+            return $app->redirect($app->url('cart'));
+        }
+
+        // カートチェック
+        if (count($cartService->getCart()->getCartItems()) <= 0) {
+            // カートが存在しない時はエラー
+            return $app->redirect($app->url('cart'));
+        }
+
+        /** @var \Eccube\Entity\Order $Order */
         $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
-        $no=0;
-        foreach ($Order->getShippings() as $Shipping) {
-            foreach ($Shipping->getShipmentItems() as $ShipmentItem) {
-                $exits_flg = false;
-                $plgShipmentItem = $app['eccube.productoption.repository.shipment_item']->findOneBy(array('item_id' => $ShipmentItem->getId()));
-                if (in_array($ShipmentItem->getProductClass()->getId(), $productClassIds)) {
-                    if($plgShipmentItem){
-                        foreach($checkOptions as $options){
-                            if($app['eccube.productoption.service.util']->compareOptions($plgShipmentItem->getOrderOption()->getSerial(),$options)){
-                                $exits_flg = true;
-                            }
-                        }
-                    }
-                }
-                $quantity = $ShipmentItem->getQuantity();
-                if(!$exits_flg){
-                    $ShipmentItems[$no] = $ShipmentItem;
-                    $compItemQuantities[$no] = $quantity;
-                    $plgShipmentItems[$no] = $plgShipmentItem->getOrderOption()->getLabel();
-                    $checkOptions[$no] = $plgShipmentItem->getOrderOption()->getSerial();
-                    $no++;                 
-                }else{
-                    foreach($ShipmentItems as $key => $tmpShipmentItem){
-                        if($tmpShipmentItem->getProductClass()->getId() == $ShipmentItem->getProductClass()->getId() && $app['eccube.productoption.service.util']->compareOptions($checkOptions[$key],$plgShipmentItem->getOrderOption()->getSerial())){
-                            $compItemQuantities[$key] += $quantity;
-                        }
-                    }
-                }
-                $productClassIds[] = $ShipmentItem->getProductClass()->getId();
-            }
+        if (!$Order) {
+            $app->addError('front.shopping.order.error');
+            return $app->redirect($app->url('shopping_error'));
         }
-
-        $builder = $app->form();
-        $builder
-            ->add('shipping_multiple', 'collection', array(
-                'type' => 'plg_shipping_multiple',
-                'data' => $ShipmentItems,
-                'allow_add' => true,
-                'allow_delete' => true,
-            ));
-        $form = $builder->getForm();
-
-        $form->handleRequest($app['request']);
-
-        $source = $event->getSource();
-        if(preg_match('/\{%\s*for\s*shipmentItem\s*in\s*shipmentItems\s*%\}/',$source, $result)){
-            $search = $result[0];
-            $replace = '{% for no, shipmentItem in shipmentItems %}';
-            $source = str_replace($search, $replace, $source);
-        }
-        
-        if(preg_match('/\{%\s*if\s*shipmentItem\.productClass\.id\s*\=\=\s*key\s*%\}/',$source, $result)){
-            $search = $result[0];
-            $replace = '{% if idx == key %}';
-            $source = str_replace($search, $replace, $source);
-        }
-        
-        if(preg_match('/<.*id="multiple_list__total_price/',$source, $result)){
-            $search = $result[0];
-            $snipet = file_get_contents($app['config']['plugin_realdir']. '/ProductOption/Resource/template/default/Shopping/shipping_multiple_option.twig');
-            $replace = $snipet.$search;
-            $source = str_replace($search, $replace, $source);
-        }
-
-        $event->setSource($source);
-        $parameters['form'] = $form->createView();
-        $parameters['shipmentItems'] = $ShipmentItems;
-        $parameters['compItemQuantities'] = $compItemQuantities;
-        $parameters['plgShipmentItems'] = $plgShipmentItems;
-        $event->setParameters($parameters);
-    }
-    
-    public function execute(EventArgs $event)
-    {
-        $app = $this->app;
-        $request = $app['request'];
         
         $plgShipmentItems = array();
         $ShipmentItems = array();
@@ -157,6 +94,15 @@ class FrontShoppingMultiple extends AbstractWorkPlace
                 'allow_add' => true,
                 'allow_delete' => true,
             ));
+        
+        $event = new EventArgs(
+            array(
+                'builder' => $builder,
+                'Order' => $Order,
+            ),
+            $request
+        );
+        $app['eccube.event.dispatcher']->dispatch(EccubeEvents::FRONT_SHOPPING_SHIPPING_MULTIPLE_INITIALIZE, $event);        
 
         $form = $builder->getForm();
 
@@ -312,12 +258,31 @@ class FrontShoppingMultiple extends AbstractWorkPlace
                                 ->setOrderOption($OrderOption);
                 $app['orm.em']->persist($plgShipmentItem);
             }
+            
+            // 合計金額の再計算
+            $Order = $app['eccube.service.shopping']->getAmount($Order);
+
+            // 配送先を更新
             $app['orm.em']->flush();
 
-            $app->redirect($app->url('shopping'))->send();
-            return;
-        }        
+            $event = new EventArgs(
+                array(
+                    'form' => $form,
+                    'Order' => $Order,
+                ),
+                $request
+            );
+            $app['eccube.event.dispatcher']->dispatch(EccubeEvents::FRONT_SHOPPING_SHIPPING_MULTIPLE_COMPLETE, $event);
+            
+
+            return $app->redirect($app->url('shopping'))->send();
+        }
         
-        return $event;
+        return $app->render('Shopping/shipping_multiple.twig', array(
+            'form' => $form->createView(),
+            'shipmentItems' => $ShipmentItems,
+            'compItemQuantities' => $compItemQuantities,
+            'errors' => $errors,
+        ));
     }
 }

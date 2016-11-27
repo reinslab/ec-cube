@@ -79,6 +79,12 @@ class OrderPdfService extends AbstractFPDIService
 
     /** 発行日 @var unknown */
     private $issueDate = "";
+    
+    /** 行数 */
+    private $line_number = 0;
+    
+    /** Y座標(明細部) */
+    private $coordinates_y = 96;
 
     /**
      * Font情報のバックアップ
@@ -114,13 +120,13 @@ class OrderPdfService extends AbstractFPDIService
         $this->labelCell[] = '数　量';
         $this->labelCell[] = '単　価';
         $this->labelCell[] = '金　額';
-        $this->widthCell = array(110.3,12,21.7,24.5);
+        $this->widthCell = array(95,25,25,27);
 
         // Fontの設定しておかないと文字化けを起こす
          $this->SetFont(self::FONT_SJIS);
 
         // PDFの余白(上左右)を設定
-        $this->SetMargins(15, 20);
+        $this->SetMargins(13.5, 20);
 
         // ヘッダーの出力を無効化
         $this->setPrintHeader(false);
@@ -162,24 +168,18 @@ class OrderPdfService extends AbstractFPDIService
 		$objOrderDetail = $this->order_data->getOrderDetails();
 		$order_count  = $objOrderDetail->count();
 		$arrOrderDetail = $objOrderDetail->toArray();
-
-		for($i=0; $i<$order_count; $i++) {
-			
-            // PDFにページを追加する
-            $this->addPdfPage();
-            
-            // ページ番号設定
-            $this->lfText(180, 10, ($i+1) . '/' . $order_count, 7, '');
 		
-            // タイトルを描画する
-            $this->renderTitle('御 見 積 書');
+        // PDFにページを追加する
+        $this->addPdfPage();
+	
+        // タイトルを描画する
+        $this->renderTitle('御 見 積 書');
 
-            // 店舗情報を描画する
-            $this->renderShopData();
+        // 店舗情報を描画する
+        $this->renderShopData();
 
-            // 注文情報を描画する
-            $this->renderOrderData($this->order_data, $arrOrderDetail[$i]);
-        }
+        // 注文情報を描画する
+        $this->renderOrderData($this->order_data);
 
         return true;
     }
@@ -209,6 +209,7 @@ class OrderPdfService extends AbstractFPDIService
      * フッターに発行日を出力する
      */
     public function Footer() {
+        $this->Cell(0, 0, $this->getPage(), 0, 0, 'C');
         $this->Cell(0, 0, $this->issueDate, 0, 0, 'R');
     }
     /**
@@ -223,6 +224,47 @@ class OrderPdfService extends AbstractFPDIService
 
         // テンプレートに使うテンプレートファイルのページ番号を指定
         $this->useTemplate($tplIdx, null, null, null, null, true);
+
+		// 購入企業名
+		$text = $this->order_data->getCompanyName();
+        $this->lfText(18, 40, $text, 11);
+		
+        // 購入者氏名
+        $text = $this->order_data->getName01() . '　' . $this->order_data->getName02() . '　様';
+        $this->lfText(18, 47, $text, 11);
+
+        // =========================================
+        // 固定文章
+        // =========================================
+        $this->SetFont(self::FONT_SJIS, '', 8);
+        $this->lfText(18, 54, ' 毎度格別のお引き立てを賜り、厚く御礼申し上げます。', 8);
+        $this->lfText(18, 58, '下記のとおり御見積もりいたしました。', 8);
+        $this->lfText(18, 62, ' ご検討のうえ、ご用命賜りますようお願い致します。', 8);
+
+        // =========================================
+        // 右上表示
+        // =========================================
+        //見積番号
+        $this->lfText(165, 25, 'No. ' . $this->order_data->getCustomOrderId(), 6);
+        //見積作成日
+        $this->lfText(162, 28, $this->order_data->getCreateDate()->format('Y年m月d日'), 8);
+        //キャッチフレーズ
+        $this->lfText(151, 32, '"私たちはお客様に安心品質を', 7, 'I');
+        $this->lfText(158, 35, 'お届けします"', 7, 'I');
+
+        // =========================================
+        // お買上げ明細ヘッダ
+        // =========================================
+        //品名(固定)
+        $this->lfText(18, 81, '御見積明細', 10, '');
+        
+        //項目名
+        $this->lfText(55, 86.5, '項　　目', 9, '');
+        $this->lfText(120, 86.5, '数　量', 9, '');
+        $this->lfText(146, 86.5, '単　価', 9, '');
+        $this->lfText(172, 86.5, '金　額', 9, '');
+		
+
     }
 
     /**
@@ -318,7 +360,7 @@ class OrderPdfService extends AbstractFPDIService
      *
      * @param string $title
      */
-    protected function renderTitle($title) {
+    protected function renderTitle($title = '御 見 積 書') {
         // 基準座標を設定する
         $this->setBasePosition();
 
@@ -341,206 +383,145 @@ class OrderPdfService extends AbstractFPDIService
      * @param \Eccube\Entity\Order $order
      * @param \Eccube\Entity\OrderDetail $order_detail
      */
-    protected function renderOrderData(\Eccube\Entity\Order $order, \Eccube\Entity\OrderDetail $order_detail) {
+    protected function renderOrderData(\Eccube\Entity\Order $order) {
+
         // 基準座標を設定する
         $this->setBasePosition();
 
         // フォント情報のバックアップ
         $this->backupFont();
-        
-        // =========================================
-        // 商品オプション取得(商品オプションプラグインが有効な場合のみ)
-        // =========================================
-		$arrLabels = array();
-        if ( is_object($this->app['eccube.productoption.repository.order_detail']) ) {
-			$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
-			$plgOrderOption = null;
-			$serial = null;
-			if ( !is_null($plgOrderDetail) ) {
-				$plgOrderOption = $plgOrderDetail->getOrderOption();
-				$arrLabels = $plgOrderOption->getLabel();
-			}
-        }
-        // =========================================
-        // 購入者情報部
-        // =========================================
-        // 郵便番号
-        //$text = '〒 '.$order->getZip01() . ' - ' . $order->getZip02();
-        //$this->lfText(23, 43, $text, 10);
-
-        // 購入者都道府県+住所1
-        //$text = $order->getPref() . $order->getAddr01();
-        //$this->lfText(27, 47, $text, 10);
-        //$this->lfText(27, 51, $order->getAddr02(), 10); //購入者住所2
-
-		// 購入企業名
-		$text = $order->getCompanyName();
-        $this->lfText(18, 40, $text, 11);
-		
-        // 購入者氏名
-        $text = $order->getName01() . '　' . $order->getName02() . '　様';
-        $this->lfText(18, 47, $text, 11);
-
-        // =========================================
-        // 固定文章
-        // =========================================
-        $this->SetFont(self::FONT_SJIS, '', 8);
-        $this->lfText(18, 54, ' 毎度格別のお引き立てを賜り、厚く御礼申し上げます。', 8);
-        $this->lfText(18, 58, '下記のとおり御見積もりいたしました。', 8);
-        $this->lfText(18, 62, ' ご検討のうえ、ご用命賜りますようお願い致します。', 8);
-
-        // =========================================
-        // 右上表示
-        // =========================================
-        //見積番号
-        $this->lfText(165, 25, 'No. ' . $order->getCustomOrderId(), 6);
-        //見積作成日
-        $this->lfText(162, 28, $order->getCreateDate()->format('Y年m月d日'), 8);
-        //キャッチフレーズ
-        $this->lfText(151, 32, '"私たちはお客様に安心品質を', 7, 'I');
-        $this->lfText(158, 35, 'お届けします"', 7, 'I');
 
         // =========================================
         // お買い上げ明細部
         // =========================================
-        //品名
-        $product_name = $order_detail->getProductName();
-        $this->lfText(18, 77, '品名：' . $product_name, 10, '');
-        
-        //項目名
-        $this->lfText(55, 86.5, '項　　目', 9, '');
-        $this->lfText(120, 86.5, '数　量', 9, '');
-        $this->lfText(146, 86.5, '単　価', 9, '');
-        $this->lfText(172, 86.5, '金　額', 9, '');
-        
-        //明細(商品情報)
-        $class_name1 = $order_detail->getClassName1();
-        $class_name2 = $order_detail->getClassName2();
-        
-        //規格有無で表示を分岐
-        if ( $class_name1 == '' && $class_name2 == '' ) {
-        	//実物販売は商品名を出力
-        	$this->lfText(30, 96, $product_name, 9, '');
-        } else 
-        if ( $class_name1 != '' && $class_name2 == '' ) {
-        	$product_class_name1 = $order_detail->getClassCategoryName1();
-        	//印刷物(規格2なし)の場合は規格を出力
-        	$this->lfText(30, 96, $class_name1 . '：' . $product_class_name1 , 9, '');
-        	
-        } else 
-        {
-        	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
-        	$product_class_name1 = $order_detail->getClassCategoryName1();
-        	$product_class_name2 = $order_detail->getClassCategoryName2();
-        	$this->lfText(30, 96,  $class_name1 . '：' . $product_class_name1 , 9, '');
-        	$this->lfText(30, 100, $class_name2 . '：' . $product_class_name2 , 9, '');
-        	//商品オプション
-        	$base_y = 104;
-        	foreach($arrLabels as $idx => $label) {
-        		//区切り文字を全角にする
-        		$label = str_replace(':', '：', $label);
-	        	$this->lfText(30, $base_y,  $label , 9, '');
-	        	$base_y = $base_y + 4;
-        	}
-        }
+       	$detail_list = array();
+       	$arrOrderDetail = $order->getOrderDetails();
+       	$line_separate = 0;
+       	$total_price = 0;
 
-		//明細(全パターン共通)
-    	//数量
-    	$this->lfText(130, 96, number_format($order_detail->getQuantity()), 9, '');
-    	//単価
-    	$this->lfText(152, 96, number_format($order_detail->getPrice()), 9, '');
-    	//金額
-    	$this->lfText(176, 96, number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
-    	//合計
-    	$this->lfText(176, 243.5, '￥ ' . number_format($order_detail->getPrice() * $order_detail->getQuantity()), 9, '');
+       	foreach($arrOrderDetail as $idx => $order_detail) {
 
-        // フォント情報の復元
-        $this->restoreFont();
-    }
+			// =========================================
+			// 商品オプション取得(商品オプションプラグインが有効な場合のみ)
+			// =========================================
+			$arrLabels = array();
+			if ( is_object($this->app['eccube.productoption.repository.order_detail']) ) {
+				$plgOrderDetail = $this->app['eccube.productoption.repository.order_detail']->findOneBy(array('order_detail_id' => $order_detail->getId()));
+				$plgOrderOption = null;
+				$serial = null;
+				if ( !is_null($plgOrderDetail) ) {
+					$plgOrderOption = $plgOrderDetail->getOrderOption();
+					$arrLabels = $plgOrderOption->getLabel();
+				}
+			}
 
-    /**
-     * 購入商品詳細情報を設定する
-     *
-     * @param \Plugin\OrderPdf\Entity\OrderPdfOrder $order
-     */
-    protected function renderOrderDetailData($order) {
-        $arrOrder = array();
-        // テーブルの微調整を行うための購入商品詳細情報をarrayに変換する
+			//商品名編集
+			$product_name = $order_detail->getProductName();
+			$product_name_print = $product_name;
+			
+			//明細(商品情報)
+			$class_name1 = $order_detail->getClassName1();
+			$class_name2 = $order_detail->getClassName2();
 
-        // =========================================
-        // 受注詳細情報
-        // =========================================
-        $i = 0;
-        foreach ($order->getOrderDetails() as $orderDetail) {
-            // class categoryの生成
-             $classcategory = "";
-             if ($orderDetail->getClassCategoryName1()) {
-                 $classcategory .= ' [ ' . $orderDetail->getClassCategoryName1();
-                 if ($orderDetail->getClassCategoryName2() == '') {
-                     $classcategory .= ' ]';
-                 } else {
-                     $classcategory .= ' * ' . $orderDetail->getClassCategoryName2() . ' ]';
-                 }
-             }
+			//規格有無で表示を分岐
+			if ( $class_name1 != '' ) {
+				if ( $class_name2 == '' ) {
+			    	$product_class_name1 = $order_detail->getClassCategoryName1();
+					//規格情報を付加する
+					$product_name_print .= "\n" . "　　" . $class_name1 . '：' . $product_class_name1;
+				} else {
+			    	//印刷物(規格1、規格2ともにあり)の場合は規格を出力
+			    	$product_class_name1 = $order_detail->getClassCategoryName1();
+			    	$product_class_name2 = $order_detail->getClassCategoryName2();
 
-             // 税
-             $tax = $this->app['eccube.service.tax_rule']
-                 ->calcTax($orderDetail->getPrice(), $orderDetail->getTaxRate(), $orderDetail->getTaxRule());
-             $orderDetail->setPriceIncTax($orderDetail->getPrice() + $tax);
+					//規格情報を付加する
+					$product_name_print .= "\n";
+					$product_name_print .= "　　" . $class_name1 . '：' . $product_class_name1 . "\n";
+					$product_name_print .= "　　" . $class_name2 . '：' . $product_class_name2;
+				}
+			}
 
-             // product
-             $arrOrder[$i][0] = sprintf('%s / %s / %s', $orderDetail->getProductName(), $orderDetail->getProductCode(), $classcategory);;
-             // 購入数量
-             $arrOrder[$i][1] = number_format($orderDetail->getQuantity());
-             // 税込金額（単価）
-             $arrOrder[$i][2] = number_format($orderDetail->getPriceIncTax()) . self::MONETARY_UNIT;
-             // 小計（商品毎）
-             $arrOrder[$i][3] = number_format($orderDetail->getTotalPrice()) . self::MONETARY_UNIT;
+			//商品オプション
+			foreach($arrLabels as $idx2 => $label) {
+				//区切り文字を全角にする
+				$label = str_replace(':', '：', $label);
+				if ( mb_strlen($label, 'utf-8') > 30 ) {
+					$length = ceil(mb_strlen($label, 'utf-8') / 30);
+					$arrTmp = array();
+					$start = 0;
+					for($i=0; $i<=$length; $i++) {
+						$arrTmp[] = mb_substr($label, $start, 30, 'utf-8');
+						$start += 30;
+					}
+					foreach($arrTmp as $tmp) {
 
-             $i++;
-        }
+						if ( $tmp == '' ) {
+							continue;
+						}
+						$product_name_print .= "\n　　" . $tmp;
+					}
+					//$label = mb_strcut($label, 0, 50, 'utf-8') . '...';
+				} else {
+					$product_name_print .= "\n　　" . $label;
+				}
+			}
+             
+            //空白調整
+            $product_name_print .= "\n";
+            $product_name_print .= "\n";
+            $product_name_print .= "\n";
 
-        // =========================================
-        // 小計
-        // =========================================
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '';
-        $arrOrder[$i][3] = '';
+            // product
+            //$detail_list[$i][0] = sprintf('%s / %s / %s', $order_detail->getProductName(), $order_detail->getProductCode(), $classcategory);;
+            $detail_list[$idx][0] = $product_name_print;
+            // 購入数量
+            $detail_list[$idx][1] = number_format($order_detail->getQuantity());
+            // 税込金額（単価）
+            $detail_list[$idx][2] = number_format($order_detail->getPrice()) . self::MONETARY_UNIT;
+            // 小計（商品毎）
+            $detail_list[$idx][3] = number_format($order_detail->getPrice() * $order_detail->getQuantity()) . self::MONETARY_UNIT;
+            // 合計
+            $total_price += $order_detail->getPrice() * $order_detail->getQuantity();
 
-        $i++;
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '商品合計';
-        $arrOrder[$i][3] = number_format($order->getSubtotal()) . self::MONETARY_UNIT;
+			//改行の数
+			$line_separate += substr_count($product_name_print, "\n");
+			
+			//総改行数が30を超えたら改ページ
+			if (  $line_separate > 30 ) {
+				// ページ内の合計
+				// 一時的に座標を調整
+				$this->setBasePosition(0, 239.5);
+		        $this->Cell(177, 0, number_format($total_price) . self::MONETARY_UNIT, 0, 0, 'R');
+		        
+		        // PDFに設定する
+		        $this->FancyTable($this->labelCell, $detail_list, $this->widthCell);
+		        
+		        $detail_list = array();
 
-        $i++;
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '送料';
-        $arrOrder[$i][3] = number_format($order->getDeliveryFeeTotal()) . self::MONETARY_UNIT;
+				//改ページ
+				$this->addPdfPage();
+				
+				//タイトル
+				$this->renderTitle();
 
-        $i++;
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '手数料';
-        $arrOrder[$i][3] = number_format($order->getCharge()) . self::MONETARY_UNIT;
+		        //基準座標を再設定する
+		        $this->setBasePosition();
+		        
+		        //改行数をクリア
+		        $line_separate = 0;
+		        
+		        $total_price = 0;
+				
+			}
 
-        $i++;
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '値引き';
-        $arrOrder[$i][3] = '- '.number_format($order->getDiscount()) . self::MONETARY_UNIT;
-
-        $i++;
-        $arrOrder[$i][0] = '';
-        $arrOrder[$i][1] = '';
-        $arrOrder[$i][2] = '請求金額';
-        $arrOrder[$i][3] = number_format($order->getPaymentTotal()).self::MONETARY_UNIT;
+       	}
+		// 一時的に座標を調整
+		$this->setBasePosition(0, 239.5);
+		//$this->SetRightMargin(200);
+        $this->Cell(177, 0, number_format($total_price) . self::MONETARY_UNIT, 0, 0, 'R');
 
         // PDFに設定する
-        $this->FancyTable($this->labelCell, $arrOrder, $this->widthCell);
-
+        $this->FancyTable($this->labelCell, $detail_list, $this->widthCell);
 
     }
 
@@ -580,25 +561,27 @@ class OrderPdfService extends AbstractFPDIService
         $this->backupFont();
 
         // 開始座標の設定
-         $this->setBasePosition(0,149);
-
+         $this->setBasePosition(0, 88);
+/*
         // Colors, line width and bold font
-        $this->SetFillColor(216, 216, 216);
+        $this->SetFillColor(255, 255, 255);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
-        $this->SetLineWidth(.3);
+        $this->SetLineWidth(0);
         $this->SetFont(self::FONT_SJIS, 'B', 8);
         $this->SetFont('', 'B');
 
         // Header
-        $this->Cell(5, 7, '', 0, 0, '', 0, '');
+        $this->Cell(5, 4, '', 0, 0, '', 0, '');
         for ($i = 0; $i < count($header); $i++) {
-            $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
+            $this->Cell($w[$i], 4, $header[$i], 'TB', 0, 'C', 1);
         }
+*/
         $this->Ln();
 
         // Color and font restoration
-        $this->SetFillColor(235, 235, 235);
+        //$this->SetFillColor(235, 235, 235);
+        $this->SetFillColor(255, 255, 255);
         $this->SetTextColor(0);
         $this->SetFont('');
         // Data
@@ -631,7 +614,7 @@ class OrderPdfService extends AbstractFPDIService
                         $w[$i],             // セル幅
                         $cellHeight,        // セルの最小の高さ
                         $col,               // 文字列
-                        1,                  // 境界線の描画方法を指定
+                        0,                  // 境界線の描画方法を指定
                         $align,             // テキストの整列
                         $fill,              // 背景の塗つぶし指定
                         $ln                 // 出力後のカーソルの移動方法
@@ -643,7 +626,7 @@ class OrderPdfService extends AbstractFPDIService
             $fill = !$fill;
         }
         $this->Cell(5, $h, '', 0, 0, '', 0, '');
-        $this->Cell(array_sum($w), 0, '', 'T');
+        //$this->Cell(array_sum($w), 0, '', 'T');
         $this->SetFillColor(255);
 
         // フォント情報の復元

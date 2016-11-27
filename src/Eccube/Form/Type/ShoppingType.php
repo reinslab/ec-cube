@@ -55,7 +55,7 @@ class ShoppingType extends AbstractType
 
         $chkArr = array();
         if ( $flgPrintItem ) {
-        	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルを選択してください。'));
+        	$chkArr[] = new Assert\NotBlank(array('message' => 'ファイルが選択されていません。'));
         }
 //        $chkArr[] = new Assert\File(array('maxSize' => $this->app['config']['pdf_size'] . 'M','maxSizeMessage' => 'PDFファイルは' . $this->app['config']['pdf_size'] . 'M以下でアップロードしてください。'));
 		$chkArr[] = new Assert\File(array(

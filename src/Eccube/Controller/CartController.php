@@ -86,6 +86,22 @@ class CartController extends AbstractController
             return $event->getResponse();
         }
 
+// A => 印刷製品判定
+		$arrCartItems = $Cart->getCartItems();
+		$flgPrintItem = false;
+
+		if ( count($arrCartItems) > 0 ) {
+			foreach($arrCartItems as $idx => $cartItem) {
+				$class_id = $cartItem->getClassId();
+				$TargetClass = $app['eccube.repository.product_class']->find($class_id);
+				$product_type = $TargetClass->getProductType()->getId();
+				if ( $product_type == $app['config']['product_type_print'] ) {
+					$flgPrintItem = true;
+					break;
+				}
+			}
+		}
+// A => 印刷製品判定
         return $app->render(
             'Cart/index.twig',
             array(
@@ -93,6 +109,9 @@ class CartController extends AbstractController
                 'least' => $least,
                 'quantity' => $quantity,
                 'is_delivery_free' => $isDeliveryFree,
+// A => 印刷製品判定
+				'flgPrintItem' => $flgPrintItem,
+// A => 印刷製品判定
             )
         );
     }
