@@ -1,0 +1,7 @@
+name: 商品展開管理プラグイン
+code: Display
+version: 1.0.3
+service:
+    - DisplayServiceProvider
+orm.path:
+    - /Resource/doctrine

@@ -25,18 +25,20 @@ textarea.form-control {
 </style>
 
 {% if ProductOptions is defined %}
-    <ul class="classcategory_list">
-        {% for ProductOption in ProductOptions %}
-            {% set value = 'productoption' ~ ProductOption.Option.id %}
-            <li style="padding-bottom:0px;">{{ form_label(form[value]) }}
-                {% if ProductOption.Option.description_flg == 1 %}
-                    &nbsp;<a href="?" id="option_description_link_{{ ProductOption.Option.id }}">詳細説明</a>
-                {% endif %}
-            </li>
-            <li>
-                {{ form_widget(form[value] ,{ attr : { onChange : 'onOptionChange()' }} ) }}
-                {{ form_errors(form[value]) }}
-            </li>
-        {% endfor %}
-    </ul>
+    {% if ProductOptions %}
+        <ul class="classcategory_list">
+            {% for ProductOption in ProductOptions %}
+                {% set value = 'productoption' ~ ProductOption.Option.id %}
+                <li>{{ form_label(form[value]) }}
+                    {% if ProductOption.Option.description_flg == 1 %}
+                        &nbsp;<a href="?" id="option_description_link_{{ ProductOption.Option.id }}">詳細説明</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {{ form_widget(form[value] ,{ attr : { onChange : 'onOptionChange()' }} ) }}
+                    {{ form_errors(form[value]) }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endif %}

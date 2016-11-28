@@ -836,7 +836,7 @@ p.message {
 }
 
 #contents {
-    min-height: 100vh;
+    min-height: 100%;
     z-index: 2;
 }
 #header .container {
@@ -845,7 +845,7 @@ p.message {
 
 /* main */
 #main {
-
+    
 }
 
 /* side */

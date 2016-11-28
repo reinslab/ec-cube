@@ -1,0 +1,7 @@
+admin.display.notfound: 商品展開が存在しません。
+admin.display.display_id.notexists: 商品展開IDがありません。
+admin.plugin.display.regist.success: 商品展開を登録しました。
+admin.plugin.display.update.success: 商品展開を修正しました。
+admin.plugin.display.delete.success: 商品展開を削除しました。
+admin.plugin.display.complete.up: 商品展開を上へ移動しました。
+admin.plugin.display.complete.down: 商品展開を下へ移動しました。
