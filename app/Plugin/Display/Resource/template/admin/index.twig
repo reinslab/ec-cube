@@ -20,15 +20,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #}
 {#
-[コンテンツ]-[商品展開]-[一覧・検索]画面
+[コンテンツ]-[商品一覧]-[一覧・検索]画面
 #}
 
 {% extends 'default_frame.twig' %}
 
 {% set menus = ['content', 'admin_display'] %}
 
-{% block title %}商品展開管理{% endblock %}
-{% block sub_title %}商品展開内容設定{% endblock %}
+{% block title %}商品一覧管理{% endblock %}
+{% block sub_title %}商品一覧内容設定{% endblock %}
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{{ app.config.admin_urlpath }}/assets/css/bootstrap-datetimepicker.min.css">
@@ -56,7 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>商品展開</th>
+                                    <th>商品一覧</th>
                                     <th>コメント</th>
                                     <th>編集</th>
                                     <th>削除</th>
@@ -102,7 +102,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     </div>
 <div class="row">
     <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center btn_area">
-        <a href="{{ url('admin_display_new') }}" class="btn btn-primary btn-block btn-lg">商品展開を新規登録</a>
+        <a href="{{ url('admin_display_new') }}" class="btn btn-primary btn-block btn-lg">商品一覧に新規登録</a>
     </div>
 </div>
 </form>

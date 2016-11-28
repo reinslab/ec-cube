@@ -1,4 +1,4 @@
-name: 商品展開管理プラグイン
+name: 商品一覧管理プラグイン
 code: Display
 version: 1.0.3
 service:

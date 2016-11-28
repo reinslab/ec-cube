@@ -43,7 +43,7 @@ class DisplayController extends AbstractController
     }
 
     /**
-     * 商品展開一覧
+     * 商品一覧
      * @param Application $app
      * @param Request     $request
      * @param unknown     $id
@@ -63,7 +63,7 @@ class DisplayController extends AbstractController
     }
 
     /**
-     * 商品展開の新規作成
+     * 商品一覧の新規作成
      * @param Application $app
      * @param Request     $request
      * @param unknown     $id
@@ -126,7 +126,7 @@ class DisplayController extends AbstractController
 
         $service = $app['eccube.plugin.display.service.display'];
 
-        // IDから商品展開情報を取得する
+        // IDから商品一覧情報を取得する
         $Display = $app['eccube.plugin.display.repository.display_product']->findById($id);
 
         if (is_null($Display)) {
@@ -166,7 +166,7 @@ class DisplayController extends AbstractController
     }
 
     /**
-     * 商品展開の削除
+     * 商品一覧の削除
      * @param Application $app
      * @param Request     $request
      * @param unknown     $id
@@ -189,7 +189,7 @@ class DisplayController extends AbstractController
 
         $service = $app['eccube.plugin.display.service.display'];
 
-        // 商品展開情報を削除する
+        // 商品一覧情報を削除する
         if ($service->deleteDisplay($id)) {
             $app->addSuccess('admin.plugin.display.delete.success', 'admin');
         } else {
@@ -219,7 +219,7 @@ class DisplayController extends AbstractController
 
         $service = $app['eccube.plugin.display.service.display'];
 
-        // IDから商品展開情報を取得する
+        // IDから商品一覧情報を取得する
         $Display = $app['eccube.plugin.display.repository.display_product']->find($id);
         if (is_null($Display)) {
             $app->addError('admin.display.notfound', 'admin');
@@ -253,7 +253,7 @@ class DisplayController extends AbstractController
 
         $service = $app['eccube.plugin.display.service.display'];
 
-        // IDから商品展開情報を取得する
+        // IDから商品一覧情報を取得する
         $Display = $app['eccube.plugin.display.repository.display_product']->find($id);
         if (is_null($Display)) {
             $app->addError('admin.display.notfound', 'admin');

@@ -45,17 +45,17 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報を新規登録する
+     * 商品一覧情報を新規登録する
      * @param $data
      * @return bool
      */
     public function createDisplay($data) {
-        // 商品展開詳細情報を生成する
+        // 商品一覧詳細情報を生成する
         $Display = $this->newDisplay($data);
 
         $em = $this->app['orm.em'];
 
-        // 商品展開情報を登録する
+        // 商品一覧情報を登録する
         $em->persist($Display);
 
         $em->flush();
@@ -64,7 +64,7 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報を更新する
+     * 商品一覧情報を更新する
      * @param $data
      * @return bool
      */
@@ -72,18 +72,18 @@ class DisplayService
         $dateTime = new \DateTime();
         $em = $this->app['orm.em'];
 
-        // 商品展開情報を取得する
+        // 商品一覧情報を取得する
         $Display =$this->app['eccube.plugin.display.repository.display_product']->find($data['id']);
         if(is_null($Display)) {
             false;
         }
 
-        // 商品展開情報を書き換える
+        // 商品一覧情報を書き換える
         $Display->setComment($data['comment']);
         $Display->setProduct($data['Product']);
         $Display->setUpdateDate($dateTime);
 
-        // 商品展開情報を更新する
+        // 商品一覧情報を更新する
         $em->persist($Display);
 
         $em->flush();
@@ -92,7 +92,7 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報を削除する
+     * 商品一覧情報を削除する
      * @param $displayId
      * @return bool
      */
@@ -100,16 +100,16 @@ class DisplayService
         $currentDateTime = new \DateTime();
         $em = $this->app['orm.em'];
 
-        // 商品展開情報を取得する
+        // 商品一覧情報を取得する
         $Display =$this->app['eccube.plugin.display.repository.display_product']->find($displayId);
         if(is_null($Display)) {
             false;
         }
-        // 商品展開情報を書き換える
+        // 商品一覧情報を書き換える
         $Display->setDelFlg(Constant::ENABLED);
         $Display->setUpdateDate($currentDateTime);
 
-        // 商品展開情報を登録する
+        // 商品一覧情報を登録する
         $em->persist($Display);
 
         $em->flush();
@@ -118,7 +118,7 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報の順位を上げる
+     * 商品一覧情報の順位を上げる
      * @param $displayId
      * @return bool
      */
@@ -126,12 +126,12 @@ class DisplayService
         $currentDateTime = new \DateTime();
         $em = $this->app['orm.em'];
 
-        // 商品展開情報を取得する
+        // 商品一覧情報を取得する
         $Display =$this->app['eccube.plugin.display.repository.display_product']->find($displayId);
         if(is_null($Display)) {
             false;
         }
-        // 対象ランクの上に位置する商品展開を取得する
+        // 対象ランクの上に位置する商品一覧を取得する
         $TargetDisplay =$this->app['eccube.plugin.display.repository.display_product']
                                 ->findByRankUp($Display->getRank());
         if(is_null($TargetDisplay)) {
@@ -157,7 +157,7 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報の順位を下げる
+     * 商品一覧情報の順位を下げる
      * @param $displayId
      * @return bool
      */
@@ -165,12 +165,12 @@ class DisplayService
         $currentDateTime = new \DateTime();
         $em = $this->app['orm.em'];
 
-        // 商品展開情報を取得する
+        // 商品一覧情報を取得する
         $Display =$this->app['eccube.plugin.display.repository.display_product']->find($displayId);
         if(is_null($Display)) {
             false;
         }
-        // 対象ランクの上に位置する商品展開を取得する
+        // 対象ランクの上に位置する商品一覧を取得する
         $TargetDisplay =$this->app['eccube.plugin.display.repository.display_product']
                                 ->findByRankDown($Display->getRank());
         if(is_null($TargetDisplay)) {
@@ -196,7 +196,7 @@ class DisplayService
     }
 
     /**
-     * 商品展開情報を生成する
+     * 商品一覧情報を生成する
      * @param $data
      * @return \Plugin\Display\Entity\DisplayProduct
      */

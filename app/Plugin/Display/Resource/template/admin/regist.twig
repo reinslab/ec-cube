@@ -23,8 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 {% set menus = ['content', 'admin_display'] %}
 
-{% block title %}商品展開管理{% endblock %}
-{% block sub_title %}商品展開内容設定{% endblock %}
+{% block title %}商品一覧管理{% endblock %}
+{% block sub_title %}商品一覧内容設定{% endblock %}
 
 {% form_theme form 'Form/bootstrap_3_horizontal_layout.html.twig' %}
 {% form_theme searchProductModalForm 'Form/bootstrap_3_horizontal_layout.html.twig' %}
@@ -80,11 +80,11 @@ var setModeAndSubmit = function(mode, keyname, keyid) {
         <div class="col-md-9">
             <div class="box accordion">
                 <div class="box-header toggle active">
-                    <h3 class="box-title">商品展開情報<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
+                    <h3 class="box-title">商品一覧情報<svg class="cb cb-angle-down icon_down"> <use xlink:href="#cb-angle-down" /></svg></h3>
                 </div><!-- /.box-header -->
                 <div class="box-body accpanel" style="display: block;">
                     <div class="order_list form-horizontal">
-                        {# 商品展開ID #}
+                        {# 商品ID #}
                         <div class="form-group" style="display: none;">
                             {{ form_label(form.id) }}
                             <div class="col-sm-9 col-lg-10">

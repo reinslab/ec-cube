@@ -52,7 +52,7 @@ class Version201611251706 extends AbstractMigration
     }
 
     /**
-     * 商品展開テーブル作成
+     * 商品一覧テーブル作成
      * @param Schema $schema
      */
     protected function createDisplayProduct(Schema $schema)

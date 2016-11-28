@@ -37,37 +37,37 @@ class DisplayServiceProvider implements ServiceProviderInterface
             return $app['orm.em']->getRepository('Plugin\Display\Entity\DisplayProduct');
         });
 
-        // 商品展開の一覧
+        // 商品の一覧
         $app->match('/' . $app["config"]["admin_route"] . '/display', '\Plugin\Display\Controller\DisplayController::index')
             ->value('id', null)->assert('id', '\d+|')
             ->bind('admin_display_list');
 
-        // 商品展開の新規先
+        // 商品一覧の新規先
         $app->match('/' . $app["config"]["admin_route"] . '/display/new', '\Plugin\Display\Controller\DisplayController::create')
             ->value('id', null)->assert('id', '\d+|')
             ->bind('admin_display_new');
 
-        // 商品展開の新規作成・編集確定
+        // 商品一覧の新規作成・編集確定
         $app->match('/' . $app["config"]["admin_route"] . '/display/commit', '\Plugin\Display\Controller\DisplayController::commit')
         ->value('id', null)->assert('id', '\d+|')
         ->bind('admin_display_commit');
 
-        // 商品展開の編集
+        // 商品一覧の編集
         $app->match('/' . $app["config"]["admin_route"] . '/display/edit/{id}', '\Plugin\Display\Controller\DisplayController::edit')
             ->value('id', null)->assert('id', '\d+|')
             ->bind('admin_display_edit');
 
-        // 商品展開の削除
+        // 商品一覧の削除
         $app->match('/' . $app["config"]["admin_route"] . '/display/delete/{id}', '\Plugin\Display\Controller\DisplayController::delete')
         ->value('id', null)->assert('id', '\d+|')
         ->bind('admin_display_delete');
 
-        // 商品展開のランク移動（上）
+        // 商品一覧のランク移動（上）
         $app->match('/' . $app["config"]["admin_route"] . '/display/rank_up/{id}', '\Plugin\Display\Controller\DisplayController::rankUp')
             ->value('id', null)->assert('id', '\d+|')
             ->bind('admin_display_rank_up');
 
-        // 商品展開のランク移動（下）
+        // 商品一覧のランク移動（下）
         $app->match('/' . $app["config"]["admin_route"] . '/display/rank_down/{id}', '\Plugin\Display\Controller\DisplayController::rankDown')
             ->value('id', null)->assert('id', '\d+|')
             ->bind('admin_display_rank_down');
@@ -107,7 +107,7 @@ class DisplayServiceProvider implements ServiceProviderInterface
         // メニュー登録
         $app['config'] = $app->share($app->extend('config', function ($config) {
             $addNavi['id'] = 'admin_display';
-            $addNavi['name'] = '商品展開管理';
+            $addNavi['name'] = '商品一覧管理';
             $addNavi['url'] = 'admin_display_list';
             $nav = $config['nav'];
             foreach ($nav as $key => $val) {

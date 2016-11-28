@@ -55,17 +55,14 @@ class DisplayProductType extends AbstractType
 
         $builder
             ->add('id', 'text', array(
-                'label' => '商品展開ID',
+                'label' => '商品ID',
                 'required' => false,
                 'attr' => array('readonly' => 'readonly'),
             ))
             ->add('comment', 'textarea', array(
                 'label' => 'コメント',
-                'required' => true,
+                'required' => false,
                 'trim' => true,
-                'constraints' => array(
-                    new Assert\NotBlank(),
-                ),
             ));
 
         $builder
