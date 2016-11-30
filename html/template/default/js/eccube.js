@@ -488,7 +488,8 @@
             $cartbtn.text('ただいま品切れ中です');
         } else {
             $cartbtn.prop('disabled', false);
-            $cartbtn.text('カートに入れる');
+            //詳細　規格未選択時にアイコンを追加 wellco-sys-t.t 2016/11/30
+            $cartbtn.html('<svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる');
         }
 
         // 通常価格

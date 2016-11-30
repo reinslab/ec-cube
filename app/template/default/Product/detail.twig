@@ -63,7 +63,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	            $cartbtn.text('ただいま品切れ中です');
 	        } else {
 	            $cartbtn.prop('disabled', false);
-	            $cartbtn.text('カートに入れる');
+	            $cartbtn.html('<svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる');
 	        }
 
 	        // 通常価格
@@ -517,15 +517,15 @@ $(function(){
 
                                 {# カートボタン #}
                                 <div id="detail_cart_box__button_area" class="btn_area">
-                                    <ul id="detail_cart_box__insert_button" class="row">
-                                        <li class="col-xs-12 col-sm-8"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button></li>
-                                    </ul>
+                                    <ul id="detail_cart_box__insert_button" class="row" style="text-align: center;">
+                                        <li style="display: inline-block; width: 40%;"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask"><svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる</button></li>
+                                    
                                     {% if BaseInfo.option_favorite_product == 1 %}
-                                    <ul id="detail_cart_box__favorite_button" class="row">
+                                    
                                         {% if is_favorite == false %}
-                                            <li class="col-xs-12 col-sm-8"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask">お気に入りに追加</button></li>
+                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加</button></li>
                                         {% else %}
-                                            <li class="col-xs-12 col-sm-8"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled">お気に入りに追加済みです</button></li>
+                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加済</button></li>
                                         {% endif %}
                                     </ul>
                                     {% endif %}
