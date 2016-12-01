@@ -251,11 +251,15 @@ class WellDirectController extends AbstractController
 		        $app['orm.em']->persist($Order);
 		        $app['orm.em']->flush($Order);
 
+				if ( !is_dir($app['config']['data_save_realdir']) ) {
+					@mkdir($app['config']['data_save_realdir']);
+				}
+
 				//一時領域に移動
-				$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+				$objPdffile->move($app['config']['data_save_realdir'], $pdf_file_name);
 				
 				//古いファイル削除
-				@unlink($app['config']['image_save_realdir'] . '/' . $old_file_name);
+				@unlink($app['config']['data_save_realdir'] . '/' . $old_file_name);
 			}
 			// 元の画面にリダイレクト
 			$request_uri = $_SERVER['REQUEST_URI'];

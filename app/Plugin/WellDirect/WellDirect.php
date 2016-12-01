@@ -366,7 +366,10 @@ class WellDirect {
 	        $app['orm.em']->flush($Order);
 
 			//一時領域に移動
-			$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+			if ( !is_dir($app['config']['data_save_realdir']) ) {
+				@mkdir($app['config']['data_save_realdir']);
+			}
+			$objPdffile->move($app['config']['data_save_realdir'], $pdf_file_name);
 		}
     }
 
@@ -392,9 +395,13 @@ class WellDirect {
         if ( !is_null($Order) && !$Order->isPdfUploadFlg() ) {
         	$pdf_file = $Order->getPdfFileName();
 
+			if ( !is_dir($this->app['config']['data_save_realdir']) ) {
+				@mkdir($this->app['config']['data_save_realdir']);
+			}
+
         	//ファイル移動
-        	@copy($app['config']['image_temp_realdir'] . '/' . $pdf_file, $app['config']['image_save_realdir'] . '/' . $pdf_file);
-        	@unlink($app['config']['image_temp_realdir'] . '/' . $pdf_file);
+        	@copy($app['config']['data_temp_realdir'] . '/' . $pdf_file, $app['config']['data_save_realdir'] . '/' . $pdf_file);
+        	@unlink($app['config']['data_temp_realdir'] . '/' . $pdf_file);
 
 			//入稿データ登録済みフラグ
 			$Order->setPdfUploadFlg(1);
@@ -473,7 +480,10 @@ class WellDirect {
 				$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
 
 				//一時領域にコピー
-				@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $upload_file_name);
+				if ( !is_dir($this->app['config']['data_temp_realdir']) ) {
+					@mkdir($this->app['config']['data_temp_realdir']);
+				}
+				@copy($tmp_file_name, $this->app['config']['data_temp_realdir'] . '/' . $upload_file_name);
 				//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
 
 			}
