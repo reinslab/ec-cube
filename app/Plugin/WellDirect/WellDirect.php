@@ -343,9 +343,6 @@ class WellDirect {
 			$orgFileName = $objPdffile->getClientOriginalName();
 			$orgFileExt  = $objPdffile->getClientOriginalExtension();
 
-			//アップロードファイル名
-	        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
-
 /*
 			if ( strpos($orgFileName, '.pdf') === false ) {
 				throw new UnsupportedMediaTypeHttpException();
@@ -353,6 +350,15 @@ class WellDirect {
 */
 			//カスタム注文IDもセットする
 			$Order = $app['eccube.service.shopping']->setCustomOrderId($app, $Order);
+    	
+	    	//カスタム注文ID
+	    	$custom_order_id = $Order->getCustomOrderId();
+			
+			//アップロードファイル名
+	        $pdf_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
+
+			//オリジナルファイル名設定
+			$Order->setDataFileOriginalName($orgFileName);
 
 			//受注ステータス
 			$app['eccube.service.shopping']->setOrderStatus($Order, $app['config']['order_new']);
@@ -452,16 +458,23 @@ class WellDirect {
 				$orgFileName = $objUploadfile->getClientOriginalName();
 				$orgFileExt  = $objUploadfile->getClientOriginalExtension();
 
-				//アップロードファイル名
-		        $upload_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
 
 /*
 				if ( strpos($orgFileName, '.pdf') === false ) {
 					throw new UnsupportedMediaTypeHttpException();
 				}
 */
-				//カスタム注文IDもセットする
+				//カスタム注文IDをセットする
 				$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
+    	
+		    	//カスタム注文ID
+		    	$custom_order_id = $Order->getCustomOrderId();
+
+				//アップロードファイル名
+		        $upload_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
+			
+				//オリジナルファイル名設定
+				$Order->setDataFileOriginalName($orgFileName);
 
 				//受注ステータス
 				//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);

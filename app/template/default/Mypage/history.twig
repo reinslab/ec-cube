@@ -203,7 +203,7 @@ console.log(document.form1.pdf_upload);
                 <h2 class="heading02">入稿データ</h2>
                 <div id="detail_box__pdf_file" class="column">
                     <p>
-                        <a href="/upload/save_image/{{ Order.pdf_file_name }}" target="_blank">{{ Order.pdf_file_name }}</a>
+                        <a href="/upload/save_data/{{ Order.pdf_file_name }}" target="_blank">{% if Order.data_file_original_name != "" %}{{ Order.data_file_original_name }}{% else %}{{ Order.pdf_file_name }}{% endif %}</a>
 					{% if Order.OrderStatus.id < app.config.order_data_check_now and
                 		  Order.OrderStatus.id != app.config.order_deliv %}
 

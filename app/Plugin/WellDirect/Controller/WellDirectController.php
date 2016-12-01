@@ -214,6 +214,9 @@ class WellDirectController extends AbstractController
     	//受注検索
     	$Order = $app['eccube.repository.order']->findOneBy(array('id' => $id));
     	
+    	//カスタム注文ID
+    	$custom_order_id = $Order->getCustomOrderId();
+    	
     	//アップロードファイル情報取得
 		$pdf_files = $request->files->get('mypage_history');
 		$objPdffile = $pdf_files['pdffile'];
@@ -239,13 +242,17 @@ class WellDirectController extends AbstractController
 					throw new UnsupportedMediaTypeHttpException();
 				}
 	*/
+				
 				//ファイル名
-		        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
+		        $pdf_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
 
 				//ファイル名セット
 				$Order->setPdfFileName($pdf_file_name);
 				//更新日時
 				$Order->setUpdateDate(new \DateTime());
+			
+				//オリジナルファイル名設定
+				$Order->setDataFileOriginalName($orgFileName);
 
 		        // DB更新
 		        $app['orm.em']->persist($Order);
