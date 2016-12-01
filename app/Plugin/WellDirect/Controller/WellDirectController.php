@@ -32,6 +32,7 @@ use Symfony\Component\HttpKernel\Exception as HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class WellDirectController extends AbstractController
 {
@@ -310,4 +311,56 @@ class WellDirectController extends AbstractController
         ));
     	
     }
+
+
+
+    /**
+     * 入稿データ読み込み
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function dataFileLoad(Application $app, Request $request, $id)
+    {
+        // 未ログインの場合, ログイン画面へリダイレクト.
+        if (!$app->isGranted('IS_AUTHENTICATED_FULLY')) {
+        	$app->setLoginTargetPath('/data/load/' . $id);
+            return $app->redirect($app->url('mypage_login'));
+        }
+        // IDが未設定の場合はトップページにリダイレクト
+        if ( is_null($id) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+		// 受注検索
+        $Order = $app['eccube.repository.order']->findOneBy(array(
+            'id' => $id,
+            'Customer' => $app->user(),
+        ));
+        
+        // 受注データが取得できなければトップページにリダイレクト
+        if ( is_null($Order) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+        // 入稿データが無ければリダイレクト
+        if ( is_null($Order->getPdfFileName()) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+        // 入稿データが実在しなければリダイレクト
+        $data_file = $app['config']['data_save_realdir'] . '/' . $Order->getPdfFileName();
+        if ( !file_exists($data_file) ) {
+        	// TODO:エラーを戻したほうが良いのか？
+        	return $app->redirect($app->url('top'));
+        }
+        
+        return $app
+            ->sendFile($data_file)
+            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $Order->getPdfFileName());
+
+        
+    }
+
 }
