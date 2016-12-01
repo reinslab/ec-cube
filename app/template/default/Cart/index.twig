@@ -166,23 +166,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             {% endfor %}
 
                         </div>
-                    </div><!--/cart_item-->
-                    <div class="total_box">
+                    </div><!--/cart_item-->               
+                    <div class="total_box" style="float: none;">
                         <dl id="total_box__total_price" class="total_price">
                             <dt>合計：</dt>
                             <dd class="text-primary">￥{{ Cart.total_price|number_format }}</dd>
                         </dl>
-                        <div id="total_box__user_action_menu" class="btn_group">
-
-                            <p id="total_box__next_button" >
-                                <a href="{{ path('cart_buystep') }}" class="btn btn-primary btn-block">レジに進む</a>
+                        
+                        <div id="total_box__user_action_menu" class="btn_group" style="padding-right: 16px;">
+                            <div class="row">
+                            <p id="total_box__top_button" class="col-xs-12 col-sm-4 col-md-4">
+                                <a  href="{{ url('top') }}" class="btn btn-info btn-block"><svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>お買い物を続ける</a>
                             </p>
-                            <p id="total_box__top_button">
-                                <a  href="{{ url('top') }}" class="btn btn-info btn-block">お買い物を続ける</a>
+                            <p id="total_box__next_button" class="col-xs-12 col-sm-4 col-md-4">
+                                <a href="{{ path('cart_buystep') }}" class="btn btn-primary btn-block"><svg class="cb cb-angle-right" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-angle-right"></use></svg>レジに進む</a>
                             </p>
+                            </div>
                         </div>
                     </div>
-
                 </form>
                 {% else %}
                 <div id="cart_box__message" class="message">

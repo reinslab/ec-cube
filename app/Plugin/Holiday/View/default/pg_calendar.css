@@ -9,7 +9,8 @@
 }
 .calendar_title {
     font-weight: bold;
-	padding-left: 10px;
+    font-size: 2.4em;
+    border-bottom: 1px dotted #ccc;
 }
 #calendar .holiday {
     background: #ff6347;

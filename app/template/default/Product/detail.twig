@@ -63,7 +63,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	            $cartbtn.text('ただいま品切れ中です');
 	        } else {
 	            $cartbtn.prop('disabled', false);
-	            $cartbtn.text('カートに入れる');
+	            $cartbtn.html('<svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる');
 	        }
 
 	        // 通常価格
@@ -462,17 +462,17 @@ $(function(){
                                         {{ form_errors(form.classcategory_id1) }}
                                         <p class="errormsg text-danger"><span id="error_msg_classcategory_id1"></span></p>
                                     {% else %}
-		                                <table border="0" cellpadding="4" cellspacing="0">
+		                                <table border="0" cellpadding="4" cellspacing="0" style="border: 1px solid #fff; border-collapse: collapse;">
 		                                <tr>
-		                                <td style="padding:5px;">&nbsp;</td>
-		                                <td style="width:100px;padding:5px;">部数</td>
-		                                <td style="width:100px;padding:5px;">金額</td>
+		                                <!-- th>&nbsp;</th -->
+                                                <th colspan="2" style="border: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;">部数</th>
+		                                <th style="border: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;">金額</th>
 		                                </tr>
 		                                {% for item in ProductClass1 %}
 		                                <tr>
-		                                <td style="padding:5px;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }});setCate2Value('{{ item.price01 }}','{{item.price02}}','{{item.product_code}}');" /></td>
-		                                <td style="width:100px;padding:5px;">{{ item.class_name }}</td>
-		                                <td style="width:100px;padding:5px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
+		                                <td style="padding: 5px 2px 5px 10px; border-bottom: 1px solid #d3d3d3;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }});setCate2Value('{{ item.price01 }}','{{item.price02}}','{{item.product_code}}');" /></td>
+		                                <td style="padding: 5px 30px; border-right: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3; text-align: right;">{{ item.class_name }}</td>
+		                                <td style="padding: 5px 30px; border-bottom: 1px solid #d3d3d3; text-align: right; width: 135px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
 		                                </tr>
 		                                {% endfor %}
 		                                </table>
@@ -517,15 +517,15 @@ $(function(){
 
                                 {# カートボタン #}
                                 <div id="detail_cart_box__button_area" class="btn_area">
-                                    <ul id="detail_cart_box__insert_button" class="row">
-                                        <li class="col-xs-12 col-sm-8"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button></li>
-                                    </ul>
+                                    <ul id="detail_cart_box__insert_button" class="row" style="text-align: center;">
+                                        <li style="display: inline-block; width: 40%;"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask"><svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる</button></li>
+                                    
                                     {% if BaseInfo.option_favorite_product == 1 %}
-                                    <ul id="detail_cart_box__favorite_button" class="row">
+                                    
                                         {% if is_favorite == false %}
-                                            <li class="col-xs-12 col-sm-8"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask">お気に入りに追加</button></li>
+                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加</button></li>
                                         {% else %}
-                                            <li class="col-xs-12 col-sm-8"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled">お気に入りに追加済みです</button></li>
+                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加済</button></li>
                                         {% endif %}
                                     </ul>
                                     {% endif %}

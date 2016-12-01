@@ -557,7 +557,16 @@ h1.header_logo{
 	padding-left: 5px;
         border-color: #a94442;
         border-radius: 4px;
+        position: relative;
 	}
+#shopping-form .errormsg:before{
+        content: "";
+        position: absolute;
+        top: -23px;
+        left: 10%;
+        border: 12px solid transparent;
+        border-bottom: 12px solid #DE5D50;
+}
 #detail_cart_box .errormsg{
 	padding-top: 5px;
 	color: #DD080C;

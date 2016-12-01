@@ -1450,8 +1450,8 @@ dl.quantity dd {
     margin-top: 0;
 }
 .btn_area .btn {
-    height: 56px;
-    line-height: 56px;
+    height: 40px;
+    line-height: 40px;
     vertical-align: middle;
     padding-top: 0;
     padding-bottom: 0;
@@ -1459,7 +1459,7 @@ dl.quantity dd {
 .btn_area .btn_icon .cb {
     display: inline-block;
     font-size: 30px;
-    font-size: 3.0rem;
+    font-size: 3.0em;
     height: 54px;
     line-height: 54px;
     vertical-align: middle;
@@ -2697,9 +2697,13 @@ fieldset[disabled] .btn-default.active {
     background-color: #525263;
 }
 .btn-primary {
-    color: #fff;
-    background-color: #DE5D50;
-    border-color: #DE5D50;
+    /*color: #fff;*/
+    background-color: #fff;
+    color: #6495ed;
+    border-left: 8px solid #6495ed;
+    border-top: 1px solid #6495ed;
+    border-right: 1px solid #6495ed;
+    border-bottom: 1px solid #6495ed;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -2707,8 +2711,11 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #D85145;
-    border-color: #D85145;
+    background-color: #6495ed;
+    border-left: 8px solid #8eafed;
+    border-top: 1px solid #6495ed;
+    border-right: 1px solid #6495ed;
+    border-bottom: 1px solid #6495ed;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -2730,8 +2737,8 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-    background-color: #DE5D50;
-    border-color: #DE5D50;
+    background-color: #8eafed;
+    border-color: #8eafed;
 }
 .btn-primary .badge {
     color: #fff;
@@ -2777,9 +2784,13 @@ fieldset[disabled] .btn-primary-border.active {
 }
 
 .btn-success {
-    color: #fff;
-    background-color: #5CB1B1;
-    border-color: #5CB1B1;
+    color: #5CB1B1;
+    background-color: #fff;
+    /*border-color: #5CB1B1;*/
+    border-left: 8px solid #5CB1B1;
+    border-top: 1px solid #5CB1B1;
+    border-right: 1px solid #5CB1B1;
+    border-bottom: 1px solid #5CB1B1;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -2787,8 +2798,12 @@ fieldset[disabled] .btn-primary-border.active {
 .btn-success.active,
 .open > .dropdown-toggle.btn-success {
     color: #fff;
-    background-color: #50A6A6;
-    border-color: #50A6A6;
+    background-color: #5CB1B1;
+    /*border-color: #50A6A6;*/
+    border-left: 8px solid #7acccc;
+    border-top: 1px solid #5CB1B1;
+    border-right: 1px solid #5CB1B1;
+    border-bottom: 1px solid #5CB1B1;
 }
 .btn-success:active,
 .btn-success.active,
@@ -2858,9 +2873,14 @@ fieldset[disabled] .btn-success-border.active {
 }
 
 .btn-info {
-    color: #fff;
-    background-color: #525263;
-    border-color: #525263;
+    /*color: #fff;*/
+    /*background-color: #525263;*/
+    color: #ff7f50;
+    background-color: #FFFFFF;
+    border-left: 8px solid #ff7f50;
+    border-top: 1px solid #ff7f50;
+    border-right: 1px solid #ff7f50;
+    border-bottom: 1px solid #ff7f50;
 }
 .btn-info:hover,
 .btn-info:focus,
@@ -2868,8 +2888,11 @@ fieldset[disabled] .btn-success-border.active {
 .btn-info.active,
 .open > .dropdown-toggle.btn-info {
     color: #fff;
-    background-color: #474757;
-    border-color: #474757;
+    background-color: #ff7f50;
+    border-left: 8px solid #ffb499;
+    border-top: 1px solid #ff7f50;
+    border-right: 1px solid #ff7f50;
+    border-bottom: 1px solid #ff7f50;
 }
 .btn-info:active,
 .btn-info.active,
@@ -2891,8 +2914,12 @@ fieldset[disabled] .btn-info:active,
 .btn-info.disabled.active,
 .btn-info[disabled].active,
 fieldset[disabled] .btn-info.active {
-    background-color: #525263;
-    border-color: #525263;
+    background-color: #ffb499;
+    border-left: 8px solid #ffccd4;
+    border-top: 1px solid #ffb499;
+    border-right: 1px solid #ffb499;
+    border-bottom: 1px solid #ffb499;
+    color: #fff;
 }
 .btn-info .badge {
     color: #525263;
@@ -4051,7 +4078,7 @@ fieldset[disabled] .btn-link:focus {
         margin-left: 0;
     }
     .total_box .btn_group {
-        padding: 16px 0;
+        padding: 56px 0;
     }
     .total_box .btn_group p {
         margin: 16px 0;
@@ -4428,4 +4455,7 @@ fieldset[disabled] .btn-link:focus {
 		margin-top: 0;
 
 	}
+    #detail_cart_box tr:nth-child(2n+1) {
+        background: #f5f5f5;
+    }
 }
