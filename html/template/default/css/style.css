@@ -1459,7 +1459,7 @@ dl.quantity dd {
 .btn_area .btn_icon .cb {
     display: inline-block;
     font-size: 30px;
-    font-size: 3.0rem;
+    font-size: 3.0em;
     height: 54px;
     line-height: 54px;
     vertical-align: middle;
@@ -2698,7 +2698,7 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
     /*color: #fff;*/
-    background-color: #FFFFFF;
+    background-color: #fff;
     color: #6495ed;
     border-left: 8px solid #6495ed;
     border-top: 1px solid #6495ed;
@@ -2737,8 +2737,8 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-    background-color: #DE5D50;
-    border-color: #DE5D50;
+    background-color: #8eafed;
+    border-color: #8eafed;
 }
 .btn-primary .badge {
     color: #fff;
@@ -2914,12 +2914,12 @@ fieldset[disabled] .btn-info:active,
 .btn-info.disabled.active,
 .btn-info[disabled].active,
 fieldset[disabled] .btn-info.active {
-    background-color: #ff8093;
-    color: #FFFFFF;
-    border-left: 8px solid #ffb3be;
-    border-top: 1px solid #ff8093;
-    border-right: 1px solid #ff8093;
-    border-bottom: 1px solid #ff8093;
+    background-color: #ffb499;
+    border-left: 8px solid #ffccd4;
+    border-top: 1px solid #ffb499;
+    border-right: 1px solid #ffb499;
+    border-bottom: 1px solid #ffb499;
+    color: #fff;
 }
 .btn-info .badge {
     color: #525263;
@@ -4455,4 +4455,7 @@ fieldset[disabled] .btn-link:focus {
 		margin-top: 0;
 
 	}
+    #detail_cart_box tr:nth-child(2n+1) {
+        background: #f5f5f5;
+    }
 }
