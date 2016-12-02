@@ -70,11 +70,14 @@ class WellDirectAdminController extends AbstractController
         $nowTime = $now->format('YmdHis');
     	
     	// PDFダウンロード一時ディレクトリ作成
-    	$pdf_download_dir = $app['config']['image_temp_realdir'] . '/' . $nowTime;
+    	if ( !is_dir($app['config']['data_dl_realdir']) ) {
+    		@mkdir($app['config']['data_dl_realdir']);
+    	}
+    	$pdf_download_dir = $app['config']['data_dl_realdir'] . '/' . $nowTime;
 
 		// ダウンロードファイル名
         $zip_filename = 'order_uploadfile_' . $nowTime . '.zip';
-        $zip_filepath = $app['config']['image_temp_realdir'] . '/' . $zip_filename;
+        $zip_filepath = $app['config']['data_dl_realdir'] . '/' . $zip_filename;
     	
     	// ディレクトリが無ければ作成
     	if (!is_dir($pdf_download_dir) ) {
@@ -99,7 +102,7 @@ $app->log("PdfFile = " . $TargetOrder->getPdfFileName());
             $custom_order_id = $TargetOrder->getCustomOrderId();
             
             //一時ディレクトリにファイルコピ
-            $file->copy($app['config']['image_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
+            $file->copy($app['config']['data_save_realdir'] . '/' . $TargetOrder->getPdfFileName(), $pdf_download_dir . '/' . $TargetOrder->getPdfFileName());
 
             
             //受注ステータス更新
@@ -111,8 +114,6 @@ $app->log("PdfFile = " . $TargetOrder->getPdfFileName());
     	
     	//Linuxの場合のみ
     	if ( PHP_OS == 'Linux' ) {
-    		//制限時間を無制限に延長する
-    		set_time_limit(0);
     		
 	    	//フォルダごと圧縮(Linux環境限定)
 	    	$command = "cd " . $pdf_download_dir . ";zip " . $zip_filename . " ./*";
@@ -123,6 +124,9 @@ $app->log("PdfFile = " . $TargetOrder->getPdfFileName());
 	    	
 	    	//ファイルの存在チェック
 	    	if ( file_exists($pdf_download_dir . '/' . $zip_filename) ) {
+	    		//制限時間を無制限に延長する
+	    		set_time_limit(0);
+
 		    	//ZIPファイル移動
 		    	$file->copy($pdf_download_dir . '/' . $zip_filename, $zip_filepath);
 		    	

@@ -39,3 +39,4 @@ composer.phar
 fabfile.*
 .fabfile.*
 /html/index_dev.php
+/app/upload
