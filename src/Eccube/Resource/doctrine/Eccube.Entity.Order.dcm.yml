@@ -180,6 +180,9 @@ Eccube\Entity\Order:
             nullable: true
             options:
                 default: '0'
+        data_file_original_name:
+            type: text
+            nullable: true
     manyToOne:
         Customer:
             targetEntity: Eccube\Entity\Customer
