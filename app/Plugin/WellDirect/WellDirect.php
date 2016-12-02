@@ -343,9 +343,6 @@ class WellDirect {
 			$orgFileName = $objPdffile->getClientOriginalName();
 			$orgFileExt  = $objPdffile->getClientOriginalExtension();
 
-			//アップロードファイル名
-	        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
-
 /*
 			if ( strpos($orgFileName, '.pdf') === false ) {
 				throw new UnsupportedMediaTypeHttpException();
@@ -353,6 +350,15 @@ class WellDirect {
 */
 			//カスタム注文IDもセットする
 			$Order = $app['eccube.service.shopping']->setCustomOrderId($app, $Order);
+    	
+	    	//カスタム注文ID
+	    	$custom_order_id = $Order->getCustomOrderId();
+			
+			//アップロードファイル名
+	        $pdf_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
+
+			//オリジナルファイル名設定
+			$Order->setDataFileOriginalName($orgFileName);
 
 			//受注ステータス
 			$app['eccube.service.shopping']->setOrderStatus($Order, $app['config']['order_new']);
@@ -366,7 +372,10 @@ class WellDirect {
 	        $app['orm.em']->flush($Order);
 
 			//一時領域に移動
-			$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+			if ( !is_dir($app['config']['data_save_realdir']) ) {
+				@mkdir($app['config']['data_save_realdir']);
+			}
+			$objPdffile->move($app['config']['data_save_realdir'], $pdf_file_name);
 		}
     }
 
@@ -392,9 +401,13 @@ class WellDirect {
         if ( !is_null($Order) && !$Order->isPdfUploadFlg() ) {
         	$pdf_file = $Order->getPdfFileName();
 
+			if ( !is_dir($this->app['config']['data_save_realdir']) ) {
+				@mkdir($this->app['config']['data_save_realdir']);
+			}
+
         	//ファイル移動
-        	@copy($app['config']['image_temp_realdir'] . '/' . $pdf_file, $app['config']['image_save_realdir'] . '/' . $pdf_file);
-        	@unlink($app['config']['image_temp_realdir'] . '/' . $pdf_file);
+        	@copy($app['config']['data_temp_realdir'] . '/' . $pdf_file, $app['config']['data_save_realdir'] . '/' . $pdf_file);
+        	@unlink($app['config']['data_temp_realdir'] . '/' . $pdf_file);
 
 			//入稿データ登録済みフラグ
 			$Order->setPdfUploadFlg(1);
@@ -445,16 +458,23 @@ class WellDirect {
 				$orgFileName = $objUploadfile->getClientOriginalName();
 				$orgFileExt  = $objUploadfile->getClientOriginalExtension();
 
-				//アップロードファイル名
-		        $upload_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
 
 /*
 				if ( strpos($orgFileName, '.pdf') === false ) {
 					throw new UnsupportedMediaTypeHttpException();
 				}
 */
-				//カスタム注文IDもセットする
+				//カスタム注文IDをセットする
 				$Order = $this->app['eccube.service.shopping']->setCustomOrderId($this->app, $Order);
+    	
+		    	//カスタム注文ID
+		    	$custom_order_id = $Order->getCustomOrderId();
+
+				//アップロードファイル名
+		        $upload_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
+			
+				//オリジナルファイル名設定
+				$Order->setDataFileOriginalName($orgFileName);
 
 				//受注ステータス
 				//$this->app['eccube.service.shopping']->setOrderStatus($Order, $this->app['config']['order_new']);
@@ -473,7 +493,10 @@ class WellDirect {
 				$tmp_file_name = $_FILES['shopping']['tmp_name']['pdffile'];
 
 				//一時領域にコピー
-				@copy($tmp_file_name, $this->app['config']['image_temp_realdir'] . '/' . $upload_file_name);
+				if ( !is_dir($this->app['config']['data_temp_realdir']) ) {
+					@mkdir($this->app['config']['data_temp_realdir']);
+				}
+				@copy($tmp_file_name, $this->app['config']['data_temp_realdir'] . '/' . $upload_file_name);
 				//$target = $objPdffile->move($this->app['config']['image_temp_realdir'], $pdf_file_name);
 
 			}

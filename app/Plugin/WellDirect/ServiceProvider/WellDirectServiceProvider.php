@@ -37,6 +37,8 @@ class WellDirectServiceProvider implements ServiceProviderInterface
         // 印刷通知
         $app->match('/' . $app["config"]["admin_route"] . '/order/printmail/{id}', '\Plugin\WellDirect\Controller\Admin\WellDirectAdminController::printMail')->value('id', null)->assert('id', '\d+|')->bind('admin_order_print_mail');
 
+        // 入稿データ表示
+        $app->match('/data/load/{id}', '\Plugin\WellDirect\Controller\WellDirectController::dataFileLoad')->value('id', null)->assert('id', '\d+|')->bind('data_load');
 
 
 		///////////////////////////////////////////////

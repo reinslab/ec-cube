@@ -32,6 +32,7 @@ use Symfony\Component\HttpKernel\Exception as HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class WellDirectController extends AbstractController
 {
@@ -214,6 +215,9 @@ class WellDirectController extends AbstractController
     	//受注検索
     	$Order = $app['eccube.repository.order']->findOneBy(array('id' => $id));
     	
+    	//カスタム注文ID
+    	$custom_order_id = $Order->getCustomOrderId();
+    	
     	//アップロードファイル情報取得
 		$pdf_files = $request->files->get('mypage_history');
 		$objPdffile = $pdf_files['pdffile'];
@@ -239,23 +243,31 @@ class WellDirectController extends AbstractController
 					throw new UnsupportedMediaTypeHttpException();
 				}
 	*/
+				
 				//ファイル名
-		        $pdf_file_name = date('mdHis') . uniqid('_') . '.' . $orgFileExt;
+		        $pdf_file_name = $custom_order_id . uniqid('_') . '.' . $orgFileExt;
 
 				//ファイル名セット
 				$Order->setPdfFileName($pdf_file_name);
 				//更新日時
 				$Order->setUpdateDate(new \DateTime());
+			
+				//オリジナルファイル名設定
+				$Order->setDataFileOriginalName($orgFileName);
 
 		        // DB更新
 		        $app['orm.em']->persist($Order);
 		        $app['orm.em']->flush($Order);
 
+				if ( !is_dir($app['config']['data_save_realdir']) ) {
+					@mkdir($app['config']['data_save_realdir']);
+				}
+
 				//一時領域に移動
-				$objPdffile->move($app['config']['image_save_realdir'], $pdf_file_name);
+				$objPdffile->move($app['config']['data_save_realdir'], $pdf_file_name);
 				
 				//古いファイル削除
-				@unlink($app['config']['image_save_realdir'] . '/' . $old_file_name);
+				@unlink($app['config']['data_save_realdir'] . '/' . $old_file_name);
 			}
 			// 元の画面にリダイレクト
 			$request_uri = $_SERVER['REQUEST_URI'];
@@ -299,4 +311,56 @@ class WellDirectController extends AbstractController
         ));
     	
     }
+
+
+
+    /**
+     * 入稿データ読み込み
+     *
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function dataFileLoad(Application $app, Request $request, $id)
+    {
+        // 未ログインの場合, ログイン画面へリダイレクト.
+        if (!$app->isGranted('IS_AUTHENTICATED_FULLY')) {
+        	$app->setLoginTargetPath('/data/load/' . $id);
+            return $app->redirect($app->url('mypage_login'));
+        }
+        // IDが未設定の場合はトップページにリダイレクト
+        if ( is_null($id) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+		// 受注検索
+        $Order = $app['eccube.repository.order']->findOneBy(array(
+            'id' => $id,
+            'Customer' => $app->user(),
+        ));
+        
+        // 受注データが取得できなければトップページにリダイレクト
+        if ( is_null($Order) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+        // 入稿データが無ければリダイレクト
+        if ( is_null($Order->getPdfFileName()) ) {
+        	return $app->redirect($app->url('top'));
+        }
+        
+        // 入稿データが実在しなければリダイレクト
+        $data_file = $app['config']['data_save_realdir'] . '/' . $Order->getPdfFileName();
+        if ( !file_exists($data_file) ) {
+        	// TODO:エラーを戻したほうが良いのか？
+        	return $app->redirect($app->url('top'));
+        }
+        
+        return $app
+            ->sendFile($data_file)
+            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $Order->getPdfFileName());
+
+        
+    }
+
 }

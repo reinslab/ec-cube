@@ -441,6 +441,14 @@ class Order extends \Eccube\Entity\AbstractEntity
     private $box_num;
 // A => 入力項目追加(伝票番号)
 
+// A => 入稿データオリジナルファイル名
+    /**
+     * 入稿データオリジナルファイル名
+     * @var string
+     */
+    private $data_file_original_name;
+// A => 入稿データオリジナルファイル名
+
 
     /**
      * Constructor
@@ -1786,6 +1794,29 @@ class Order extends \Eccube\Entity\AbstractEntity
     public function getBoxNum()
     {
         return $this->box_num;
+    }
+
+    /**
+     * Set data_file_original_name
+     *
+     * @param  string $data_file_original_name
+     * @return Order
+     */
+    public function setDataFileOriginalName($data_file_original_name)
+    {
+        $this->data_file_original_name = $data_file_original_name;
+
+        return $this;
+    }
+
+    /**
+     * Get data_file_original_name
+     *
+     * @return string
+     */
+    public function getDataFileOriginalName()
+    {
+        return $this->data_file_original_name;
     }
 
 }
