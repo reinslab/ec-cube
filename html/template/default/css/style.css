@@ -4455,7 +4455,4 @@ fieldset[disabled] .btn-link:focus {
 		margin-top: 0;
 
 	}
-    #detail_cart_box tr:nth-child(2n+1) {
-        background: #f5f5f5;
-    }
 }

@@ -427,6 +427,20 @@ h1.header_logo{
 .nav-trigger{
     height: 70px;
 }
+/*詳細表示価格表*/
+#detail_cart_box table{
+    border-collapse: collapse;
+}
+#detail_cart_box th{
+    border-right: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;
+}
+#detail_cart_box td{
+     border-bottom: 1px solid #d3d3d3;
+     padding: 5px 30px;
+}
+#detail_cart_box tr:nth-child(2n+1) {
+    background: #f5f5f5;
+}
 
 }
 @media only screen and (max-width: 852px) {
@@ -442,6 +456,20 @@ h1.header_logo{
 	background-position: -170px 0%;
 	padding-left: 3%;
 	width: 100%;
+}
+/*詳細表示価格表*/
+#detail_cart_box table{
+    border-collapse: collapse;
+}
+#detail_cart_box th{
+    border-right: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;
+}
+#detail_cart_box td{
+     border-bottom: 1px solid #d3d3d3;
+     padding: 5px 30px;
+}
+#detail_cart_box tr:nth-child(2n+1) {
+    background: #f5f5f5;
 }
 
 }
@@ -486,6 +514,21 @@ h1.header_logo{
 	margin-right: auto;
 	background-color: #FFFFFF;
 }
+/*詳細表示価格表*/
+#detail_cart_box table{
+    border-collapse: collapse;
+}
+#detail_cart_box th{
+    border-right: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;
+}
+#detail_cart_box td{
+     border-bottom: 1px solid #d3d3d3;
+     padding: 5px 30px;
+}
+#detail_cart_box tr:nth-child(2n+1) {
+    background: #f5f5f5;
+}
+
 }
 @media only screen and (min-width: 852px) {
  #member{
@@ -497,6 +540,21 @@ h1.header_logo{
     font-size: 0.8em;
     text-align: right;
 }
+/*詳細表示価格表*/
+#detail_cart_box table{
+    border-collapse: collapse;
+}
+#detail_cart_box th{
+    border-right: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;
+}
+#detail_cart_box td{
+     border-bottom: 1px solid #d3d3d3;
+     padding: 5px 30px;
+}
+#detail_cart_box tr:nth-child(2n+1) {
+    background: #f5f5f5;
+}
+
 }
 @media only screen and (min-width: 1050px) {
 #member{
@@ -539,7 +597,20 @@ h1.header_logo{
     text-align: right;
     margin-right: 5px;
 }
-
+/*詳細表示価格表*/
+#detail_cart_box table{
+    border-collapse: collapse;
+}
+#detail_cart_box th{
+    border-right: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;
+}
+#detail_cart_box td{
+     border-bottom: 1px solid #d3d3d3;
+     padding: 5px 30px;
+}
+#detail_cart_box tr:nth-child(2n+1) {
+    background: #f5f5f5;
+}
 
 }
 #shopping-form .parent{
@@ -558,7 +629,7 @@ h1.header_logo{
         border-color: #a94442;
         border-radius: 4px;
         position: relative;
-	}
+}
 #shopping-form .errormsg:before{
         content: "";
         position: absolute;
@@ -568,12 +639,33 @@ h1.header_logo{
         border-bottom: 12px solid #DE5D50;
 }
 #detail_cart_box .errormsg{
-	padding-top: 5px;
+/*	padding-top: 5px;
 	color: #DD080C;
 	font-weight: bold;
 	padding-left: 5px;
-	width: 70%;
-	}
+	width: 70%;*/
+        margin-top: 15px !important;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+	padding-top: 6px;
+        padding-right: 5px;
+	background-color: #DE5D50;
+	color: #FFFFFF;
+	font-weight: bold;
+	padding-left: 5px;
+        border-color: #a94442;
+        border-radius: 4px;
+        position: relative;
+}
+#detail_cart_box .errormsg:before{
+        content: "";
+        position: absolute;
+        top: -23px;
+        left: 10%;
+        border: 12px solid transparent;
+        border-bottom: 12px solid #DE5D50;
+}
 #item_list .item_price{
     color: #DE5D50;
 }

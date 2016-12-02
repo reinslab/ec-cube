@@ -173,9 +173,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		classcat2 = eccube.classCategories[classcat_id1];
 
         var th = $('<tr>')
-        	.append('<th style="padding:5px;">&nbsp;</th>')
-        	.append('<th style="width:100px;padding:5px;">部数</th>')
-        	.append('<th style="width:100px;padding:5px;">金額</td>');
+        	//.append('<th style="padding:5px;">&nbsp;</th>')
+        	.append('<th colspan="2" style="border-right: 1px solid #fff;padding: 5px 10px;">部数</th>')
+        	.append('<th>金額</th>');
         
         table.append($('<thead>').append(th));
         
@@ -229,9 +229,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 
                 // trタグ生成
 		        var td = $('<tr>')
-		        	.append('<td style="padding:5px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ');setCate2Value(' + param_price01 + ',' + param_price02 + ',\'' + product_code + '\');" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
-		        	.append('<td style="width:100px;padding:5px;">' + name + '</td>')
-		        	.append('<td style="width:100px;padding:5px;">' + price02 + '円</td>');
+		        	.append('<td style="padding: 5px 2px 5px 10px;"><input type="radio" value="' + id + '" ' + checked + ' onclick="setCate(' + product_class_id + ');setCate2Value(' + param_price01 + ',' + param_price02 + ',\'' + product_code + '\');" required="required" name="classcategory_id2" id="classcategory_id2" /></td>')
+		        	.append('<td style="text-align: right;">' + name + '</td>')
+		        	.append('<td style="text-align: right; width: 160px;">' + price02 + '円</td>');
 
 		        tbody.append(td);
             }
@@ -460,19 +460,21 @@ $(function(){
                                     {% if form.classcategory_id2 is defined %}
                                         {{ form_widget(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
-                                        <p class="errormsg text-danger"><span id="error_msg_classcategory_id1"></span></p>
+                                        {% if form_errors(form.classcategory_id1) == '入力されていません。' %}
+                                            <p class="errormsg text-danger"><span id="error_msg_classcategory_id1"></span></p>
+                                        {% endif %}
                                     {% else %}
-		                                <table border="0" cellpadding="4" cellspacing="0" style="border: 1px solid #fff; border-collapse: collapse;">
+		                                <table border="0" cellpadding="4" cellspacing="0">
 		                                <tr>
 		                                <!-- th>&nbsp;</th -->
-                                                <th colspan="2" style="border: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;">部数</th>
-		                                <th style="border: 1px solid #fff; background-color: #6495ed; padding: 5px 10px; text-align: center; color: #fff;">金額</th>
+                                                <th colspan="2">部数</th>
+		                                <th>金額</th>
 		                                </tr>
 		                                {% for item in ProductClass1 %}
 		                                <tr>
-		                                <td style="padding: 5px 2px 5px 10px; border-bottom: 1px solid #d3d3d3;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }});setCate2Value('{{ item.price01 }}','{{item.price02}}','{{item.product_code}}');" /></td>
-		                                <td style="padding: 5px 30px; border-right: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3; text-align: right;">{{ item.class_name }}</td>
-		                                <td style="padding: 5px 30px; border-bottom: 1px solid #d3d3d3; text-align: right; width: 135px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
+		                                <td style="padding: 5px 2px 5px 10px;"><input type="radio" required="required" name="classcategory_id1" id="classcategory_id1" value="{{item.class_category_id}}" onclick="setCate({{ item.product_class_id }});setCate2Value('{{ item.price01 }}','{{item.price02}}','{{item.product_code}}');" /></td>
+		                                <td style="text-align: right;">{{ item.class_name }}</td>
+		                                <td style="text-align: right; width: 160px;">{% if item.price01 != item.price02 %}{{ item.price02|number_format(0, '.', ',') }}{% else %}{{ item.price01|number_format(0, '.', ',') }}{% endif %}円</td>
 		                                </tr>
 		                                {% endfor %}
 		                                </table>
@@ -492,7 +494,9 @@ $(function(){
 	                                     <div>{{ Product.className2 }}</div>
                                             {{ form_widget(form.classcategory_id2) }}
                                             {{ form_errors(form.classcategory_id2) }}
-                                            <p class="errormsg text-danger"><span id="error_msg_classcategory_id2"></span></p>
+                                            {% if form_errors(form.classcategory_id2) == '入力されていません。' %}
+                                                <p class="errormsg text-danger"><span id="error_msg_classcategory_id2"></span></p>
+                                            {% endif %}
                                         </li>
                                      {% endif %}
                                 </ul>
@@ -518,14 +522,14 @@ $(function(){
                                 {# カートボタン #}
                                 <div id="detail_cart_box__button_area" class="btn_area">
                                     <ul id="detail_cart_box__insert_button" class="row" style="text-align: center;">
-                                        <li style="display: inline-block; width: 40%;"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask"><svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる</button></li>
+                                        <li style="display: inline-block; width: 45%;"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask"><svg class="cb cb-shopping-cart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-shopping-cart"></use></svg>カートに入れる</button></li>
                                     
                                     {% if BaseInfo.option_favorite_product == 1 %}
                                     
                                         {% if is_favorite == false %}
-                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加</button></li>
+                                            <li style="display: inline-block; width: 45%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block prevention-btn prevention-mask"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加</button></li>
                                         {% else %}
-                                            <li style="display: inline-block; width: 40%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入りに追加済</button></li>
+                                            <li style="display: inline-block; width: 45%; margin-left: 20px;"><button type="submit" id="favorite" class="btn btn-info btn-block" disabled="disabled"><svg class="cb cb-heart" style="font-size: 1.5em; margin-top:-4px;"><use xlink:href="#cb-heart"></use></svg>お気に入り追加済</button></li>
                                         {% endif %}
                                     </ul>
                                     {% endif %}
