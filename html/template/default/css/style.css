@@ -2470,6 +2470,7 @@ margin-top: 5px;
     padding: 8px 0 8px 10%;
 }
 #login_box .column input[type="text"],
+#login_box .column input[type="email"],
 #login_box .column input[type="password"]{
     width: 90%;
 }
@@ -4414,6 +4415,7 @@ fieldset[disabled] .btn-link:focus {
     }
 
     #login_box .column input[type="text"],
+    #login_box .column input[type="email"],
     #login_box .column input[type="password"]{
         width: 85%;
     }
