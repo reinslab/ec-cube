@@ -361,7 +361,7 @@ class PG_MULPAY_Client_Base
         // Get order
         if (false !== strpos($order_id, "-")) {
             $OrderID = $order_id;
-            list($split_orderId, $split_orderTime) = split("-", $OrderID);
+            list($split_orderId, $split_orderTime) = explode("-", $OrderID);
             $OrderExtension = $objUtil->getOrderPayData($split_orderId);
         } else {
             // Get payment authen data if existings

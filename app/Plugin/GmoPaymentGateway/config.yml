@@ -2,7 +2,7 @@ name: GmoPaymentGateway
 event: GmoPaymentGateway
 code: GmoPaymentGateway
 
-version: 1.1.13
+version: 1.1.14
 
 service: 
     - PaymentServiceProvider
