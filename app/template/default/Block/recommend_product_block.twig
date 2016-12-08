@@ -9,17 +9,16 @@
 
 <!-- ▼item_list▼ -->
 <div id="item_list2">
-<h2 class="heading01" style="border-bottom: 1px dotted #ccc;">おすすめ商品</h2>
     <div class="row">
         {% for RecommendProduct in recommend_products %}
-            <div class="col-sm-3 col-xs-6">
+            <div class="col-sm-4 col-xs-6">
                 <div class="pickup_item">
                     <a href="{{ url('product_detail', {'id': RecommendProduct.Product.id}) }}">
                         <div class="item_photo"><img src="{{ app.config.image_save_urlpath }}/{{ RecommendProduct.Product.mainFileName|no_image_product }}"></div>
-                        <p class="item_comment">{{ RecommendProduct.comment|raw|nl2br }}</p>
+                        <!-- p class="item_comment">{{ RecommendProduct.comment|raw|nl2br }}</p -->
                         <dl>
                             <dt class="item_name">{{ RecommendProduct.Product.name }}</dt>
-                            <dd class="item_price">
+                            <!-- dd class="item_price">
                                 {% if RecommendProduct.Product.hasProductClass %}
                                     {% if RecommendProduct.Product.getPrice02Min == RecommendProduct.Product.getPrice02Max %}
                                         {{ RecommendProduct.Product.getPrice02IncTaxMin|price }}
@@ -29,7 +28,7 @@
                                 {% else %}
                                     {{ RecommendProduct.Product.getPrice02IncTaxMin|price }}
                                 {% endif %}
-                            </dd>
+                            </dd -->
                         </dl>
                     </a>
                 </div>
